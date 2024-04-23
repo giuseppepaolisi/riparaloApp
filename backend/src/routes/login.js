@@ -5,6 +5,6 @@ const { loginUser } = require('../controllers/authController/login');
 const router = express.Router();
 
 // login route
-router.post('/login', loginUser);
+router.post('/', loginUser);
 
 module.exports = router

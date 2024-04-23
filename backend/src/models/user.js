@@ -81,6 +81,11 @@ userSchema.statics.signup = async function(newuser) {
     throw Error('La password deve avere almeno 8 caratteri');
   }
 
+  // Controlla la validità dell'email
+  if (!/\S+@\S+\.\S+/.test(newuser.email)) {
+    throw new Error("Inserire un'email valida");
+  }
+
   // controlla se l'email è già in uso
   const exists = await this.findOne({ email: newuser.email });
   if (exists) {

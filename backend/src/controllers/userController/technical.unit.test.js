@@ -48,4 +48,18 @@ describe('signupTechnician', () => {
       user: expect.any(Object)
     }));
   });
+
+  it('la creazione del tecnico fallisce', async () => {
+    // Setup del mock del metodo signup di User per generare un errore
+    const errorMessage = 'Signup failed';
+    User.signup.mockRejectedValue(new Error(errorMessage));
+
+    await signupTechnician(mockReq, mockRes);
+
+    // Verifica che la risposta sia stata inviata con status 400
+    expect(mockRes.status).toHaveBeenCalledWith(400);
+    expect(mockRes.json).toHaveBeenCalledWith(expect.objectContaining({
+      error: errorMessage
+    }));
+  });
 });

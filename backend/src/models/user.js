@@ -74,112 +74,44 @@ const userSchema = new Schema({
   });
 
 // Metodo statico per la registrazione di un Partner
-userSchema.statics.signupPartner = async function(newuser) {
-    const {
-        email,
-        password,
-        nome,
-        cognome,
-        telefono,
-        ragioneSociale,
-        partitaIVA,
-        codiceUnivoco,
-        pec,
-        cap,
-        via,
-        provincia
-    } = newuser;
-    
-    // controlla se la password rispetta la lunghezza minima
-    if (password.length < 8) {
-        throw Error('La password deve avere almeno 8 caratteri');
-    }
-    
-    // controlla se l'email è già in uso
-    const exists = await this.findOne({ email });
-    if (exists) {
-        throw Error('Email già utilizzata');
-    }
+userSchema.statics.signup = async function(newuser) {
 
-    // Controlla la lunghezza del codice univoco
-    if (codiceUnivoco.length !== 6) {
-        throw new Error('Il codice univoco deve avere esattamente 6 caratteri');
-    }
-
-    const salt = await bcrypt.genSalt(10); // Genera una stringa casuale
-    const hash = await bcrypt.hash(password, salt); // Combina la stringa casuale con la password
-
-    const user = await this.create({
-        email,
-        password: hash,
-        nome,
-        cognome,
-        telefono,
-        ragioneSociale,
-        partitaIVA,
-        codiceUnivoco,
-        pec,
-        cap,
-        via,
-        provincia,
-        role: PARTNER // Imposta il ruolo a 'partner'
-    });
-
-    return user;
-};
-
-// Metodo statico per la registrazione di un Partner
-userSchema.statics.signupTechnician = async function(newuser) {
-  const {
-      email,
-      password,
-      nome,
-      cognome,
-      telefono
-  } = newuser;
-  
   // controlla se la password rispetta la lunghezza minima
-  if (password.length < 8) {
-      throw Error('La password deve avere almeno 8 caratteri');
+  if (newuser.password.length < 8) {
+    throw Error('La password deve avere almeno 8 caratteri');
   }
-  
+
   // controlla se l'email è già in uso
-  const exists = await this.findOne({ email });
+  const exists = await this.findOne({ email: newuser.email });
   if (exists) {
-      throw Error('Email già utilizzata');
+    throw Error('Email già utilizzata');
   }
-
   const salt = await bcrypt.genSalt(10); // Genera una stringa casuale
-  const hash = await bcrypt.hash(password, salt); // Combina la stringa casuale con la password
-
-  const user = await this.create({
-      email,
-      password: hash,
-      nome,
-      cognome,
-      telefono,
-      role: TECHNICIAN
-  });
+  const hash = await bcrypt.hash(newuser.password, salt); // Combina la stringa casuale con la password
+  
+  newuser.password = hash;
+  console.log(newuser);
+  const user = await this.create(newuser);
 
   return user;
 };
 
 // Metodo statico di login
 userSchema.statics.login = async function(email, password) {
-    const user = await this.findOne({ email })
+  const user = await this.findOne({ email })
 
-    // verifica se l'email esiste nel db
-    if (!user) {
-        throw Error('Email non trovata')
-    }
+  // verifica se l'email esiste nel db
+  if (!user) {
+    throw Error('Email non trovata')
+  }
 
-    // Verifica delle password
-    const match = await bcrypt.compare(password, user.password)
-    if (!match) {
-        throw Error('Password errata')
-    }
+  // Verifica delle password
+  const match = await bcrypt.compare(password, user.password)
+  if (!match) {
+    throw Error('Password errata')
+  }
 
-    return user
+  return user
 };
 
 module.exports = mongoose.model('User', userSchema)

@@ -1,11 +1,13 @@
-const User = require('../../../models/user');
+const User = require('../../models/user');
+const { TECHNICIAN } = require('../../conf/role');
 
 // registrazione di un utente base
 const signupTechnician = async (req, res) => {
-  const newuser = req.body;
+  let newuser = req.body;
 
   try {
-    const user = await User.signupTechnician(newuser);
+    newuser.role = TECHNICIAN;
+    const user = await User.signup(newuser);
 
     res.status(200).json({user});
   } catch (error) {

@@ -1,11 +1,11 @@
 const express = require('express');
 
-const { signupTechnician } = require('../controllers/userController/technicianController/create');
-const { signupPartner } = require('../controllers/userController/partnerController/create');
+const { signupTechnician } = require('../controllers/userController/technician');
+const { signupPartner } = require('../controllers/userController/partner');
 
 const router = express.Router();
 
 router.post('/signupTechnician', signupTechnician);
-router.post('/signupPartner', signupTechnician);
+router.post('/signupPartner', signupPartner);
 
 module.exports = router

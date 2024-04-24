@@ -1,7 +1,4 @@
-const { 
-  signup, 
-  getAll, 
-  deleteUser } = require('./user');
+const { signup, getAll, deleteUser } = require('./user');
 const { signupFactory } = require('./userFactory');
 const User = require('../../models/user');
 const { TECHNICIAN, PARTNER } = require('../../conf/role');
@@ -174,12 +171,12 @@ describe('deleteUser', () => {
   beforeEach(() => {
     mockReq = {
       params: {
-        id: '507f1f77bcf86cd799439011' // Un ObjectId MongoDB valido
-      }
+        id: '507f1f77bcf86cd799439011', // Un ObjectId MongoDB valido
+      },
     };
     mockRes = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     mockNext = jest.fn();
     mongoose.Types.ObjectId.isValid = jest.fn();
@@ -192,7 +189,9 @@ describe('deleteUser', () => {
     User.findOneAndDelete.mockResolvedValue(mockUser);
     await deleteUser(mockReq, mockRes);
 
-    expect(User.findOneAndDelete).toHaveBeenCalledWith({ _id: '507f1f77bcf86cd799439011' });
+    expect(User.findOneAndDelete).toHaveBeenCalledWith({
+      _id: '507f1f77bcf86cd799439011',
+    });
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({ user: mockUser });
   });
@@ -201,9 +200,13 @@ describe('deleteUser', () => {
     mongoose.Types.ObjectId.isValid.mockReturnValue(false);
     await deleteUser(mockReq, mockRes);
 
-    expect(mongoose.Types.ObjectId.isValid).toHaveBeenCalledWith('507f1f77bcf86cd799439011');
+    expect(mongoose.Types.ObjectId.isValid).toHaveBeenCalledWith(
+      '507f1f77bcf86cd799439011'
+    );
     expect(mockRes.status).toHaveBeenCalledWith(400);
-    expect(mockRes.json).toHaveBeenCalledWith({ error: 'ID utente non valido' });
+    expect(mockRes.json).toHaveBeenCalledWith({
+      error: 'ID utente non valido',
+    });
   });
 
   it('Nessun utente trovato', async () => {
@@ -211,9 +214,13 @@ describe('deleteUser', () => {
     User.findOneAndDelete.mockResolvedValue(null);
     await deleteUser(mockReq, mockRes);
 
-    expect(User.findOneAndDelete).toHaveBeenCalledWith({ _id: '507f1f77bcf86cd799439011' });
+    expect(User.findOneAndDelete).toHaveBeenCalledWith({
+      _id: '507f1f77bcf86cd799439011',
+    });
     expect(mockRes.status).toHaveBeenCalledWith(400);
-    expect(mockRes.json).toHaveBeenCalledWith({ error: 'Nessun utente trovato' });
+    expect(mockRes.json).toHaveBeenCalledWith({
+      error: 'Nessun utente trovato',
+    });
   });
 
   it('errore per findOneAndDelete', async () => {

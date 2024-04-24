@@ -1,4 +1,4 @@
-const { createDevice, getDevices } = require('../device');
+const { getDevices } = require('../device');
 const Service = require('../../../models/service');
 const mongoose = require('mongoose');
 

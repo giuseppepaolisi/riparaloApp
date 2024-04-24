@@ -1,11 +1,11 @@
-const { loginUser } = require('./login');
-const User = require('../../models/user');
-const { generateToken } = require('../../middleware/requireAuth');
+const { loginUser } = require('../login');
+const User = require('../../../models/user');
+const { generateToken } = require('../../../middleware/requireAuth');
 
-jest.mock('../../models/user', () => ({
+jest.mock('../../../models/user', () => ({
   login: jest.fn(),
 }));
-jest.mock('../../middleware/requireAuth', () => ({
+jest.mock('../../../middleware/requireAuth', () => ({
   generateToken: jest.fn(),
 }));
 

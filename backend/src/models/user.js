@@ -76,16 +76,6 @@ const userSchema = new Schema({
 // Metodo statico per la registrazione di un Partner
 userSchema.statics.signup = async function(newuser) {
 
-  // controlla se la password rispetta la lunghezza minima
-  if (newuser.password.length < 8) {
-    throw Error('La password deve avere almeno 8 caratteri');
-  }
-
-  // Controlla la validità dell'email
-  if (!/\S+@\S+\.\S+/.test(newuser.email)) {
-    throw new Error("Inserire un'email valida");
-  }
-
   // controlla se l'email è già in uso
   const exists = await this.findOne({ email: newuser.email });
   if (exists) {
@@ -95,7 +85,6 @@ userSchema.statics.signup = async function(newuser) {
   const hash = await bcrypt.hash(newuser.password, salt); // Combina la stringa casuale con la password
   
   newuser.password = hash;
-  console.log(newuser);
   const user = await this.create(newuser);
 
   return user;

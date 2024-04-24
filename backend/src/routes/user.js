@@ -1,11 +1,13 @@
 const express = require('express');
 
-const { signupTechnician } = require('../controllers/userController/technician');
-const { signupPartner } = require('../controllers/userController/partner');
+const {signup} = require('../controllers/userController/user');
+const {requireAdmin} = require('../middleware/requireAuth');
 
 const router = express.Router();
 
-router.post('/signupTechnician', signupTechnician);
-router.post('/signupPartner', signupPartner);
+router.use(requireAdmin);
+
+// in base al :role registra un partner o un tecnico
+router.post('/signup/:role', signup);
 
 module.exports = router

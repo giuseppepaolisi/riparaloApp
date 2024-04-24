@@ -58,6 +58,10 @@ const getDevice = async (req, res) => {
   const { id } = req.params;
 
   try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error('ID dispositivo non valido');
+    }
+
     const device = await Service.findById(id);
 
     if (!device) {

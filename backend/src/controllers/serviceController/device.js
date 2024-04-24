@@ -42,6 +42,7 @@ const createDevice = async (req, res) => {
   }
 };
 
+// restituisce un array di device con marca e modello
 const getDevices = async (req, res) => {
   try {
     const devices = await Service.find({}, 'modello marca');
@@ -52,7 +53,25 @@ const getDevices = async (req, res) => {
   }
 };
 
+// Restiruisce un singolo device passando un id
+const getDevice = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const device = await Service.findById(id);
+
+    if (!device) {
+      return res.status(404).json({ error: 'Dispositivo non trovato' });
+    }
+
+    res.status(200).json({ device });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createDevice,
   getDevices,
+  getDevice,
 };

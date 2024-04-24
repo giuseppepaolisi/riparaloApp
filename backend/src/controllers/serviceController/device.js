@@ -65,12 +65,36 @@ const getDevice = async (req, res) => {
     const device = await Service.findById(id);
 
     if (!device) {
-      return res.status(404).json({ error: 'Dispositivo non trovato' });
+      throw new Error('Dispositivo non trovato');
     }
 
     res.status(200).json({ device });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Restituisce un array di marche
+const getBrands = async (req, res) => {
+  try {
+    const uniqueBdrands = await Service.distinct('marca');
+
+    res.status(200).json({ brands: uniqueBdrands });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Ritorna un array di modelli per una determinata marca
+const getModelsByBrand = async (req, res) => {
+  const { brand } = req.params;
+
+  try {
+    const devices = await Service.find({ marca: brand }).distinct('modello');
+
+    res.status(200).json({ modelli: devices });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -78,4 +102,6 @@ module.exports = {
   createDevice,
   getDevices,
   getDevice,
+  getBrands,
+  getModelsByBrand,
 };

@@ -8,8 +8,6 @@ const signup = async (req, res) => {
 
     try {
         let newuser = req.body;
-        const signupFunction = signupFactory(role);
-        newuser = signupFunction(newuser);
 
         // Controlli comuni (es. validazione email e password)
         if (!/\S+@\S+\.\S+/.test(newuser.email)) {
@@ -19,6 +17,9 @@ const signup = async (req, res) => {
             throw new Error('La password deve avere almeno 8 caratteri');
         }
 
+        const signupFunction = signupFactory(role);
+        newuser = signupFunction(newuser);
+        
         const user = await User.signup(newuser);
         res.status(200).json({ user });
     } catch (error) {

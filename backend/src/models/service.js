@@ -5,12 +5,12 @@ const servizioSchema = new mongoose.Schema({
   servizio: {
     type: String,
     required: true,
-    lowercase: true
+    lowercase: true,
   },
   prezzo: {
     type: Number,
-    required: true
-  }
+    required: true,
+  },
 });
 
 // Schema principale
@@ -18,14 +18,14 @@ const serviceSchema = new mongoose.Schema({
   modello: {
     type: String,
     required: true,
-    lowercase: true
+    lowercase: true,
   },
   marca: {
     type: String,
     required: true,
-    lowercase: true
+    lowercase: true,
   },
-  servizi: [servizioSchema]
+  servizi: [servizioSchema],
 });
 
 // Creazione del modello Mongoose

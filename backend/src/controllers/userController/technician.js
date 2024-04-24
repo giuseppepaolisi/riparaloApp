@@ -7,5 +7,5 @@ function signupTechnician(newuser) {
 }
 
 module.exports = {
-    signupTechnician
-}
+  signupTechnician,
+};

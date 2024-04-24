@@ -2,13 +2,19 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const fs = require('fs');
 const path = require('path');
-const {ADMIN, TECHNICIAN, PARTNER} = require('../conf/role');
+const { ADMIN, TECHNICIAN, PARTNER } = require('../conf/role');
 
 // Carica la chiave privata per firmare il token
-const privateKey = fs.readFileSync(path.join(__dirname, '../keys/rsa.private'), 'utf8');
+const privateKey = fs.readFileSync(
+  path.join(__dirname, '../keys/rsa.private'),
+  'utf8'
+);
 
 // Carica la chiave pubblica per verificare il token
-const publicKey = fs.readFileSync(path.join(__dirname, '../keys/rsa.public'), 'utf8');
+const publicKey = fs.readFileSync(
+  path.join(__dirname, '../keys/rsa.public'),
+  'utf8'
+);
 
 // Funzione per generare un token JWT
 const generateToken = (payload) => {
@@ -26,21 +32,22 @@ const requireAuth = async (req, res, next) => {
   const token = authorization.split(' ')[1];
 
   try {
-    const payload = jwt.verify(token, publicKey, { algorithms: ['RS256'] })
+    const payload = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
 
     // Includi il campo 'role' quando recuperi l'utente dal database
-    const user = await User.findOne({ _id: payload._id }).select('_id role email nome cognome')
+    const user = await User.findOne({ _id: payload._id }).select(
+      '_id role email nome cognome'
+    );
 
     if (!user) {
-      throw new Error('Utente non trovato')
+      throw new Error('Utente non trovato');
     }
 
-    req.user = user
-    next()
-
+    req.user = user;
+    next();
   } catch (error) {
-    console.log(error)
-    res.status(401).json({ error: 'Richiesta non autorizzata' })
+    console.log(error);
+    res.status(401).json({ error: 'Richiesta non autorizzata' });
   }
 };
 
@@ -72,4 +79,10 @@ const requirePartner = async (req, res, next) => {
   await requireRole([PARTNER])(req, res, next);
 };
 
-module.exports = { generateToken, requireAuth, requireAdmin, requireTechnicianAdmin, requirePartner }
+module.exports = {
+  generateToken,
+  requireAuth,
+  requireAdmin,
+  requireTechnicianAdmin,
+  requirePartner,
+};

@@ -3,10 +3,10 @@ const User = require('../../models/user');
 const { generateToken } = require('../../middleware/requireAuth');
 
 jest.mock('../../models/user', () => ({
-  login: jest.fn()
+  login: jest.fn(),
 }));
 jest.mock('../../middleware/requireAuth', () => ({
-  generateToken: jest.fn()
+  generateToken: jest.fn(),
 }));
 
 describe('Controller: loginUser', () => {
@@ -20,11 +20,11 @@ describe('Controller: loginUser', () => {
 
     // Crea oggetti mock per req, res
     mockReq = {
-      body: { email: 'test@example.com', password: 'password123' }
+      body: { email: 'test@example.com', password: 'password123' },
     };
     mockRes = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     mockNext = jest.fn();
   });
@@ -36,7 +36,7 @@ describe('Controller: loginUser', () => {
       email: 'test@example.com',
       role: 'user',
       nome: 'Test',
-      cognome: 'User'
+      cognome: 'User',
     };
     User.login.mockResolvedValue(mockUserDetails);
 
@@ -49,9 +49,9 @@ describe('Controller: loginUser', () => {
         email: mockUserDetails.email,
         role: mockUserDetails.role,
         nome: mockUserDetails.nome,
-        cognome: mockUserDetails.cognome
+        cognome: mockUserDetails.cognome,
       },
-      token: 'fakeToken123'
+      token: 'fakeToken123',
     });
   });
 
@@ -62,7 +62,7 @@ describe('Controller: loginUser', () => {
 
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.json).toHaveBeenCalledWith({
-      error: 'Invalid credentials'
+      error: 'Invalid credentials',
     });
   });
 });

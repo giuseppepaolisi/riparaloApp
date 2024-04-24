@@ -5,13 +5,15 @@
   "main": "index.js",
   "jest": {
     "testEnvironment": "node"
-  },  
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage --verbose",
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon --exec \"npm run format && node src/server.js\"",
+    "format": "prettier --write .",
+    "prestart": "npm run format"
   },
   "repository": {
     "type": "git",
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "prettier": "^3.2.5",
     "supertest": "^6.3.4"
   }
 }

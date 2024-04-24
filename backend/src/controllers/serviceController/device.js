@@ -42,6 +42,17 @@ const createDevice = async (req, res) => {
   }
 };
 
+const getDevices = async (req, res) => {
+  try {
+    const devices = await Service.find({}, 'modello marca');
+
+    res.status(200).json({ devices });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createDevice,
+  getDevices,
 };

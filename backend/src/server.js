@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api/login', loginRoutes);
-app.use('/api/user', userRoutes);
+app.use('/api', userRoutes);
 
 
 // connect to db

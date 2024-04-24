@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "App per gestire la riparazione di dispositivi mobile",
-  "main": "index.js",
+  "main": "server.js",
   "jest": {
     "testEnvironment": "node"
   },

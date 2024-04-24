@@ -1,17 +1,20 @@
 const mongoose = require('mongoose');
 
 // Schema per l'array di servizi interno
-const servizioSchema = new mongoose.Schema({
-  servizio: {
-    type: String,
-    required: true,
-    lowercase: true,
+const servizioSchema = new mongoose.Schema(
+  {
+    servizio: {
+      type: String,
+      required: true,
+      lowercase: true,
+    },
+    prezzo: {
+      type: Number,
+      required: true,
+    },
   },
-  prezzo: {
-    type: Number,
-    required: true,
-  },
-});
+  { _id: false }
+);
 
 // Schema principale
 const serviceSchema = new mongoose.Schema({

@@ -1,7 +1,7 @@
-// signup.js
 const { signupFactory } = require('./userFactory');
 const User = require('../../models/user');
 const { PARTNER, TECHNICIAN } = require('../../conf/role');
+const mongoose = require('mongoose');
 
 // Si occupa della creazione di untente
 const signup = async (req, res) => {
@@ -28,6 +28,7 @@ const signup = async (req, res) => {
   }
 };
 
+// ritorna un arry di users per un ruolo specificato
 const getAll = async (req, res) => {
   const { role } = req.params;
   try {
@@ -40,7 +41,28 @@ const getAll = async (req, res) => {
   }
 };
 
+// elimina un utente dal sistema
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error('ID utente non valido');
+    }
+
+    const user = await User.findOneAndDelete({ _id: id });
+
+    if (!user) {
+      throw new Error('Nessun utente trovato');
+    }
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   signup,
   getAll,
+  deleteUser,
 };

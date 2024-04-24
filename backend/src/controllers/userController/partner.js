@@ -1,7 +1,6 @@
-const User = require('../../models/user');
 const { PARTNER } = require('../../conf/role');
 
-// registrazione di un utente base
+// preparazione dell'utente PARTNER alla registrazione
 function signupPartner(newuser) {
   
   if (!newuser.codiceUnivoco || newuser.codiceUnivoco.length !== 6) {

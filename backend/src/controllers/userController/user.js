@@ -2,6 +2,7 @@
 const {signupFactory} = require('./userFactory');
 const User = require('../../models/user');
 
+// Si occupa della creazione di untente 
 const signup = async (req, res) => {
     const { role } = req.params;
 

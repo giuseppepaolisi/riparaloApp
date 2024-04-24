@@ -1,4 +1,3 @@
-const User = require('../../models/user');
 const { TECHNICIAN } = require('../../conf/role');
 
 // preparazione dell'utente TECNICO alla registrazione

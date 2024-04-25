@@ -5,13 +5,13 @@ const {
   getCustomers,
   getCustomer,
 } = require('../controllers/customerController/customer');
-const { requireAdmin } = require('../middleware/requireAuth');
+const { requirePartner } = require('../middleware/requireAuth');
 
 const { errorHandler } = require('../middleware/errorManager');
 
 const router = express.Router();
 
-//router.use(requireAdmin);
+router.use(requirePartner);
 
 // in base al :role registra un partner o un tecnico
 router.post('/customer', createCustomer);

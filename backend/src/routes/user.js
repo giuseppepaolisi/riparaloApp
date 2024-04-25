@@ -11,7 +11,7 @@ const { errorHandler } = require('../middleware/errorManager');
 
 const router = express.Router();
 
-//router.use(requireAdmin);
+router.use(requireAdmin);
 
 // in base al :role registra un partner o un tecnico
 router.post('/user/signup/:role', signup);

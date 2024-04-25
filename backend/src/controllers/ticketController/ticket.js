@@ -8,25 +8,22 @@ const { APERTO } = require('../../conf/state');
 const openTicket = async (req, res, next) => {
   const {
     // dati cliente
-    nomeCliente,
-    cognomeCliente,
-    telefonoCliente,
+    nome_cliente,
+    cognome_cliente,
+    telefono_cliente,
     // desctizione inserita dal tecnico
-    descrizioneProblema,
+    descrizione_problema,
     // dati dispositivo
-    marcaDispositivo,
-    modelloDispositivo,
-    problemiSelezionati, // array di oggetti { problema, prezzo }
+    marca,
+    modello,
+    servizi, // array di oggetti { problema, prezzo }
   } = req.body;
 
   // Calcola il totale stimato
-  const totaleStimato = problemiSelezionati.reduce(
-    (total, item) => total + item.prezzo,
-    0
-  );
+  const totaleStimato = servizi.reduce((total, item) => total + item.prezzo, 0);
 
   // recupero id del partner
-  const idPartner = req.user_id;
+  const idPartner = req.user._id;
 
   try {
     // recupero dati partner
@@ -48,15 +45,15 @@ const openTicket = async (req, res, next) => {
       via: partner.via,
       provincia: partner.provincia,
       // dati cliente
-      nome_cliente: nomeCliente,
-      cognome_cliente: cognomeCliente,
-      telefono_cliente: telefonoCliente,
+      nome_cliente: nome_cliente,
+      cognome_cliente: cognome_cliente,
+      telefono_cliente: telefono_cliente,
       // descrizione del problema
-      descrizione_problema: descrizioneProblema,
+      descrizione_problema: descrizione_problema,
       // dati dispositivo
-      marca: marcaDispositivo,
-      modello: modelloDispositivo,
-      servizi: problemiSelezionati, // Array
+      marca: marca,
+      modello: modello,
+      servizi: servizi, // Array
       // prezzo stimato calcolato
       prezzo_stimato: totaleStimato,
       stato: APERTO,

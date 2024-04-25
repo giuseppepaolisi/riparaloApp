@@ -5,20 +5,20 @@ const {
   getAll,
   deleteUser,
 } = require('../controllers/userController/user');
-const { requireAdmin } = require('../middleware/requireAuth');
+const { requireAdmin, requireAuth } = require('../middleware/requireAuth');
 
 const { errorHandler } = require('../middleware/errorManager');
 
 const router = express.Router();
 
-router.use(requireAdmin);
+router.use(requireAuth);
 
 // in base al :role registra un partner o un tecnico
-router.post('/user/signup/:role', signup);
+router.post('/user/signup/:role', requireAdmin, signup);
 
-router.get('/users/:role', getAll);
+router.get('/users/:role', requireAdmin, getAll);
 
-router.delete('/user/:id', deleteUser);
+router.delete('/user/:id', requireAdmin, deleteUser);
 
 router.use(errorHandler);
 

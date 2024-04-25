@@ -26,7 +26,7 @@ router.use(requireAuth);
 
 router.post('/device', requireAdmin, createDevice);
 router.get('/devices', requireAdmin, getDevices);
-router.get('/device/:id', getDevice);
+router.get('/device/:id', requireAdmin, getDevice);
 router.get('/brands', getBrands);
 router.get('/devices/:brand', getModelsByBrand);
 router.get('/services/:device', getServicesByDevice);

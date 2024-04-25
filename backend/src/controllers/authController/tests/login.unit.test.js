@@ -9,7 +9,7 @@ jest.mock('../../../middleware/requireAuth', () => ({
   generateToken: jest.fn(),
 }));
 
-describe('Controller: loginUser', () => {
+describe('login', () => {
   let mockReq, mockRes, mockNext;
 
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('Controller: loginUser', () => {
     mockNext = jest.fn();
   });
 
-  it('should return 200 and token with user details when credentials are correct', async () => {
+  it('Login con successo', async () => {
     // Setup User.login to resolve with user details
     const mockUserDetails = {
       _id: '123',
@@ -55,14 +55,15 @@ describe('Controller: loginUser', () => {
     });
   });
 
-  it('should return 400 when credentials are incorrect', async () => {
+  it('creadenziali errate', async () => {
     User.login.mockRejectedValue(new Error('Invalid credentials'));
 
     await loginUser(mockReq, mockRes, mockNext);
 
-    expect(mockRes.status).toHaveBeenCalledWith(400);
-    expect(mockRes.json).toHaveBeenCalledWith({
-      error: 'Invalid credentials',
-    });
+    expect(mockNext).toHaveBeenCalledWith(
+      expect.any(Error)
+    );
+    
+    expect(mockNext.mock.calls[0][0].message).toContain('Invalid credentials');
   });
 });

@@ -2,11 +2,11 @@ const User = require('../../models/user');
 const { generateToken } = require('../../middleware/requireAuth');
 
 // login di un utente
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    let user = await User.login(email, password);
+    let user = await User.login(email, password, next);
 
     // creazione token
     const token = generateToken({ _id: user._id });
@@ -22,7 +22,7 @@ const loginUser = async (req, res) => {
 
     res.status(200).json({ user: userOutput, token });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 

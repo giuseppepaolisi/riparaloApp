@@ -58,6 +58,7 @@ const getCustomers = async (req, res, next) => {
 
 // Ritorna i dati di un singolo cliente
 // !!ATTENZIONE chiunque passando l'id può prendere questi dati
+/*
 const getCustomer = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -67,10 +68,9 @@ const getCustomer = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+};*/
 
 module.exports = {
   createCustomer,
   getCustomers,
-  getCustomer,
 };

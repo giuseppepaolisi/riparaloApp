@@ -18,7 +18,7 @@ router.post('/customer', requirePartner, createCustomer);
 
 router.get('/customers', requirePartner, getCustomers);
 
-router.get('/customer/:id', getCustomer);
+//router.get('/customer/:id', getCustomer);
 
 router.use(errorHandler);
 

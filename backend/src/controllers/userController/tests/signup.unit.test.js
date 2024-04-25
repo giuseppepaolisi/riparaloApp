@@ -72,16 +72,20 @@ describe('TEST signup', () => {
   it('email invalida', async () => {
     mockReq.body.email = 'invalidemail';
     await signup(mockReq, mockRes, mockNext);
-    
-    expect(mockNext.mock.calls[0][0].message).toContain("Inserire un'email valida");
+
+    expect(mockNext.mock.calls[0][0].message).toContain(
+      "Inserire un'email valida"
+    );
   });
 
   it('password troppo corta', async () => {
     mockReq.body.password = '123';
     await signup(mockReq, mockRes, mockNext);
-    
+
     expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
-    expect(mockNext.mock.calls[0][0].message).toContain('La password deve avere almeno 8 caratteri');
+    expect(mockNext.mock.calls[0][0].message).toContain(
+      'La password deve avere almeno 8 caratteri'
+    );
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
 
@@ -92,10 +96,8 @@ describe('TEST signup', () => {
     });
     await signup(mockReq, mockRes, mockNext);
 
-    expect(mockNext).toHaveBeenCalledWith(
-      expect.any(Error)
-    );
-    
+    expect(mockNext).toHaveBeenCalledWith(expect.any(Error));
+
     expect(mockNext.mock.calls[0][0].message).toContain(errorMessage);
   });
 });

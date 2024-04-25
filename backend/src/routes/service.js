@@ -12,6 +12,7 @@ const {
   getServicesByDevice,
 } = require('../controllers/serviceController/service');
 const { requireAdmin } = require('../middleware/requireAuth');
+const { errorHandler } = require('../middleware/errorManager');
 
 const router = express.Router();
 
@@ -23,5 +24,7 @@ router.get('/device/:id', getDevice);
 router.get('/brands', getBrands);
 router.get('/devices/:brand', getModelsByBrand);
 router.get('/services/:device', getServicesByDevice);
+
+router.use(errorHandler);
 
 module.exports = router;

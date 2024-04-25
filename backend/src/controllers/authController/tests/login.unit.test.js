@@ -60,10 +60,8 @@ describe('login', () => {
 
     await loginUser(mockReq, mockRes, mockNext);
 
-    expect(mockNext).toHaveBeenCalledWith(
-      expect.any(Error)
-    );
-    
+    expect(mockNext).toHaveBeenCalledWith(expect.any(Error));
+
     expect(mockNext.mock.calls[0][0].message).toContain('Invalid credentials');
   });
 });

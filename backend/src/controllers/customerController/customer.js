@@ -38,7 +38,19 @@ const getCustomers = async (req, res, next) => {
   }
 };
 
+const getCustomer = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const customer = await Customer.findOne({ _id: id });
+
+    res.status(200).json({ customer });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createCustomer,
   getCustomers,
+  getCustomer,
 };

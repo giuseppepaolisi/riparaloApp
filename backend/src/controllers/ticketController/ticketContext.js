@@ -1,16 +1,15 @@
-const {OpenTicket} = require('./ticketState');
-
 class TicketContext {
-
     constructor(state) {
-        this.state = new OpenTicket();
-    }
-
-    setState(state) {
         this.state = state;
+        this.transitionTo(state);
     }
 
-    handleAction(action) {
+    transitionTo(state) {
+        console.log(state);
+        this.state = state;
+        this.state.setContext(this)
+    }
+    action(action) {
         this.state.handleAction(action);
     }
 }

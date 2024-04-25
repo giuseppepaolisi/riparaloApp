@@ -46,7 +46,7 @@ const createCustomer = async (req, res, next) => {
 
 // Ritorna la lista di clienti di un certo partner
 const getCustomers = async (req, res, next) => {
-    const partner = req.user._id;
+  const partner = req.user._id;
   try {
     const customers = await Customer.find({ partner });
 

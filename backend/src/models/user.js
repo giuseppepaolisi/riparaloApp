@@ -25,11 +25,11 @@ const userSchema = new Schema({
   },
   nome: {
     type: String,
-    required: true
+    required: true,
   },
   cognome: {
     type: String,
-    required: true
+    required: true,
   },
   telefono: {
     type: String,

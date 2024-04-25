@@ -20,7 +20,10 @@ const openTicket = async (req, res, next) => {
   } = req.body;
 
   // Calcola il totale stimato
-  const totaleStimato = problemiSelezionati.reduce((total, item) => total + item.prezzo, 0);
+  const totaleStimato = problemiSelezionati.reduce(
+    (total, item) => total + item.prezzo,
+    0
+  );
 
   // recupero id del partner
   const idPartner = req.user_id;
@@ -57,11 +60,13 @@ const openTicket = async (req, res, next) => {
       // prezzo stimato calcolato
       prezzo_stimato: totaleStimato,
       stato: APERTO,
-      storico_stato: [{
-        stato: APERTO,
-        data: new Date(),
-        tecnico: '' // Campo vuoto per il tecnico
-      }]
+      storico_stato: [
+        {
+          stato: APERTO,
+          data: new Date(),
+          tecnico: '', // Campo vuoto per il tecnico
+        },
+      ],
     });
 
     await newTicket.save();
@@ -93,7 +98,7 @@ const getTicket = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const tickets = await Ticket.find({_id:id});
+    const tickets = await Ticket.find({ _id: id });
     res.status(200).json(tickets);
   } catch (error) {
     next(error);

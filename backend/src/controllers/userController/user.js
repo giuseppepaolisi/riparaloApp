@@ -24,7 +24,7 @@ const signup = async (req, res, next) => {
     const signupFunction = signupFactory(role);
     newuser = signupFunction(newuser, next);
 
-    const user = await User.signup(newuser);
+    const user = await User.signup(newuser, next);
     res.status(201).json({ user });
   } catch (error) {
     next(error);

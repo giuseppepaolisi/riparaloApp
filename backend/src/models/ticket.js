@@ -50,7 +50,7 @@ const servizioSchema = new mongoose.Schema(
 
 // Schema principale per Ticket
 const ticketSchema = new mongoose.Schema({
-  email_partner: {
+  id_partner: {
     type: String,
     required: true,
   },
@@ -69,6 +69,9 @@ const ticketSchema = new mongoose.Schema({
   codiceUnivoco: {
     type: String,
     required: true,
+  },
+  pec: {
+    type: String,
   },
   cap: {
     type: String,

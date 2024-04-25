@@ -2,6 +2,7 @@ const { getAll } = require('../user');
 const User = require('../../../models/user');
 const { TECHNICIAN, PARTNER } = require('../../../conf/role');
 const mongoose = require('mongoose');
+const { ErrorResponse } = require('../../../middleware/errorManager');
 
 jest.mock('../../../models/user');
 
@@ -26,7 +27,7 @@ describe('TEST getAll', () => {
     const mockUsers = [{ role: PARTNER }];
     User.find.mockResolvedValue(mockUsers);
 
-    await getAll(mockReq, mockRes);
+    await getAll(mockReq, mockRes, mockNext);
 
     expect(User.find).toHaveBeenCalledWith({ role: PARTNER });
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -38,7 +39,7 @@ describe('TEST getAll', () => {
     const mockUsers = [{ role: TECHNICIAN }];
     User.find.mockResolvedValue(mockUsers);
 
-    await getAll(mockReq, mockRes);
+    await getAll(mockReq, mockRes, mockNext);
 
     expect(User.find).toHaveBeenCalledWith({ role: TECHNICIAN });
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -48,12 +49,11 @@ describe('TEST getAll', () => {
   it('ruolo non supportato', async () => {
     mockReq.params.role = 'admin';
 
-    await getAll(mockReq, mockRes);
-
-    expect(mockRes.status).toHaveBeenCalledWith(400);
-    expect(mockRes.json).toHaveBeenCalledWith({
-      error: 'ruolo non supportato',
-    });
+    await getAll(mockReq, mockRes, mockNext);
+    
+    expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
+    expect(mockNext.mock.calls[0][0].message).toContain('ruolo non supportato');
+    expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
 
   it('errore nel metodo User.find', async () => {
@@ -61,9 +61,11 @@ describe('TEST getAll', () => {
     const errorMessage = 'Database error';
     User.find.mockRejectedValue(new Error(errorMessage));
 
-    await getAll(mockReq, mockRes);
+    await getAll(mockReq, mockRes, mockNext);
 
-    expect(mockRes.status).toHaveBeenCalledWith(400);
-    expect(mockRes.json).toHaveBeenCalledWith({ error: errorMessage });
+    expect(mockNext).toHaveBeenCalledWith(
+      expect.any(Error)
+    );
+    expect(mockNext.mock.calls[0][0].message).toContain(errorMessage);
   });
 });

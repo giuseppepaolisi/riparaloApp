@@ -21,6 +21,10 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Il numero di telefono è obbligatorio'],
   },
+  partner: {
+    type: String,
+    required: true,
+  },
 });
 
 const Customer = mongoose.model('Customer', customerSchema);

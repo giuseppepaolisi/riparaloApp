@@ -1,10 +1,14 @@
 const Customer = require('../../models/customer');
 const { ErrorResponse } = require('../../middleware/errorManager');
 
+// Creazione di un cliente con email, nome, cognome, telefono e partner associato
 const createCustomer = async (req, res, next) => {
   const { email, nome, cognome, telefono } = req.body;
+  const { authorization } = req.headers;
 
   try {
+    const partner = authorization.split(' ')[0]._id;
+
     // validazione input
     if (!/\S+@\S+\.\S+/.test(email)) {
       return next(new ErrorResponse("Inserire un'email valida", 400));
@@ -29,16 +33,25 @@ const createCustomer = async (req, res, next) => {
       );
     }
 
-    const customer = await Customer.create({ email, nome, cognome, telefono });
+    const customer = await Customer.create({
+      email,
+      nome,
+      cognome,
+      telefono,
+      partner,
+    });
     res.status(201).json({ customer });
   } catch (error) {
     next(error);
   }
 };
 
+// Ritorna la lista di clienti di un certo partner
 const getCustomers = async (req, res, next) => {
+  const { authorization } = req.headers;
   try {
-    const customers = await Customer.find({});
+    const partner = authorization.split(' ')[0]._id;
+    const customers = await Customer.find({ partner });
 
     res.status(200).json({ customers });
   } catch (error) {
@@ -46,6 +59,8 @@ const getCustomers = async (req, res, next) => {
   }
 };
 
+// Ritorna i dati di un singolo cliente
+// !!ATTENZIONE chiunque passando l'id può prendere questi dati
 const getCustomer = async (req, res, next) => {
   const { id } = req.params;
   try {

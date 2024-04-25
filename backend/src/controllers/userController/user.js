@@ -22,7 +22,7 @@ const signup = async (req, res) => {
     newuser = signupFunction(newuser);
 
     const user = await User.signup(newuser);
-    res.status(200).json({ user });
+    res.status(201).json({ user });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

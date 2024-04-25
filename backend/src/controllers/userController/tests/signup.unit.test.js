@@ -45,7 +45,7 @@ describe('TEST signup', () => {
 
     await signup(mockReq, mockRes);
 
-    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.status).toHaveBeenCalledWith(201);
     expect(mockRes.json).toHaveBeenCalledWith({ user: newUser });
   });
 
@@ -64,7 +64,7 @@ describe('TEST signup', () => {
 
     await signup(mockReq, mockRes);
 
-    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.status).toHaveBeenCalledWith(201);
     expect(mockRes.json).toHaveBeenCalledWith({ user: newUser });
   });
 

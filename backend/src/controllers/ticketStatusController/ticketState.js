@@ -20,157 +20,257 @@ class TicketState {
         this.context = context;
     }
 
-    handleAction(action) {
+    printNext(state) {
+    }
+
+    handleAction(state) {
+
     }
 
 }
 
 // Stato APERTO
 class OpenTicket extends TicketState { 
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === ACCETTATO) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === ACCETTATO) {
             console.log(ACCETTATO);
             this.context.transitionTo(new AcceptedTicket());
+        } else {
+            // transizione di stato invalida
         }
+    }
+
+    handleAction(state) {
+        if(state === ACCETTATO) {
+            // transizione valisa
+            return true;
+        }
+        // transizione di stato invalida
+        return false;
     }
 }
 
 // Stato ACCETTATO
 class AcceptedTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === RITIRATO) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === RITIRATO) {
             console.log(RITIRATO);
             this.context.transitionTo(new RetrivedTicket());
-        } else if(action === IN_LAVORAZIONE) {
+        } else if(state === IN_LAVORAZIONE) {
             console.log(IN_LAVORAZIONE);
             this.context.transitionTo(new InProgressTicket()); 
         }
+    }
+    
+    handleAction(state) {
+        if(state === RITIRATO) {
+            // transizione valisa
+            return true;
+        } else if(state === IN_LAVORAZIONE){
+            // transizione di stato invalida
+            return true;
+        }
+        return false;
     }
 }
 
 // Stato RITIRATO
 class RetrivedTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === IN_LAVORAZIONE) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === IN_LAVORAZIONE) {
             console.log(IN_LAVORAZIONE);
             this.context.transitionTo(new InProgressTicket());
         }
+    }
+
+    handleAction(state) {
+        if(state === IN_LAVORAZIONE) {
+            return true;
+        }
+        return false;
     }
 }
 
 // Stato IN LAVORAZIONE
 class InProgressTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === ATTESA_CONFERMA_PREVENTIVO) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === ATTESA_CONFERMA_PREVENTIVO) {
             console.log(ATTESA_CONFERMA_PREVENTIVO);
             this.context.transitionTo(new AwatingQuoteConfirmTicket());
-        } else if(action === ANNULLATO) {
+        } else if(state === ANNULLATO) {
             console.log(ANNULLATO);
             this.context.transitionTo(new CancelledTicket());
         }
+    }
+
+    handleAction(state) {
+        if(state === ATTESA_CONFERMA_PREVENTIVO) {
+            return true;
+        } else if(state === ANNULLATO) {
+            return true;
+        }
+        return false;
     }
 }
 
 // Stato ATTESA CONFERMA PREVENTIVO
 class AwatingQuoteConfirmTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === PREVENTIVO_ACCETTATO) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === PREVENTIVO_ACCETTATO) {
             this.context.transitionTo(new QuoteAcceptedTicket());
             console.log(PREVENTIVO_ACCETTATO);
-        } else if(action === PREVENTIVO_RIFIUTATO) {
+        } else if(state === PREVENTIVO_RIFIUTATO) {
             this.context.transitionTo(new QuoteRejectedTicket());
             console.log(PREVENTIVO_RIFIUTATO);
         }
+    }
+
+    handleAction(state) {
+        if(state === PREVENTIVO_ACCETTATO) {
+            return true;
+        } else if(state === PREVENTIVO_RIFIUTATO) {
+            return true;
+        }
+        return false;
     }
 }
 
 // Stato PREVENTIVO ACCETTATO
 class QuoteAcceptedTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === COMPLETATO) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === COMPLETATO) {
             this.context.transitionTo(new CompletedTicket());
             console.log(COMPLETATO);
-        } else if(action === ATTESA_RICAMBIO) {
+        } else if(state === ATTESA_RICAMBIO) {
             this.context.transitionTo(new AwationgPartsTicket());
             console.log(ATTESA_RICAMBIO);
         }
+    }
+
+    handleAction(state) {
+        if(state === COMPLETATO) {
+            return true;
+        } else if(state === ATTESA_RICAMBIO) {
+            return true;
+        }
+        return false;
     }
 }
 
 // Stato ATTESA RICAMBIO
 class AwationgPartsTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === COMPLETATO) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === COMPLETATO) {
             this.context.transitionTo(new CompletedTicket());
             console.log(COMPLETATO);
         }
+    }
+
+    handleAction(state) {
+        if(state === COMPLETATO) {
+            return true;
+        }
+        return false;
     }
 }
 
 // Stato COMPLETATO
 class CompletedTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === IN_CONSEGNA_COMPLETATO) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === IN_CONSEGNA_COMPLETATO) {
             this.context.transitionTo(new InDdeliveryCompletedTicket());
             console.log(IN_CONSEGNA_COMPLETATO);
         }
+    }
+
+    handleAction(state) {
+        if(state === IN_CONSEGNA_COMPLETATO) {
+            return true;
+        }
+        return false;
     }
 }
 
 // Stato IN CONSEGNA COMPLETATO
 class InDdeliveryCompletedTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
+    printNext(state) {
+        console.log("state: " + state);
         // stato finale pos
         console.log(IN_CONSEGNA_COMPLETATO);
+    }
+
+    handleAction(state) {
+        return true;
     }
 }
 
 // Stato ANNULLATO
 class CancelledTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === IN_CONSEGNA_ANNULLATO) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === IN_CONSEGNA_ANNULLATO) {
             this.context.transitionTo(new InDdeliveryCancelledTicket());
             console.log(IN_CONSEGNA_ANNULLATO);
         }
+    }
+
+    handleAction(state) {
+        if(state === IN_CONSEGNA_ANNULLATO) {
+            return true;
+        }
+        return false;
     }
 }
 
 // Stato IN CONSEGNA ANNULLATO
 class InDdeliveryCancelledTicket extends TicketState {
-    handleAction(action) {
+    printNext(state) {
         // stato finale
-        console.log("action: " + action);
+        console.log("state: " + state);
         console.log(IN_CONSEGNA_ANNULLATO);
+    }
+
+    handleAction(state) {
+        return true;
     }
 }
 
 // Stato PREVENTIVO RIFIUTATO
 class QuoteRejectedTicket extends TicketState {
-    handleAction(action) {
-        console.log("action: " + action);
-        if(action === IN_CONSEGNA_RIFIUTATO) {
+    printNext(state) {
+        console.log("state: " + state);
+        if(state === IN_CONSEGNA_RIFIUTATO) {
             this.context.transitionTo(new InDdeliveryRejectedTicket());
             console.log(IN_CONSEGNA_RIFIUTATO);
         }
+    }
+
+    handleAction(state) {
+        if(state === IN_CONSEGNA_RIFIUTATO) {
+            return true;
+        }
+        return false;
     }
 }
 
 // Stato IN CONSEGNA RIFIUTATO
 class InDdeliveryRejectedTicket extends TicketState {
-    handleAction(action) {
+    printNext(state) {
         // stato finale
-        console.log("action: " + action);
+        console.log("state: " + state);
         console.log(IN_CONSEGNA_RIFIUTATO);
+    }
+
+    handleAction(state) {
+        return true;
     }
 }
 

@@ -1,4 +1,5 @@
-# Ignore artifacts:
+// prettier-ignore
 build
 coverage
 node_modules
+const totaleStimato = problemiSelezionati.reduce((total, item) => total + item.prezzo, 0);

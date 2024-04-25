@@ -5,11 +5,6 @@ const mongoose = require('mongoose');
 // Mock di Service e delle sue funzioni
 jest.mock('../../../models/service');
 
-// Setup di base per i test
-const mockRequest = (body = {}) => ({
-  body,
-});
-
 const mockResponse = () => {
   const res = {};
   res.status = jest.fn().mockReturnValue(res);
@@ -19,11 +14,12 @@ const mockResponse = () => {
 
 // TEST getDevices
 describe('getDevices', () => {
-  let res;
+  let res, next;
 
   // Pulisce i mock dopo ogni test
   beforeEach(() => {
     res = mockResponse();
+    next = jest.fn();
     jest.clearAllMocks();
   });
 
@@ -34,7 +30,7 @@ describe('getDevices', () => {
     ];
     Service.find.mockResolvedValue(mockDevices);
 
-    await getDevices(null, res);
+    await getDevices(null, res, next);
 
     expect(Service.find).toHaveBeenCalledWith({}, 'modello marca');
     expect(res.status).toHaveBeenCalledWith(200);
@@ -42,13 +38,11 @@ describe('getDevices', () => {
   });
 
   it('errori in caso di fallimento del database', async () => {
-    const errorMessage = 'Errore di connessione al database';
+    const errorMessage = 'Database failure';
     Service.find.mockRejectedValue(new Error(errorMessage));
 
-    await getDevices(null, res);
+    await getDevices(null, res, next);
 
-    expect(Service.find).toHaveBeenCalledWith({}, 'modello marca');
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: errorMessage });
+    expect(next).toHaveBeenCalledWith(expect.any(Error));
   });
 });

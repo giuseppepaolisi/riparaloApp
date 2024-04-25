@@ -1,6 +1,7 @@
 const { createDevice } = require('../device');
 const Service = require('../../../models/service');
 const mongoose = require('mongoose');
+const { ErrorResponse } = require('../../../middleware/errorManager');
 
 // Mock di Service e delle sue funzioni
 jest.mock('../../../models/service');
@@ -19,13 +20,13 @@ const mockResponse = () => {
 
 // TEST createDevice
 describe('createDevice', () => {
-  let req, res;
+  let req, res, next;
 
-  // Pulisce i mock dopo ogni test
   beforeEach(() => {
+    jest.clearAllMocks();
     req = mockRequest();
     res = mockResponse();
-    jest.clearAllMocks();
+    next = jest.fn();
   });
 
   it('crea un dispositivo con successo', async () => {
@@ -35,9 +36,13 @@ describe('createDevice', () => {
       servizi: [{ servizio: 'Riparazione', prezzo: 100 }],
     };
     Service.findOne.mockResolvedValue(null);
-    Service.create.mockResolvedValue(req.body);
+    Service.create.mockResolvedValue({
+      modello: 'ModelloX',
+      marca: 'MarcaX',
+      servizi: [{ servizio: 'Riparazione', prezzo: 100 }],
+    });
 
-    await createDevice(req, res);
+    await createDevice(req, res, next);
 
     expect(Service.findOne).toHaveBeenCalledWith({ modello: 'ModelloX' });
     expect(Service.create).toHaveBeenCalledWith(req.body);
@@ -51,30 +56,28 @@ describe('createDevice', () => {
       marca: 'MarcaX',
       servizi: [{ servizio: 'Riparazione', prezzo: 100 }],
     };
-    Service.findOne.mockResolvedValue(req.body);
+    Service.findOne.mockResolvedValue(true);
 
-    await createDevice(req, res);
+    await createDevice(req, res, next);
 
     expect(Service.findOne).toHaveBeenCalledWith({ modello: 'ModelloX' });
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      error: 'Questo dispoditivo è già stato inserito.',
-    });
+    expect(next).toHaveBeenCalledWith(
+      new ErrorResponse('Questo dispoditivo è già stato inserito.', 400)
+    );
   });
 
-  it('nome mdello non valido', async () => {
+  it('nome modello non valido', async () => {
     req.body = {
       modello: '',
       marca: 'MarcaX',
       servizi: [{ servizio: 'Riparazione', prezzo: 100 }],
     };
 
-    await createDevice(req, res);
+    await createDevice(req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      error: 'Inserisci un nome modello valido.',
-    });
+    expect(next).toHaveBeenCalledWith(
+      new ErrorResponse('Inserisci un nome modello valido.', 400)
+    );
   });
 
   it('marca non valida', async () => {
@@ -84,12 +87,11 @@ describe('createDevice', () => {
       servizi: [{ servizio: 'Riparazione', prezzo: 100 }],
     };
 
-    await createDevice(req, res);
+    await createDevice(req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      error: 'Inserisci una marca valida.',
-    });
+    expect(next).toHaveBeenCalledWith(
+      new ErrorResponse('Inserisci una marca valida.', 400)
+    );
   });
 
   it('array di servizi non valido', async () => {
@@ -98,13 +100,12 @@ describe('createDevice', () => {
       marca: 'MarcaX',
       servizi: 'non un array',
     };
-    Service.findOne.mockResolvedValue(null);
-    await createDevice(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      error: 'Il campo servizi deve essere un array.',
-    });
+    await createDevice(req, res, next);
+
+    expect(next).toHaveBeenCalledWith(
+      new ErrorResponse('Il campo servizi deve essere un array.', 400)
+    );
   });
 
   it('prezzo del servizio non valido', async () => {
@@ -114,12 +115,10 @@ describe('createDevice', () => {
       servizi: [{ servizio: 'Riparazione', prezzo: 'cento' }],
     };
 
-    Service.findOne.mockResolvedValue(null);
-    await createDevice(req, res);
+    await createDevice(req, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      error: 'Ogni servizio deve avere un prezzo valido.',
-    });
+    expect(next).toHaveBeenCalledWith(
+      new ErrorResponse('Ogni servizio deve avere un prezzo valido.', 400)
+    );
   });
 });

@@ -58,9 +58,11 @@ describe('deleteUser', () => {
     expect(User.findOneAndDelete).toHaveBeenCalledWith({
       _id: '507f1f77bcf86cd799439011',
     });
-    
+
     expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
-    expect(mockNext.mock.calls[0][0].message).toContain('Nessun utente trovato');
+    expect(mockNext.mock.calls[0][0].message).toContain(
+      'Nessun utente trovato'
+    );
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
 
@@ -70,9 +72,7 @@ describe('deleteUser', () => {
     User.findOneAndDelete.mockRejectedValue(new Error(errorMessage));
     await deleteUser(mockReq, mockRes, mockNext);
 
-    expect(mockNext).toHaveBeenCalledWith(
-      expect.any(Error)
-    );
+    expect(mockNext).toHaveBeenCalledWith(expect.any(Error));
     expect(mockNext.mock.calls[0][0].message).toContain(errorMessage);
   });
 });

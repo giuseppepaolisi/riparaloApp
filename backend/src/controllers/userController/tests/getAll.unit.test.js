@@ -50,7 +50,7 @@ describe('TEST getAll', () => {
     mockReq.params.role = 'admin';
 
     await getAll(mockReq, mockRes, mockNext);
-    
+
     expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
     expect(mockNext.mock.calls[0][0].message).toContain('ruolo non supportato');
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
@@ -63,9 +63,7 @@ describe('TEST getAll', () => {
 
     await getAll(mockReq, mockRes, mockNext);
 
-    expect(mockNext).toHaveBeenCalledWith(
-      expect.any(Error)
-    );
+    expect(mockNext).toHaveBeenCalledWith(expect.any(Error));
     expect(mockNext.mock.calls[0][0].message).toContain(errorMessage);
   });
 });

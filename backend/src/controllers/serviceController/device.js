@@ -1,92 +1,100 @@
 const Service = require('../../models/service');
+const { ErrorResponse } = require('../../middleware/errorManager');
 
 // si occupa della creazione di un dispositivo
-const createDevice = async (req, res) => {
+const createDevice = async (req, res, next) => {
   const { modello, marca, servizi } = req.body;
 
   try {
-    // Verifica la la validità di modello e marca
+    // Verifica la validità di modello e marca
     if (!modello || modello.trim() === '') {
-      throw new Error('Inserisci un nome modello valido.');
+      return next(new ErrorResponse('Inserisci un nome modello valido.', 400));
     }
     if (!marca || marca.trim() === '') {
-      throw new Error('Inserisci una marca valida.');
+      return next(new ErrorResponse('Inserisci una marca valida.', 400));
+    }
+
+    // Verifica che l'array di servizi sia definito
+    if (!servizi || !Array.isArray(servizi)) {
+      return next(
+        new ErrorResponse('Il campo servizi deve essere un array.', 400)
+      );
+    }
+
+    // Verifica ogni elemento nell'array servizi
+    for (const servizio of servizi) {
+      if (!servizio.servizio || servizio.servizio.trim() === '') {
+        return next(
+          new ErrorResponse('Ogni servizio deve avere un nome valido.', 400)
+        );
+      }
+      if (typeof servizio.prezzo !== 'number' || isNaN(servizio.prezzo)) {
+        return next(
+          new ErrorResponse('Ogni servizio deve avere un prezzo valido.', 400)
+        );
+      }
     }
 
     // Controlla se esiste già lo stesso modello
     const existingDevice = await Service.findOne({ modello });
     if (existingDevice) {
-      throw new Error('Questo dispoditivo è già stato inserito.');
+      return next(
+        new ErrorResponse('Questo dispoditivo è già stato inserito.', 400)
+      );
     }
-
-    // Verifica che l'array di servizi sia definito
-    if (!servizi || !Array.isArray(servizi)) {
-      throw new Error('Il campo servizi deve essere un array.');
-    }
-
-    // Verifica ogni elemento nell'array servizi
-    servizi.forEach((servizio) => {
-      if (!servizio.servizio || servizio.servizio.trim() === '') {
-        throw new Error('Ogni servizio deve avere un nome valido.');
-      }
-      if (typeof servizio.prezzo !== 'number' || isNaN(servizio.prezzo)) {
-        throw new Error('Ogni servizio deve avere un prezzo valido.');
-      }
-    });
 
     const device = await Service.create({ modello, marca, servizi });
-
     res.status(201).json({ device });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
 // restituisce un array di device con marca e modello
-const getDevices = async (req, res) => {
+const getDevices = async (req, res, next) => {
   try {
     const devices = await Service.find({}, 'modello marca');
 
     res.status(200).json({ devices });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    next(error);
   }
 };
 
 // Restiruisce un singolo device passando un id
-const getDevice = async (req, res) => {
+const getDevice = async (req, res, next) => {
   const { id } = req.params;
 
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new Error('ID dispositivo non valido');
+      return next(new ErrorResponse("'ID dispositivo non valido", 400));
     }
 
     const device = await Service.findById(id);
 
     if (!device) {
-      throw new Error('Dispositivo non trovato');
+      return next(new ErrorResponse('Dispositivo non trovato', 400));
     }
 
     res.status(200).json({ device });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
 // Restituisce un array di marche
-const getBrands = async (req, res) => {
+const getBrands = async (req, res, next) => {
   try {
     const uniqueBdrands = await Service.distinct('marca');
 
     res.status(200).json({ brands: uniqueBdrands });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 
 // Ritorna un array di modelli per una determinata marca
-const getModelsByBrand = async (req, res) => {
+const getModelsByBrand = async (req, res, next) => {
   const { brand } = req.params;
 
   try {
@@ -94,7 +102,7 @@ const getModelsByBrand = async (req, res) => {
 
     res.status(200).json({ modelli: devices });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    next(error);
   }
 };
 

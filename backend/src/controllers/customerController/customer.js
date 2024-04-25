@@ -15,9 +15,17 @@ const createCustomer = async (req, res, next) => {
     if (!cognome) {
       return next(new ErrorResponse('Inserire un cognome', 400));
     }
-    if (!telefono && telefono.lenght < 10) {
+    if (!telefono || telefono.length < 10) {
       return next(
         new ErrorResponse('Inserire un numero di telefono valido', 400)
+      );
+    }
+
+    // Controlla se esiste già un cliente con la stessa email
+    const existingCustomer = await Customer.findOne({ email });
+    if (existingCustomer) {
+      return next(
+        new ErrorResponse('Questo cliente è già stato inserito.', 400)
       );
     }
 

@@ -16,8 +16,8 @@ class TicketContext {
     this.state.printNext(action);
   }
 
-  action(action) {
-    this.state.handleAction(action);
+  isValid(action) {
+    return this.state.handleAction(action);
   }
 }
 

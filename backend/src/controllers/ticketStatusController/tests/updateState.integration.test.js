@@ -479,8 +479,8 @@ describe('TEST updateState', () => {
       newTicket: expect.any(Object),
     });
   });
-  /*
-     // SUCCESSO
+
+    // SUCCESSO
     // Cambio stato da Preventivo accettato a Annullato
     it('SUCCESS - Cambio stato da Preventivo accettato a Annullato', async () => {
         mockReq.body.newstate = ANNULLATO;
@@ -503,7 +503,6 @@ describe('TEST updateState', () => {
         expect(mockRes.json).toHaveBeenCalledWith({ newTicket: expect.any(Object) });
     })
 
-    */
   // SUCCESSO
   // Cambio stato da In Lavorazione a Annullato
   it('SUCCESS - Cambio stato da In Lavorazione a Annullato', async () => {

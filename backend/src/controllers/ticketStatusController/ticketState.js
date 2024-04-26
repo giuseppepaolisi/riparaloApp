@@ -188,6 +188,9 @@ class QuoteAcceptedTicket extends TicketState {
     } else if (state === ATTESA_RICAMBIO) {
       this.context.transitionTo(new AwationgPartsTicket());
       console.log(ATTESA_RICAMBIO);
+    } else if (state === ANNULLATO) {
+      this.context.transitionTo(new CancelledTicket());
+      console.log(ANNULLATO);
     }
   }
 
@@ -195,6 +198,8 @@ class QuoteAcceptedTicket extends TicketState {
     if (state === COMPLETATO) {
       return true;
     } else if (state === ATTESA_RICAMBIO) {
+      return true;
+    } else if (state === ANNULLATO) {
       return true;
     }
     return false;

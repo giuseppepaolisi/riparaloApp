@@ -608,7 +608,7 @@ describe('TEST updateState', () => {
   });
 
   // Permessi non validi per il cambio di stato
-  it('ERRORE - Ticket non trovato', async () => {
+  it('ERRORE - Permessi non validi per il cambio di stato', async () => {
     mockReq.body.newstate = ATTESA_CONFERMA_PREVENTIVO;
     mockReq.user.role = PARTNER;
     ticket.stato = IN_LAVORAZIONE;

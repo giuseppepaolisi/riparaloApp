@@ -16,18 +16,19 @@ const updateState = async (req, res, next) => {
     const ticket = await Ticket.findById({ _id: id });
     if (!ticket) {
       // ticket non trovato
-      return new ErrorResponse('Ticket non trovato', 404);
+      throw new ErrorResponse('Ticket non trovato', 404);
     }
 
     let context = new TicketContext(ticketFactory(ticket.stato));
     // controlla se l'utente è autorizzato a cambiare stato
     if (!context.isAuthorized(role)) {
-      return new ErrorResponse('Non sei autorizzato a cambiare stato', 400);
+      console.log('sono nel if');
+      throw new ErrorResponse('Non sei autorizzato a cambiare stato', 400);
     }
 
     if (!context.isValid(newstate)) {
       // transizione di stato non valida
-      return new ErrorResponse(
+      throw new ErrorResponse(
         'Transizione di stato illegale: ' + ticket.stato + ' -/-> ' + newstate,
         400
       );

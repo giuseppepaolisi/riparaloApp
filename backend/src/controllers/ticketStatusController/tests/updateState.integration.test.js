@@ -480,28 +480,32 @@ describe('TEST updateState', () => {
     });
   });
 
-    // SUCCESSO
-    // Cambio stato da Preventivo accettato a Annullato
-    it('SUCCESS - Cambio stato da Preventivo accettato a Annullato', async () => {
-        mockReq.body.newstate = ANNULLATO;
-        ticket.stato = PREVENTIVO_ACCETTATO;
-        Ticket.findById.mockResolvedValue(ticket);
-        ticket.save.mockResolvedValueOnce(ticket);
+  // SUCCESSO
+  // Cambio stato da Preventivo accettato a Annullato
+  it('SUCCESS - Cambio stato da Preventivo accettato a Annullato', async () => {
+    mockReq.body.newstate = ANNULLATO;
+    ticket.stato = PREVENTIVO_ACCETTATO;
+    Ticket.findById.mockResolvedValue(ticket);
+    ticket.save.mockResolvedValueOnce(ticket);
 
-        await updateState(mockReq, mockRes, mockNext);
+    await updateState(mockReq, mockRes, mockNext);
 
-        expect(mockRes.status).not.toHaveBeenCalledWith(400);
-        expect(mockRes.status).not.toHaveBeenCalledWith(404);
-        expect(Ticket.findById).toHaveBeenCalledWith({ _id: '123456'});
-        expect(ticket.save).toHaveBeenCalled();
-        expect(ticket.stato).toEqual(ANNULLATO);
-        // Verifica che storico_stato contenga un oggetto con stato 'Accettato'
-        const hasNewStateInHistory = ticket.storico_stato.some(hist => hist.stato === ANNULLATO);
-        expect(hasNewStateInHistory).toBeTruthy();
+    expect(mockRes.status).not.toHaveBeenCalledWith(400);
+    expect(mockRes.status).not.toHaveBeenCalledWith(404);
+    expect(Ticket.findById).toHaveBeenCalledWith({ _id: '123456' });
+    expect(ticket.save).toHaveBeenCalled();
+    expect(ticket.stato).toEqual(ANNULLATO);
+    // Verifica che storico_stato contenga un oggetto con stato 'Accettato'
+    const hasNewStateInHistory = ticket.storico_stato.some(
+      (hist) => hist.stato === ANNULLATO
+    );
+    expect(hasNewStateInHistory).toBeTruthy();
 
-        expect(mockRes.status).toHaveBeenCalledWith(200);
-        expect(mockRes.json).toHaveBeenCalledWith({ newTicket: expect.any(Object) });
-    })
+    expect(mockRes.status).toHaveBeenCalledWith(200);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      newTicket: expect.any(Object),
+    });
+  });
 
   // SUCCESSO
   // Cambio stato da In Lavorazione a Annullato

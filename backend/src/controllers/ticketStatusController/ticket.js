@@ -8,7 +8,8 @@ const { ATTESA_CONFERMA_PREVENTIVO } = require('../../conf/state');
 const updateState = async (req, res, next) => {
   const { id, newstate } = req.body;
   const role = req.user.role;
-  const {descrizione_tecnica, prezzo} = req.body;
+  const email = req.user.email;
+  const { descrizione_tecnica, prezzo } = req.body;
 
   try {
     // retrive dello stato attuale del ticket
@@ -23,7 +24,6 @@ const updateState = async (req, res, next) => {
     if (!context.isAuthorized(role)) {
       throw new ErrorResponse('Non sei autorizzato a cambiare stato', 400);
     }
-
     if (!context.isValid(newstate)) {
       // transizione di stato non valida
       throw new ErrorResponse(
@@ -31,7 +31,6 @@ const updateState = async (req, res, next) => {
         400
       );
     }
-
     // set del nuovo stato
     ticket.stato = newstate;
 
@@ -41,29 +40,27 @@ const updateState = async (req, res, next) => {
       data: new Date(),
     };
     if ([ADMIN, TECHNICIAN].includes(role)) {
-      storico.tecnico = role;
+      storico.tecnico = email;
     }
     ticket.storico_stato.push(storico);
-
     // set descrizione tecnica
-    if(descrizione_tecnica) {
+    if (descrizione_tecnica) {
       ticket.descrizione_tecnica = descrizione_tecnica;
     }
-
     // set del prezzo
-    if(newstato === ATTESA_CONFERMA_PREVENTIVO) {
-      if(!prezzo) {
+    if (newstate === ATTESA_CONFERMA_PREVENTIVO) {
+      console.log('if new stato');
+      if (!prezzo) {
         throw new ErrorResponse('Il prezzo è richiesto', 400);
       }
       const prezzoFloat = parseFloat(prezzo);
-      if(isNaN(prezzoFloat) || prezzoFloat < 0) {
+      if (isNaN(prezzoFloat) || prezzoFloat < 0) {
         throw new ErrorResponse('Inserisci un prezzo valido', 400);
       }
 
       // setta il prezzo
       ticket.prezzo = prezzoFloat;
     }
-    
 
     // aggiornamento dello stato
     const newTicket = await ticket.save();

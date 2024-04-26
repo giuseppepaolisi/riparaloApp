@@ -21,9 +21,7 @@ class TicketContext {
   }
 
   isAuthorized(role) {
-    const flag = this.state.authorized(role);
-    console.log(flag);
-    return flag;
+    return this.state.authorized(role);
   }
 }
 

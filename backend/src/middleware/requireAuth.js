@@ -35,7 +35,9 @@ const requireAuth = async (req, res, next) => {
     const payload = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
 
     // Includi il campo 'role' quando recuperi l'utente dal database
-    const user = await User.findOne({ _id: payload._id }).select('_id role');
+    const user = await User.findOne({ _id: payload._id }).select(
+      '_id role email'
+    );
 
     if (!user) {
       throw new Error('Utente non trovato');

@@ -61,7 +61,6 @@ const openTicket = async (req, res, next) => {
         {
           stato: APERTO,
           data: new Date(),
-          tecnico: '', // Campo vuoto per il tecnico
         },
       ],
     });

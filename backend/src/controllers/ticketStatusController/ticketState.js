@@ -14,15 +14,22 @@ const {
   IN_CONSEGNA_RIFIUTATO,
 } = require('../../conf/state');
 
+const { ADMIN, TECHNICIAN, PARTNER } = require('../../conf/role');
+
 // State interface
 class TicketState {
   setContext(context) {
     this.context = context;
   }
 
+  // print di tutti gli stati successivi
   printNext(state) {}
 
+  // verifica se la transazione di stato è valida return true se non è valida return false
   handleAction(state) {}
+
+  //verifica se l'utente è autorizzato ad effettuare quel cambiamento di stato return true, se non è autorizzato return false
+  authorized(role) {}
 }
 
 // Stato APERTO
@@ -43,6 +50,13 @@ class OpenTicket extends TicketState {
       return true;
     }
     // transizione di stato invalida
+    return false;
+  }
+
+  authorized(role) {
+    if ([ADMIN, TECHNICIAN].includes(role)) {
+      return true;
+    }
     return false;
   }
 }
@@ -70,6 +84,13 @@ class AcceptedTicket extends TicketState {
     }
     return false;
   }
+
+  authorized(role) {
+    if ([ADMIN, TECHNICIAN].includes(role)) {
+      return true;
+    }
+    return false;
+  }
 }
 
 // Stato RITIRATO
@@ -84,6 +105,13 @@ class RetrivedTicket extends TicketState {
 
   handleAction(state) {
     if (state === IN_LAVORAZIONE) {
+      return true;
+    }
+    return false;
+  }
+
+  authorized(role) {
+    if ([ADMIN, TECHNICIAN].includes(role)) {
       return true;
     }
     return false;
@@ -111,6 +139,13 @@ class InProgressTicket extends TicketState {
     }
     return false;
   }
+
+  authorized(role) {
+    if ([ADMIN, TECHNICIAN].includes(role)) {
+      return true;
+    }
+    return false;
+  }
 }
 
 // Stato ATTESA CONFERMA PREVENTIVO
@@ -130,6 +165,13 @@ class AwatingQuoteConfirmTicket extends TicketState {
     if (state === PREVENTIVO_ACCETTATO) {
       return true;
     } else if (state === PREVENTIVO_RIFIUTATO) {
+      return true;
+    }
+    return false;
+  }
+
+  authorized(role) {
+    if ([PARTNER].includes(role)) {
       return true;
     }
     return false;
@@ -157,6 +199,13 @@ class QuoteAcceptedTicket extends TicketState {
     }
     return false;
   }
+
+  authorized(role) {
+    if ([ADMIN, TECHNICIAN].includes(role)) {
+      return true;
+    }
+    return false;
+  }
 }
 
 // Stato ATTESA RICAMBIO
@@ -171,6 +220,13 @@ class AwationgPartsTicket extends TicketState {
 
   handleAction(state) {
     if (state === COMPLETATO) {
+      return true;
+    }
+    return false;
+  }
+
+  authorized(role) {
+    if ([ADMIN, TECHNICIAN].includes(role)) {
       return true;
     }
     return false;
@@ -193,6 +249,13 @@ class CompletedTicket extends TicketState {
     }
     return false;
   }
+
+  authorized(role) {
+    if ([ADMIN, TECHNICIAN].includes(role)) {
+      return true;
+    }
+    return false;
+  }
 }
 
 // Stato IN CONSEGNA COMPLETATO
@@ -204,6 +267,10 @@ class InDdeliveryCompletedTicket extends TicketState {
   }
 
   handleAction(state) {
+    return true;
+  }
+
+  authorized(role) {
     return true;
   }
 }
@@ -224,6 +291,13 @@ class CancelledTicket extends TicketState {
     }
     return false;
   }
+
+  authorized(role) {
+    if ([ADMIN, TECHNICIAN].includes(role)) {
+      return true;
+    }
+    return false;
+  }
 }
 
 // Stato IN CONSEGNA ANNULLATO
@@ -235,6 +309,10 @@ class InDdeliveryCancelledTicket extends TicketState {
   }
 
   handleAction(state) {
+    return true;
+  }
+
+  authorized(role) {
     return true;
   }
 }
@@ -255,6 +333,13 @@ class QuoteRejectedTicket extends TicketState {
     }
     return false;
   }
+
+  authorized(role) {
+    if ([ADMIN, TECHNICIAN].includes(role)) {
+      return true;
+    }
+    return false;
+  }
 }
 
 // Stato IN CONSEGNA RIFIUTATO
@@ -266,6 +351,10 @@ class InDdeliveryRejectedTicket extends TicketState {
   }
 
   handleAction(state) {
+    return true;
+  }
+
+  authorized(role) {
     return true;
   }
 }

@@ -8,6 +8,8 @@ const updateState = async (req, res, next) => {
   // includere anche: descrizione del problema, prezzo effettivo, storico
 
   const { id, newstate } = req.body;
+  const role = req.user.role;
+  console.log(role);
 
   try {
     // retrive dello stato attuale del ticket
@@ -18,11 +20,16 @@ const updateState = async (req, res, next) => {
     }
 
     let context = new TicketContext(ticketFactory(ticket.stato));
+    // controlla se l'utente è autorizzato a cambiare stato
+    if (!context.isAuthorized(role)) {
+      return new ErrorResponse('Non sei autorizzato a cambiare stato', 400);
+    }
+
     if (!context.isValid(newstate)) {
       // transizione di stato non valida
       return new ErrorResponse(
-        'Tranzazione di stato illegale: ' + ticket.stato + ' -/-> ' + newstate,
-        404
+        'Transizione di stato illegale: ' + ticket.stato + ' -/-> ' + newstate,
+        400
       );
     }
 

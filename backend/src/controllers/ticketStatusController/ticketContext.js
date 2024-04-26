@@ -19,6 +19,10 @@ class TicketContext {
   isValid(action) {
     return this.state.handleAction(action);
   }
+
+  isAuthorized(role) {
+    return this.state.authorized(role);
+  }
 }
 
 module.exports = {

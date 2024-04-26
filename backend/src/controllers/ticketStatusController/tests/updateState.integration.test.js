@@ -1,7 +1,4 @@
 const Ticket = require('../../../models/ticket');
-const { ErrorResponse } = require('../../../middleware/errorManager');
-const { TicketContext } = require('../ticketContext');
-const { ticketFactory } = require('../ticketFactory');
 const { ADMIN, TECHNICIAN, PARTNER } = require('../../../conf/role');
 const { updateState } = require('../ticket');
 const {

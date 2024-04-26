@@ -49,18 +49,22 @@ const updateState = async (req, res, next) => {
     }
     // set del prezzo
     if (newstate === ATTESA_CONFERMA_PREVENTIVO) {
-      if (!prezzo || prezzo === 0 || prezzo ==='') {
+      if (!prezzo || prezzo === 0 || prezzo === '') {
         // conferma il prezzo stimato
         ticket.prezzo = ticket.prezzo_stimato;
       } else {
         // aggiunge il nuovo prezzo
         const prezzoFloat = parseFloat(prezzo);
-        if (isNaN(prezzoFloat) || prezzoFloat < 0) {
+        if (
+          typeof prezzo === 'string' ||
+          isNaN(prezzoFloat) ||
+          prezzoFloat < 0
+        ) {
+          console.log('sono nel if');
           throw new ErrorResponse('Inserisci un prezzo valido', 400);
         }
         ticket.prezzo = prezzoFloat;
       }
-      
     }
 
     // aggiornamento dello stato

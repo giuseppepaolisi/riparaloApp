@@ -75,7 +75,7 @@ const openTicket = async (req, res, next) => {
 
 // ritorna la lista di ticket
 const getTickets = async (req, res, next) => {
-  const { state } =  req.params;
+  const { state } = req.params;
   let filters = {};
 
   // aggiungi un filsìtro se si tratta di un partner
@@ -89,7 +89,7 @@ const getTickets = async (req, res, next) => {
 
   try {
     const tickets = await Ticket.find(filters);
-    res.status(200).json({tickets});
+    res.status(200).json({ tickets });
   } catch (error) {
     next(error);
   }
@@ -103,7 +103,7 @@ const getTicket = async (req, res, next) => {
     if (!id) {
       throw new ErrorResponse('ID non valido', 400);
     }
-  
+
     let filters = { _id: id };
     // aggiungi un filtro se si tratta di un partner
     if (req.user.role === PARTNER) {

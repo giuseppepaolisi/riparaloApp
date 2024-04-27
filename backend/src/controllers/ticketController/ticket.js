@@ -100,8 +100,22 @@ const getTicket = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const tickets = await Ticket.find({ _id: id });
-    res.status(200).json(tickets);
+    if (!id) {
+      throw new ErrorResponse('ID non valido', 400);
+    }
+  
+    let filters = { _id: id };
+    // aggiungi un filtro se si tratta di un partner
+    if (req.user.role === PARTNER) {
+      filters.id_partner = req.user._id;
+    }
+
+    const ticket = await Ticket.findOne(filters);
+    if (!ticket) {
+      throw new ErrorResponse('Ticket non trovato', 404); // Changed status code to 404
+    }
+
+    res.status(200).json({ ticket }); // Ensuring response format is consistent
   } catch (error) {
     next(error);
   }

@@ -17,7 +17,7 @@ router.use(requireAuth);
 
 router.post('/ticket', requirePartner, openTicket);
 
-router.get('/tickets', getTickets);
+router.get('/tickets/:state', getTickets);
 
 router.get('/ticket/:id', getTicket);
 

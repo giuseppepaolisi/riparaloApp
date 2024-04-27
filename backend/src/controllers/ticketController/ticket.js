@@ -2,7 +2,7 @@ const Ticket = require('../../models/ticket');
 const User = require('../../models/user');
 const { ErrorResponse } = require('../../middleware/errorManager');
 const { PARTNER } = require('../../conf/role');
-const { APERTO } = require('../../conf/state');
+const { APERTO, STATES } = require('../../conf/state');
 
 // Permette la creazione di un ticket
 const openTicket = async (req, res, next) => {
@@ -75,16 +75,21 @@ const openTicket = async (req, res, next) => {
 
 // ritorna la lista di ticket
 const getTickets = async (req, res, next) => {
+  const { state } =  req.params;
   let filters = {};
 
   // aggiungi un filsìtro se si tratta di un partner
   if (req.user.role === PARTNER) {
-    filters = { id_partner: req.user._id };
+    filters.id_partner = req.user._id;
+  }
+
+  if (STATES.includes(state)) {
+    filters.stato = state;
   }
 
   try {
-    const tickets = await Ticket.find({});
-    res.status(200).json(tickets);
+    const tickets = await Ticket.find(filters);
+    res.status(200).json({tickets});
   } catch (error) {
     next(error);
   }

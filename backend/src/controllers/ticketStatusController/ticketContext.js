@@ -6,7 +6,6 @@ class TicketContext {
 
   // permette di passare a una nuova istanza di TicketStatus
   transitionTo(state) {
-    //console.log(state);
     this.state = state;
     this.state.setContext(this);
   }

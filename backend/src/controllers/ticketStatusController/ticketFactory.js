@@ -23,11 +23,11 @@ const {
   QuoteAcceptedTicket,
   AwationgPartsTicket,
   CompletedTicket,
-  InDdeliveryCompletedTicket,
+  //InDdeliveryCompletedTicket,
   CancelledTicket,
-  InDdeliveryCancelledTicket,
+  //InDdeliveryCancelledTicket,
   QuoteRejectedTicket,
-  InDdeliveryRejectedTicket,
+  //InDdeliveryRejectedTicket,
 } = require('./ticketState');
 
 function ticketFactory(status) {
@@ -52,12 +52,12 @@ function ticketFactory(status) {
       return new CancelledTicket();
     case ATTESA_RICAMBIO:
       return new AwationgPartsTicket();
-    case IN_CONSEGNA_COMPLETATO:
+    /*case IN_CONSEGNA_COMPLETATO:
       return new InDdeliveryCompletedTicket();
     case IN_CONSEGNA_ANNULLATO:
       return new InDdeliveryCancelledTicket();
     case IN_CONSEGNA_RIFIUTATO:
-      return new InDdeliveryRejectedTicket();
+      return new InDdeliveryRejectedTicket();*/
     default:
       throw new Error('Status non valido');
   }

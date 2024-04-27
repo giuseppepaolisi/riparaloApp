@@ -23,7 +23,7 @@ class TicketState {
   }
 
   // print di tutti gli stati successivi
-  printNext(state) {}
+  /*printNext(state) {}*/
 
   // verifica se la transazione di stato è valida return true se non è valida return false
   handleAction(state) {}
@@ -34,7 +34,7 @@ class TicketState {
 
 // Stato APERTO
 class OpenTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === ACCETTATO) {
       console.log(ACCETTATO);
@@ -42,7 +42,7 @@ class OpenTicket extends TicketState {
     } else {
       // transizione di stato invalida
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === ACCETTATO) {
@@ -63,7 +63,7 @@ class OpenTicket extends TicketState {
 
 // Stato ACCETTATO
 class AcceptedTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === RITIRATO) {
       console.log(RITIRATO);
@@ -72,7 +72,7 @@ class AcceptedTicket extends TicketState {
       console.log(IN_LAVORAZIONE);
       this.context.transitionTo(new InProgressTicket());
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === RITIRATO) {
@@ -95,13 +95,13 @@ class AcceptedTicket extends TicketState {
 
 // Stato RITIRATO
 class RetrivedTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === IN_LAVORAZIONE) {
       console.log(IN_LAVORAZIONE);
       this.context.transitionTo(new InProgressTicket());
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === IN_LAVORAZIONE) {
@@ -120,7 +120,7 @@ class RetrivedTicket extends TicketState {
 
 // Stato IN LAVORAZIONE
 class InProgressTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === ATTESA_CONFERMA_PREVENTIVO) {
       console.log(ATTESA_CONFERMA_PREVENTIVO);
@@ -129,7 +129,7 @@ class InProgressTicket extends TicketState {
       console.log(ANNULLATO);
       this.context.transitionTo(new CancelledTicket());
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === ATTESA_CONFERMA_PREVENTIVO) {
@@ -150,7 +150,7 @@ class InProgressTicket extends TicketState {
 
 // Stato ATTESA CONFERMA PREVENTIVO
 class AwatingQuoteConfirmTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === PREVENTIVO_ACCETTATO) {
       this.context.transitionTo(new QuoteAcceptedTicket());
@@ -159,7 +159,7 @@ class AwatingQuoteConfirmTicket extends TicketState {
       this.context.transitionTo(new QuoteRejectedTicket());
       console.log(PREVENTIVO_RIFIUTATO);
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === PREVENTIVO_ACCETTATO) {
@@ -180,7 +180,7 @@ class AwatingQuoteConfirmTicket extends TicketState {
 
 // Stato PREVENTIVO ACCETTATO
 class QuoteAcceptedTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === COMPLETATO) {
       this.context.transitionTo(new CompletedTicket());
@@ -192,7 +192,7 @@ class QuoteAcceptedTicket extends TicketState {
       this.context.transitionTo(new CancelledTicket());
       console.log(ANNULLATO);
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === COMPLETATO) {
@@ -215,13 +215,13 @@ class QuoteAcceptedTicket extends TicketState {
 
 // Stato ATTESA RICAMBIO
 class AwationgPartsTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === COMPLETATO) {
       this.context.transitionTo(new CompletedTicket());
       console.log(COMPLETATO);
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === COMPLETATO) {
@@ -240,13 +240,13 @@ class AwationgPartsTicket extends TicketState {
 
 // Stato COMPLETATO
 class CompletedTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === IN_CONSEGNA_COMPLETATO) {
       this.context.transitionTo(new InDdeliveryCompletedTicket());
       console.log(IN_CONSEGNA_COMPLETATO);
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === IN_CONSEGNA_COMPLETATO) {
@@ -264,7 +264,7 @@ class CompletedTicket extends TicketState {
 }
 
 // Stato IN CONSEGNA COMPLETATO
-class InDdeliveryCompletedTicket extends TicketState {
+/*class InDdeliveryCompletedTicket extends TicketState {
   printNext(state) {
     console.log('state: ' + state);
     // stato finale pos
@@ -278,17 +278,17 @@ class InDdeliveryCompletedTicket extends TicketState {
   authorized(role) {
     return true;
   }
-}
+}*/
 
 // Stato ANNULLATO
 class CancelledTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === IN_CONSEGNA_ANNULLATO) {
       this.context.transitionTo(new InDdeliveryCancelledTicket());
       console.log(IN_CONSEGNA_ANNULLATO);
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === IN_CONSEGNA_ANNULLATO) {
@@ -306,7 +306,7 @@ class CancelledTicket extends TicketState {
 }
 
 // Stato IN CONSEGNA ANNULLATO
-class InDdeliveryCancelledTicket extends TicketState {
+/*class InDdeliveryCancelledTicket extends TicketState {
   printNext(state) {
     // stato finale
     console.log('state: ' + state);
@@ -320,17 +320,17 @@ class InDdeliveryCancelledTicket extends TicketState {
   authorized(role) {
     return true;
   }
-}
+}*/
 
 // Stato PREVENTIVO RIFIUTATO
 class QuoteRejectedTicket extends TicketState {
-  printNext(state) {
+  /*printNext(state) {
     console.log('state: ' + state);
     if (state === IN_CONSEGNA_RIFIUTATO) {
       this.context.transitionTo(new InDdeliveryRejectedTicket());
       console.log(IN_CONSEGNA_RIFIUTATO);
     }
-  }
+  }*/
 
   handleAction(state) {
     if (state === IN_CONSEGNA_RIFIUTATO) {
@@ -348,7 +348,7 @@ class QuoteRejectedTicket extends TicketState {
 }
 
 // Stato IN CONSEGNA RIFIUTATO
-class InDdeliveryRejectedTicket extends TicketState {
+/*class InDdeliveryRejectedTicket extends TicketState {
   printNext(state) {
     // stato finale
     console.log('state: ' + state);
@@ -362,7 +362,7 @@ class InDdeliveryRejectedTicket extends TicketState {
   authorized(role) {
     return true;
   }
-}
+}*/
 
 module.exports = {
   OpenTicket,
@@ -373,9 +373,9 @@ module.exports = {
   QuoteAcceptedTicket,
   AwationgPartsTicket,
   CompletedTicket,
-  InDdeliveryCompletedTicket,
+  //InDdeliveryCompletedTicket,
   CancelledTicket,
-  InDdeliveryCancelledTicket,
+  //InDdeliveryCancelledTicket,
   QuoteRejectedTicket,
-  InDdeliveryRejectedTicket,
+  //InDdeliveryRejectedTicket,
 };

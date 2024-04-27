@@ -11,9 +11,9 @@ class TicketContext {
   }
 
   // permette di eseguire action in base all'istanza di TicketStatus
-  print(action) {
+  /*print(action) {
     this.state.printNext(action);
-  }
+  }*/
 
   isValid(action) {
     return this.state.handleAction(action);

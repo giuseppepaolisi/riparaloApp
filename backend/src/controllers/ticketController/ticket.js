@@ -65,8 +65,9 @@ const openTicket = async (req, res, next) => {
       ],
     });
 
-    await newTicket.save();
-    res.status(201).json({ newTicket });
+    const ticket = await newTicket.save();
+
+    res.status(201).json({ ticket });
   } catch (error) {
     next(error);
   }

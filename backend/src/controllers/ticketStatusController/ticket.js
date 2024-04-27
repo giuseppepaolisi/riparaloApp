@@ -60,7 +60,6 @@ const updateState = async (req, res, next) => {
           isNaN(prezzoFloat) ||
           prezzoFloat < 0
         ) {
-          console.log('sono nel if');
           throw new ErrorResponse('Inserisci un prezzo valido', 400);
         }
         ticket.prezzo = prezzoFloat;

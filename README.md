@@ -66,6 +66,6 @@ This web application is designed to facilitate the management of a phone repair 
     ```bash
     cd frontend
     npm start
-Copyright © 2023
+Copyright © 2024
 [Giuseppe Paolisi](https://github.com/giuseppepaolisi)
 [Christian Gemelli](https://github.com/).

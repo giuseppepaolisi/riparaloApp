@@ -48,6 +48,9 @@ const createCustomer = async (req, res, next) => {
 const getCustomers = async (req, res, next) => {
   const partner = req.user._id;
   try {
+    if (!partner) {
+      throw new ErrorResponse('Sessione scaduta', 400);
+    }
     const customers = await Customer.find({ partner });
 
     res.status(200).json({ customers });

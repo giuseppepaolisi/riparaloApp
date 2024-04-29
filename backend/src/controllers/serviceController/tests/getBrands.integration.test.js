@@ -13,7 +13,7 @@ describe('getBrands', () => {
     mockReq = {};
     mockRes = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     mockNext = jest.fn();
   });

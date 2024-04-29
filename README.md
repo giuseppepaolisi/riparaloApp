@@ -22,9 +22,9 @@ This web application is designed to facilitate the management of a phone repair 
 - **Delete Ticket:** Partners can delete a ticket if it is in the 'Open' state.
 - **Search and Barcode Integration:** Tickets can be searched using a barcode system.
 
-### Client Management
-- **Add Client:** Partners can add customers.
-- **View Clients:** Partners can view a list of their customers.
+### Customer Management
+- **Add Customer:** Partners can add customers.
+- **View Customers:** Partners can view a list of their customers.
 
 ### Model and Service Management
 - **Add/View/Edit/Delete Models:** Manage device models and their associated repair services.

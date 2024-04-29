@@ -22,7 +22,7 @@ router.get('/tickets/:state', getTickets);
 
 router.get('/ticket/:id', getTicket);
 
-router.patch('/ticket/:id', requirePartner, deleteTicket);
+router.delete('/ticket/:id', requirePartner, deleteTicket);
 
 router.patch('/ticket', updateState);
 

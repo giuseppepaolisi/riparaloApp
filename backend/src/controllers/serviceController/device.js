@@ -1,6 +1,7 @@
 const Service = require('../../models/service');
 const { ErrorResponse } = require('../../middleware/errorManager');
 const mongoose = require('mongoose');
+const { ADMIN } = require('../../conf/role');
 // si occupa della creazione di un dispositivo
 const createDevice = async (req, res, next) => {
   const { modello, marca, servizi } = req.body;
@@ -104,10 +105,36 @@ const getModelsByBrand = async (req, res, next) => {
   }
 };
 
+// Eliminazione di un device
+const deleteDevice = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ErrorResponse('ID non valido', 400);
+    }
+    if (req.user.role !== ADMIN) {
+      throw new ErrorResponse(
+        'Devi essere un admin per eliminare il dispositivo',
+        400
+      );
+    }
+    const device = await Service.findOne({ _id: id });
+    if (!device) {
+      throw new ErrorResponse('Dispositivo non trovato', 404);
+    }
+    const result = await Service.findByIdAndDelete(device);
+    res.status(200).json({ result });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createDevice,
   getDevices,
   getDevice,
   getBrands,
   getModelsByBrand,
+  deleteDevice,
 };

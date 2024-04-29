@@ -3,6 +3,7 @@ const User = require('../../models/user');
 const { ErrorResponse } = require('../../middleware/errorManager');
 const { PARTNER } = require('../../conf/role');
 const { APERTO, STATES } = require('../../conf/state');
+const mongoose = require('mongoose');
 
 // Permette la creazione di un ticket
 const openTicket = async (req, res, next) => {
@@ -112,10 +113,42 @@ const getTicket = async (req, res, next) => {
 
     const ticket = await Ticket.findOne(filters);
     if (!ticket) {
-      throw new ErrorResponse('Ticket non trovato', 404); // Changed status code to 404
+      throw new ErrorResponse('Ticket non trovato', 404);
     }
 
-    res.status(200).json({ ticket }); // Ensuring response format is consistent
+    res.status(200).json({ ticket });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// consente a un partner di eliminare un ticket solo se questo è nello stato aperto
+const deleteTicket = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ErrorResponse('ID non valido', 400);
+    }
+    let filters = { _id: id };
+    // aggiungi un filtro se si tratta di un partner
+    if (req.user.role !== PARTNER) {
+      throw new ErrorResponse(
+        'Devi essere un partner per eliminare il ticket',
+        400
+      );
+    }
+    const ticket = await Ticket.findOne(filters);
+    if (!ticket) {
+      throw new ErrorResponse('Ticket non trovato', 404);
+    }
+    if (ticket.stato !== APERTO) {
+      throw new ErrorResponse(
+        'Non puoi eliminare un ticket in uno stato avanzato',
+        400
+      );
+    }
+    const result = await Ticket.findByIdAndDelete(ticket);
+    res.status(200).json({ result });
   } catch (error) {
     next(error);
   }
@@ -125,4 +158,5 @@ module.exports = {
   openTicket,
   getTickets,
   getTicket,
+  deleteTicket,
 };

@@ -4,6 +4,7 @@ const {
   openTicket,
   getTickets,
   getTicket,
+  deleteTicket,
 } = require('../controllers/ticketController/ticket');
 const { requirePartner, requireAuth } = require('../middleware/requireAuth');
 
@@ -20,6 +21,8 @@ router.post('/ticket', requirePartner, openTicket);
 router.get('/tickets/:state', getTickets);
 
 router.get('/ticket/:id', getTicket);
+
+router.patch('/ticket/:id', requirePartner, deleteTicket);
 
 router.patch('/ticket', updateState);
 

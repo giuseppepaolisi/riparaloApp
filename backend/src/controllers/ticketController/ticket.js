@@ -141,7 +141,7 @@ const deleteTicket = async (req, res, next) => {
     if (!ticket) {
       throw new ErrorResponse('Ticket non trovato', 404);
     }
-    if (ticket.stato !== APERTO) {
+    if (ticket.stato !== APERTO || ticket.id_partner !== req.user._id) {
       throw new ErrorResponse(
         'Non puoi eliminare un ticket in uno stato avanzato',
         400

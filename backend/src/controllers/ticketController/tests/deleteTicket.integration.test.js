@@ -17,6 +17,7 @@ describe('deleteTicket', () => {
         id: '507f1f77bcf86cd799439011',
       },
       user: {
+        _id: '123456',
         role: PARTNER,
       },
     };
@@ -28,6 +29,7 @@ describe('deleteTicket', () => {
     mockTicket = {
       _id: '507f1f77bcf86cd799439011',
       stato: 'Aperto',
+      id_partner: '123456',
     };
     mongoose.Types.ObjectId.isValid = jest.fn();
     Ticket.findOne = jest.fn();
@@ -62,7 +64,7 @@ describe('deleteTicket', () => {
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
 
-  it('ERROR - Chi tenda di eliminare il ticket non è parter', async () => {
+  it('ERROR - Chi tenta di eliminare il ticket non è parter', async () => {
     mongoose.Types.ObjectId.isValid.mockReturnValue(true);
     mockReq.user.role = '';
 

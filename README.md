@@ -1,7 +1,7 @@
 # Phone Repair Center Management System
 
 ## Overview
-This web application is designed to facilitate the management of a phone repair service center. It allows various actors such as administrators, technicians, and partners to interact with the system to manage user authentication, users, tickets, models, clients, and more. The system handles ticket lifecycle, user management, and device model management seamlessly through a MERN (MongoDB, Express.js, React.js, Node.js) stack.
+This web application is designed to facilitate the management of a phone repair service center. It allows various actors such as administrators, technicians, and partners to interact with the system to manage user authentication, users, tickets, models, customers, and more. The system handles ticket lifecycle, user management, and device model management seamlessly through a MERN (MongoDB, Express.js, React.js, Node.js) stack.
 
 ## Features
 
@@ -22,9 +22,9 @@ This web application is designed to facilitate the management of a phone repair 
 - **Delete Ticket:** Partners can delete a ticket if it is in the 'Open' state.
 - **Search and Barcode Integration:** Tickets can be searched using a barcode system.
 
-### Client Management
-- **Add Client:** Partners can add clients.
-- **View Clients:** Partners can view a list of their clients.
+### Customer Management
+- **Add Customer:** Partners can add customers.
+- **View Customers:** Partners can view a list of their customers.
 
 ### Model and Service Management
 - **Add/View/Edit/Delete Models:** Manage device models and their associated repair services.

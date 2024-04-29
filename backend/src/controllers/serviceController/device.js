@@ -1,6 +1,6 @@
 const Service = require('../../models/service');
 const { ErrorResponse } = require('../../middleware/errorManager');
-
+const mongoose = require('mongoose');
 // si occupa della creazione di un dispositivo
 const createDevice = async (req, res, next) => {
   const { modello, marca, servizi } = req.body;
@@ -64,16 +64,14 @@ const getDevices = async (req, res, next) => {
 // Restiruisce un singolo device passando un id
 const getDevice = async (req, res, next) => {
   const { id } = req.params;
-
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return next(new ErrorResponse("'ID dispositivo non valido", 400));
+      return next(new ErrorResponse('ID dispositivo non valido', 400));
     }
-
-    const device = await Service.findById(id);
+    const device = await Service.findById({ id_: id });
 
     if (!device) {
-      return next(new ErrorResponse('Dispositivo non trovato', 400));
+      return next(new ErrorResponse('Dispositivo non trovato', 404));
     }
 
     res.status(200).json({ device });

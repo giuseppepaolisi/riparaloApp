@@ -148,7 +148,6 @@ const updateDevice = async (req, res, next) => {
     }
     // modello !== udefined e non vuoto
     if (modello && modello.trim() !== '') {
-      console.log(modello);
       data.modello = modello;
     }
     if (marca && marca.trim() !== '') {

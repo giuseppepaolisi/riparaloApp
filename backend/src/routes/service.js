@@ -14,6 +14,7 @@ const {
   getBrands,
   getModelsByBrand,
   updateDevice,
+  deleteDevice,
 } = require('../controllers/serviceController/device');
 
 const {
@@ -33,6 +34,7 @@ router.get('/device/:id', requireAdmin, getDevice);
 router.get('/brands', getBrands);
 router.get('/devices/:brand', getModelsByBrand);
 router.patch('/device/:id', requireAdmin, updateDevice);
+router.delete('/device/:id', requireAdmin, deleteDevice);
 
 router.get('/services/:device', getServicesByDevice);
 router.post('/service/:id', requireAdmin, addServices);

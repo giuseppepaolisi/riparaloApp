@@ -13,6 +13,7 @@ const {
   getDevice,
   getBrands,
   getModelsByBrand,
+  updateDevice,
 } = require('../controllers/serviceController/device');
 
 const {
@@ -29,6 +30,8 @@ router.get('/devices', requireAdmin, getDevices);
 router.get('/device/:id', requireAdmin, getDevice);
 router.get('/brands', getBrands);
 router.get('/devices/:brand', getModelsByBrand);
+router.patch('/device/:id', updateDevice);
+
 router.get('/services/:device', getServicesByDevice);
 
 router.use(errorHandler);

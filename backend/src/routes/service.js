@@ -19,6 +19,7 @@ const {
 const {
   getServicesByDevice,
   addServices,
+  deleteService,
 } = require('../controllers/serviceController/service');
 const { errorHandler } = require('../middleware/errorManager');
 
@@ -34,7 +35,8 @@ router.get('/devices/:brand', getModelsByBrand);
 router.patch('/device/:id', requireAdmin, updateDevice);
 
 router.get('/services/:device', getServicesByDevice);
-router.post('/service/:id', requireAdmin,addServices);
+router.post('/service/:id', requireAdmin, addServices);
+router.delete('/service/:id', requireAdmin, deleteService);
 
 router.use(errorHandler);
 

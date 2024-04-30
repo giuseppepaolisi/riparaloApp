@@ -113,12 +113,6 @@ const deleteDevice = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new ErrorResponse('ID non valido', 400);
     }
-    if (req.user.role !== ADMIN) {
-      throw new ErrorResponse(
-        'Devi essere un admin per eliminare il dispositivo',
-        400
-      );
-    }
     const device = await Service.findOne({ _id: id });
     if (!device) {
       throw new ErrorResponse('Dispositivo non trovato', 404);

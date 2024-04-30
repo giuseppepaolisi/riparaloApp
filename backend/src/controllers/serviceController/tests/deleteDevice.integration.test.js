@@ -69,19 +69,6 @@ describe('deleteDevice', () => {
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
 
-  it('ERROR - Chi tenta di eliminare il device non è admin', async () => {
-    mongoose.Types.ObjectId.isValid.mockReturnValue(true);
-    mockReq.user.role = '';
-
-    await deleteDevice(mockReq, mockRes, mockNext);
-
-    expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
-    expect(mockNext.mock.calls[0][0].message).toContain(
-      'Devi essere un admin per eliminare il dispositivo'
-    );
-    expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
-  });
-
   it('ERROR - Dispositivo non trovato', async () => {
     mongoose.Types.ObjectId.isValid.mockReturnValue(true);
     Service.findOne.mockResolvedValue();

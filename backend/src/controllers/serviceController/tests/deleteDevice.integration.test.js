@@ -5,7 +5,7 @@ const { ADMIN } = require('../../../conf/role');
 const { deleteDevice } = require('../device');
 // npm test -- src/controllers/serviceController/tests/
 
-jest.mock('../../../models/ticket');
+jest.mock('../../../models/service');
 
 describe('deleteDevice', () => {
   let mockReq, mockRes, mockNext, mockDevice;

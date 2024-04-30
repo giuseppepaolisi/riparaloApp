@@ -130,6 +130,37 @@ const deleteDevice = async (req, res, next) => {
   }
 };
 
+// Aggiorna solo non e marca di un dispositivo
+const updateDevice = async (req, res, next) => {
+  const { marca, modello } = req.body;
+  const { id } = req.params;
+  const data = {};
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ErrorResponse('ID non valido', 400);
+    }
+    if (req.user.role !== ADMIN) {
+      throw new ErrorResponse(
+        'Devi essere un admin per aggiornare i dati del dispositivo',
+        400
+      );
+    }
+    // modello !== udefined e non vuoto
+    if (modello && modello.trim() !== '') {
+      console.log(modello);
+      data.modello = modello;
+    }
+    if (marca && marca.trim() !== '') {
+      data.marca = marca;
+    }
+    const device = await Service.findByIdAndUpdate({ _id: id }, data);
+    res.status(200).json({ device });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createDevice,
   getDevices,
@@ -137,4 +168,5 @@ module.exports = {
   getBrands,
   getModelsByBrand,
   deleteDevice,
+  updateDevice,
 };

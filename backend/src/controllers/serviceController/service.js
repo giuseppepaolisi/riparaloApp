@@ -57,4 +57,31 @@ const addServices = async (req, res, next) => {
   }
 };
 
-module.exports = { getServicesByDevice, addServices };
+const deleteService = async (req, res, next) => {
+  const { id } = req.params;
+  const { service } = req.body;
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return next(new ErrorResponse('ID non valido', 400));
+    }
+    let device = await Service.findById({ _id: id });
+    if (!device) {
+      return next(new ErrorResponse('Dispositivo non trovato', 404));
+    }
+    const idToRemove = service.servizio;
+    const services = device.servizi.filter(
+      (service) => service.servizio !== idToRemove
+    );
+    device.servizi = services;
+    device = await device.save();
+    res.status(200).json({ device });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  getServicesByDevice,
+  addServices,
+  deleteService,
+};

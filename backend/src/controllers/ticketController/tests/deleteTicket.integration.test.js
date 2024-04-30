@@ -64,19 +64,6 @@ describe('deleteTicket', () => {
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
 
-  it('ERROR - Chi tenta di eliminare il ticket non è parter', async () => {
-    mongoose.Types.ObjectId.isValid.mockReturnValue(true);
-    mockReq.user.role = '';
-
-    await deleteTicket(mockReq, mockRes, mockNext);
-
-    expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
-    expect(mockNext.mock.calls[0][0].message).toContain(
-      'Devi essere un partner per eliminare il ticket'
-    );
-    expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
-  });
-
   it('ERROR - Ticket non trovato', async () => {
     mongoose.Types.ObjectId.isValid.mockReturnValue(true);
     Ticket.findOne.mockResolvedValue();

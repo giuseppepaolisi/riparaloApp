@@ -92,16 +92,4 @@ describe('deleteDevice', () => {
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
 
-  it('ERROR - Chi tenta di aggiornare il device non è admin', async () => {
-    mongoose.Types.ObjectId.isValid.mockReturnValue(true);
-    mockReq.user.role = '';
-
-    await updateDevice(mockReq, mockRes, mockNext);
-
-    expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
-    expect(mockNext.mock.calls[0][0].message).toContain(
-      'Devi essere un admin per aggiornare i dati del dispositivo'
-    );
-    expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
-  });
 });

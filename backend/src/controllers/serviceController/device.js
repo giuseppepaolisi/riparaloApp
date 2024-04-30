@@ -134,12 +134,6 @@ const updateDevice = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new ErrorResponse('ID non valido', 400);
     }
-    if (req.user.role !== ADMIN) {
-      throw new ErrorResponse(
-        'Devi essere un admin per aggiornare i dati del dispositivo',
-        400
-      );
-    }
     // modello !== udefined e non vuoto
     if (modello && modello.trim() !== '') {
       data.modello = modello;

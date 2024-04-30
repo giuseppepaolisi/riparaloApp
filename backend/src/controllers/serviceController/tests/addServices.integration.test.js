@@ -1,7 +1,6 @@
 const Service = require('../../../models/service');
 const { ErrorResponse } = require('../../../middleware/errorManager');
 const mongoose = require('mongoose');
-const { ADMIN } = require('../../../conf/role');
 const { addServices } = require('../service');
 // npm test -- src/controllers/serviceController/tests/
 
@@ -17,10 +16,6 @@ describe('addService', () => {
     mockReq = {
       params: {
         id: '507f1f77bcf86cd799439011',
-      },
-      user: {
-        _id: '123456',
-        role: ADMIN,
       },
       body: {},
     };
@@ -125,19 +120,6 @@ describe('addService', () => {
     );
     expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
     expect(mockNext.mock.calls[0][0].message).toContain('ID non valido');
-    expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
-  });
-
-  it('ERROR - Chi tenta di eliminare il device non è admin', async () => {
-    mongoose.Types.ObjectId.isValid.mockReturnValue(true);
-    mockReq.user.role = '';
-
-    await addServices(mockReq, mockRes, mockNext);
-
-    expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
-    expect(mockNext.mock.calls[0][0].message).toContain(
-      'Devi essere un admin per aggiungere nuovi servizi'
-    );
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
 

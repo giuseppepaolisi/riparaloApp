@@ -1,7 +1,6 @@
 const Service = require('../../models/service');
 const { ErrorResponse } = require('../../middleware/errorManager');
 const mongoose = require('mongoose');
-const { ADMIN } = require('../../conf/role');
 
 // Ritorna la lisat di servizi passato un modello
 const getServicesByDevice = async (req, res, next) => {
@@ -29,12 +28,6 @@ const addServices = async (req, res, next) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return next(new ErrorResponse('ID non valido', 400));
-    }
-    if (req.user.role !== ADMIN) {
-      throw new ErrorResponse(
-        'Devi essere un admin per aggiungere nuovi servizi',
-        400
-      );
     }
     let device = await Service.findById({ _id: id });
     if (!device) {

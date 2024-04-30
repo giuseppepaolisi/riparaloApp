@@ -40,7 +40,7 @@ This web application is designed to facilitate the management of a phone repair 
 ### Installation Steps
 1. Clone the repository:
    ```bash
-   git clone https://yourrepositorylink.git
+   git clone https://github.com/giuseppepaolisi/riparaloApp.git
    cd riparaloApp
 2. Install dependencies for server:
     ```bash

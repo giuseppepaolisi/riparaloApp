@@ -16,6 +16,20 @@ function signupPartner(newuser, next) {
   return newuser;
 }
 
+function updatePartner(data, next) {
+  if (!data.codiceUnivoco || data.codiceUnivoco.length !== 6) {
+    return next(
+      new ErrorResponse(
+        'Il codice univoco deve avere esattamente 6 caratteri',
+        400
+      )
+    );
+  }
+
+  
+  return data;
+}
 module.exports = {
   signupPartner,
+  updatePartner,
 };

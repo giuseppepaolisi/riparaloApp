@@ -1,4 +1,4 @@
-const { signupFactory } = require('./userFactory');
+const { signupFactory, updateFactory } = require('./userFactory');
 const User = require('../../models/user');
 const { PARTNER, TECHNICIAN } = require('../../conf/role');
 const mongoose = require('mongoose');
@@ -64,8 +64,40 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+// Aggiorna i dati di un utente dal sistema
+const updateUser = async (req, res, next) => {
+  const { id } = req.params;
+  let { data } = req.body;
+  const { role } = req.user;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return next(new ErrorResponse('ID utente non valido', 400));
+    }
+
+    // Controlli comuni (es. validazione email e password)
+    if (data.email && !/\S+@\S+\.\S+/.test(data.email)) {
+      return next(new ErrorResponse("Inserire un'email valida", 400));
+    }
+
+    if (data.password !== undefined && data.password.length < 8) {
+      return next(
+        new ErrorResponse('La password deve avere almeno 8 caratteri', 400)
+      );
+    }
+    const updateFuction = updateFactory(role);
+    data = updateFuction(data, next);
+    
+    user = await User.findByIdAndUpdate({ _id: id }, data);
+    res.status(200).json({ user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   getAll,
   deleteUser,
+  updateUser,
 };

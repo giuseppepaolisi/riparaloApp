@@ -6,6 +6,11 @@ function signupTechnician(newuser, next) {
   return newuser;
 }
 
+function updateTechnician(data, next) {
+  return data;
+}
+
 module.exports = {
   signupTechnician,
+  updateTechnician,
 };

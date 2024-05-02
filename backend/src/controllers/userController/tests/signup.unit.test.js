@@ -5,8 +5,7 @@ const { TECHNICIAN, PARTNER } = require('../../../conf/role');
 const mongoose = require('mongoose');
 const { ErrorResponse } = require('../../../middleware/errorManager');
 
-// Mock di signupFactory e User
-jest.mock('../userFactory');
+// Mock di User
 jest.mock('../../../models/user');
 
 // Test di signup
@@ -20,6 +19,9 @@ describe('TEST signup', () => {
         email: 'example@example.com',
         password: 'longenoughpassword',
         codiceUnivoco: '123456',
+        nome: 'Giacomo',
+        cognome: 'Matteo',
+        telefono: '',
       },
     };
     mockRes = {
@@ -41,9 +43,6 @@ describe('TEST signup', () => {
       role: PARTNER,
     };
     User.signup.mockResolvedValue(newUser);
-    // mock della funzione factory
-    signupFactory.mockImplementation(() => jest.fn().mockReturnValue(newUser));
-
     await signup(mockReq, mockRes, mockNext);
 
     expect(mockRes.status).toHaveBeenCalledWith(201);
@@ -57,11 +56,10 @@ describe('TEST signup', () => {
       password: 'longenoughpassword',
       role: TECHNICIAN,
     };
+    mockReq.params = { role: TECHNICIAN };
     // eliminazione del codice univoco per il tecnico
     delete newUser.codiceUnivoco;
     User.signup.mockResolvedValue(newUser);
-    // mock della funzione factory
-    signupFactory.mockImplementation(() => jest.fn().mockReturnValue(newUser));
 
     await signup(mockReq, mockRes, mockNext);
 
@@ -90,14 +88,15 @@ describe('TEST signup', () => {
   });
 
   it('ruolo non specificato', async () => {
-    const errorMessage = 'Ruolo non supportato: ';
-    signupFactory.mockImplementation(() => () => {
-      throw new Error(errorMessage);
-    });
+    mockReq.params = {
+      role: '',
+    };
     await signup(mockReq, mockRes, mockNext);
 
-    expect(mockNext).toHaveBeenCalledWith(expect.any(Error));
+    expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
 
-    expect(mockNext.mock.calls[0][0].message).toContain(errorMessage);
+    expect(mockNext.mock.calls[0][0].message).toContain(
+      'Ruolo non supportato: '
+    );
   });
 });

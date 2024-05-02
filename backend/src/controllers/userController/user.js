@@ -1,4 +1,8 @@
-const { signupFactory, updateFactory } = require('./userFactory');
+const {
+  signupFactory,
+  updateFactory,
+  filterUserFactory,
+} = require('./userFactory');
 const User = require('../../models/user');
 const { PARTNER, TECHNICIAN } = require('../../conf/role');
 const mongoose = require('mongoose');
@@ -21,8 +25,10 @@ const signup = async (req, res, next) => {
       );
     }
 
-    const signupFunction = signupFactory(role);
+    newuser = filterUserFactory(role, newuser, next);
+    const signupFunction = signupFactory(role, next);
     newuser = signupFunction(newuser, next);
+    console.log(newuser);
 
     const user = await User.signup(newuser, next);
     res.status(201).json({ user });
@@ -85,9 +91,9 @@ const updateUser = async (req, res, next) => {
         new ErrorResponse('La password deve avere almeno 8 caratteri', 400)
       );
     }
-    const updateFuction = updateFactory(role);
+    const updateFuction = updateFactory(role, next);
     data = updateFuction(data, next);
-    
+
     user = await User.findByIdAndUpdate({ _id: id }, data);
     res.status(200).json({ user });
   } catch (error) {

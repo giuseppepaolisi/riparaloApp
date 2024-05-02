@@ -26,7 +26,6 @@ function updatePartner(data, next) {
     );
   }
 
-  
   return data;
 }
 module.exports = {

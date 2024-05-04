@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const loginRoutes = require('./routes/login');
 const userRoutes = require('./routes/user');
@@ -10,6 +11,13 @@ const ticketRoutes = require('./routes/ticket');
 
 // express app
 const app = express();
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    methods: ['POST', 'GET', 'OPTIONS', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
 
 // TZ
 process.env.TZ;

@@ -4,19 +4,22 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run format && vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write src//**/*.{js,jsx,json}"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "prettierrc": "^0.0.0-5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.1",
     "react-router-dom": "^6.22.3",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "sass": "^1.76.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

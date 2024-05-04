@@ -1,0 +1,27 @@
+# File e cartelle comuni da ignorare
+node_modules
+dist
+build
+coverage
+
+# File specifici
+package-lock.json
+yarn.lock
+
+# Cartelle e file di configurazione
+.env
+.gitignore
+.prettierrc
+.vite.config.js
+
+# Cartelle e file di documentazione
+README.md
+CHANGELOG.md
+LICENSE
+
+# File di log
+*.log
+
+# File temporanei o di cache
+.cache
+.temp

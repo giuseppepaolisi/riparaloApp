@@ -1,0 +1,49 @@
+/node# Ignora tutti i node_modules
+**/node_modules
+
+# Ignora le directory di log
+**/logs
+*.log
+
+# Ignora i file di configurazione e le directory temporanee
+**/.npm
+**/.eslintcache
+**/.next
+**/.nuxt
+
+
+# Ignora i file di test e copertura
+**/coverage
+**/__tests__
+**/__mocks__
+**/test
+**/tests
+**/*.spec.*
+**/*.test.*
+
+# Ignora le directory di output di costruzione
+**/dist
+**/build
+**/out
+
+# Ignora i file e le directory specifici del sistema di versionamento
+**/.git
+**/.gitattributes
+**/.gitignore
+**/.gitmodules
+
+# Ignora file di documentazione
+**/README.md
+**/CHANGELOG.md
+**/LICENSE.md
+**/CONTRIBUTING.md
+
+# Ignora file di configurazione di editor specifici
+**/.vscode
+**/.idea
+**/*.sublime-project
+**/*.sublime-workspace
+
+# Ignora file di configurazione specifici del progetto
+**/Dockerfile
+**/*.dockerignore

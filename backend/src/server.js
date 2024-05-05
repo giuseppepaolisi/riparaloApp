@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const mongoose = require('mongoose');
 const loginRoutes = require('./routes/login');
 const userRoutes = require('./routes/user');
@@ -36,6 +37,14 @@ app.use('/api', userRoutes);
 app.use('/api', serviceRoutes);
 app.use('/api', customerRoutes);
 app.use('/api', ticketRoutes);
+
+// Assicurati che il percorso sia corretto
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Fallback per Single Page Applications
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // connect to db
 mongoose

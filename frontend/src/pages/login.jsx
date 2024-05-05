@@ -1,6 +1,6 @@
 //import './assets/scss/sb-admin-2.scss'; // Adjust the path as necessary
 import "../assets/css/sb-admin-2.min.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -35,6 +35,17 @@ const LoginPage = () => {
       console.error(error);
     }
   };
+
+  //aggiunge la classe al body
+  useEffect(() => {
+    // Aggiungere una classe al body quando il componente viene montato
+    document.body.classList.add("bg-gradient-primary");
+
+    // Rimuovere la classe quando il componente viene smontato
+    return () => {
+      document.body.classList.remove("bg-gradient-primary");
+    };
+  }, []);
 
   return (
     <div className="row justify-content-center">

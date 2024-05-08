@@ -66,6 +66,29 @@ This web application is designed to facilitate the management of a phone repair 
     ```bash
     cd frontend
     npm start
+### How install with Docker
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/giuseppepaolisi/riparaloApp.git
+   cd riparaloApp
+
+2. Build Docker image
+    ```bash
+    docker build -t riparalo-image:latest .
+
+3. Create and start the container
+    ```bash
+    docker run -d -p 4000:4000 --name riparalo-container riparalo-image:latest
+
+#### Do this steps after the steps upside
+1. Start container
+    ```bash
+    docker start riparalo-container
+
+2. Stop container
+    ```bash
+    docker stop riparalo-container
+
 Copyright © 2024
 [Giuseppe Paolisi](https://github.com/giuseppepaolisi)
-[Christian Gemelli](https://github.com/).
+[Christian Gemelli](https://github.com/KrisTwinn).

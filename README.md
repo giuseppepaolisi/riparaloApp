@@ -26,8 +26,8 @@ This web application is designed to facilitate the management of a phone repair 
 - **Add Customer:** Partners can add customers.
 - **View Customers:** Partners can view a list of their customers.
 
-### Model and Service Management
-- **Add/View/Edit/Delete Models:** Manage device models and their associated repair services.
+### Device and Service Management
+- **Add/View/Edit/Delete Device:** Manage device models and their associated repair services.
 - **Tariff Management:** Add, update, or remove service tariffs for each model.
 
 ## Setup and Installation

@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./components/login";
-import NavigationBar from "./components/NavigationBar.jsx";
+import LoginPage from "./components/Login";
+import NavigationBar from "./components/NavigationBar";
 import Sidebar from "./components/sidebar";
 import logo from "./img/cropped-LOGO1-1.png";
-import DashboardPartner from "./components/DashboardPartner.jsx";
+import DashboardPartner from "./components/DashboardPartner";
 function App() {
   return (
     <Router>

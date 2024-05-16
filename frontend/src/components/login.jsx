@@ -1,5 +1,4 @@
-//import './assets/scss/sb-admin-2.scss'; // Adjust the path as necessary
-import "../assets/css/sb-admin-2.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 
 const LoginPage = () => {
@@ -39,15 +38,15 @@ const LoginPage = () => {
   //aggiunge la classe al body
   useEffect(() => {
     // Aggiungere una classe al body quando il componente viene montato
-    document.body.classList.add("bg-gradient-primary");
+    document.body.style.backgroundColor = "#007bff";
 
     // Rimuovere la classe quando il componente viene smontato
     return () => {
-      document.body.classList.remove("bg-gradient-primary");
+      document.body.style.backgroundColor = null;
     };
   }, []);
 
-  return (
+  /*return (
     <div className="container-fluid">
       <div className="row justify-content-center">
         <div className="col-xl-6 col-lg-7 col-md-5">
@@ -127,4 +126,76 @@ const LoginPage = () => {
   );
 };
 
+export default LoginPage;
+*/
+
+  return (
+    <div className="container">
+      <div className="row justify-content-center mt-5">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h2 className="card-title text-center mb-4">Login</h2>
+              <form onSubmit={handleLogin}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    E-mail
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form-check mb-3">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="rememberMe"
+                  />
+                  <label className="form-check-label" htmlFor="rememberMe">
+                    Rimani connesso
+                  </label>
+                </div>
+                <div className="d-grid gap-2">
+                  <button type="submit" className="btn btn-primary">
+                    Accedi
+                  </button>
+                </div>
+              </form>
+              {error ? (
+                <div
+                  className="alert alert-danger"
+                  style={{ marginTop: "20px" }}
+                  role="alert"
+                >
+                  {error}
+                </div>
+              ) : (
+                <div></div>
+              )}
+              <div className="text-center mt-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 export default LoginPage;

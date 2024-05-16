@@ -1,16 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./components/Login";
-import NavigationBar from "./components/NavigationBar";
-import Sidebar from "./components/sidebar";
+import Sidebar from "./components/Sidebar";
 import logo from "./img/cropped-LOGO1-1.png";
 import DashboardPartner from "./components/DashboardPartner";
 function App() {
   return (
     <Router>
       <div className="d-flex">
-        <Sidebar />
         <div className="flex-grow-1">
-          <NavigationBar />
+          <Sidebar />
           <div className="container">
             <Routes>
               <Route path="/" element={<HomePage />} />

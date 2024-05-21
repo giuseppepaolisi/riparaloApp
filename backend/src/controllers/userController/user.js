@@ -8,14 +8,14 @@ const { PARTNER, TECHNICIAN } = require('../../conf/role');
 const mongoose = require('mongoose');
 const { ErrorResponse } = require('../../middleware/errorManager');
 
-// Si occupa della creazione di untente
+// Si occupa della creazione di utente
 const signup = async (req, res, next) => {
   const { role } = req.params;
 
   try {
     let newuser = req.body;
 
-    // Controlli comuni (es. validazione email e password)
+    // validazione email e password
     if (!/\S+@\S+\.\S+/.test(newuser.email)) {
       return next(new ErrorResponse("Inserire un'email valida", 400));
     }
@@ -28,7 +28,6 @@ const signup = async (req, res, next) => {
     newuser = filterUserFactory(role, newuser, next);
     const signupFunction = signupFactory(role, next);
     newuser = signupFunction(newuser, next);
-    console.log(newuser);
 
     const user = await User.signup(newuser, next);
     res.status(201).json({ user });

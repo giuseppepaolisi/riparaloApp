@@ -91,5 +91,4 @@ describe('deleteDevice', () => {
     expect(mockNext.mock.calls[0][0].message).toContain('ID non valido');
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
-
 });

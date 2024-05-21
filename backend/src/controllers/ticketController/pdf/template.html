@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dettagli del Pacco</title>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        padding: 20px;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      .half-page {
+        break-after: page;
+      }
+      .title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .data {
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="section half-page">
+      <div class="title">Informazioni per il Cliente:</div>
+      <p class="data">Ragione Sociale: {{ragioneSociale}}</p>
+      <p class="data">Cellulare: {{cellulare}}</p>
+      <p class="data">Indirizzo: {{indirizzo}}</p>
+      <p class="data">Nome del Modello: {{modello}}</p>
+      <p class="data">Marca: {{marca}}</p>
+      <p class="data">Prezzo Stimato: {{prezzo}}</p>
+      <p class="data">Descrizione del Problema: {{problema}}</p>
+    </div>
+    <div class="section">
+      <div class="title">Informazioni per il Partner:</div>
+      <p class="data">Ragione Sociale: {{ragioneSociale}}</p>
+      <p class="data">Cellulare: {{cellulare}}</p>
+      <p class="data">Indirizzo: {{indirizzo}}</p>
+      <p class="data">Nome del Modello: {{modello}}</p>
+      <p class="data">Marca: {{marca}}</p>
+      <p class="data">Prezzo Stimato: {{prezzo}}</p>
+      <p class="data">Descrizione del Problema: {{problema}}</p>
+      <img src="{{barcodeImage}}" alt="Barcode Image" />
+    </div>
+  </body>
+</html>

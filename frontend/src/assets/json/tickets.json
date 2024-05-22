@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "dataApertura": "10-01-2023",
+    "nome": "Jhon",
+    "cognome": "Doe",
+    "marca": "Apple",
+    "modello": "iPhone 12",
+    "stato": "RITIRATO",
+    "descrizione": "Schermo rotto"
+  },
+  {
+    "id": 2,
+    "dataApertura": "15-02-2023",
+    "nome": "Alice",
+    "cognome": "Smith",
+    "marca": "Samsung",
+    "modello": "Galaxy S20",
+    "stato": "APERTO",
+    "descrizione": "Problemi di batteria"
+  },
+  {
+    "id": 3,
+    "dataApertura": "20-03-2023",
+    "nome": "Bob",
+    "cognome": "Johnson",
+    "marca": "Sony",
+    "modello": "Xperia 5 II",
+    "stato": "IN_LAVORAZIONE",
+    "descrizione": "Schermo nero"
+  },
+  {
+    "id": 4,
+    "dataApertura": "20-03-2023",
+    "nome": "Bob",
+    "cognome": "Johnson",
+    "marca": "Sony",
+    "modello": "Xperia 5 II",
+    "stato": "ACCETTATO",
+    "descrizione": "Schermo nero"
+  },
+  {
+    "id": 5,
+    "dataApertura": "20-03-2023",
+    "nome": "Bob",
+    "cognome": "Johnson",
+    "marca": "Sony",
+    "modello": "Xperia 5 II",
+    "stato": "ANNULLATO",
+    "descrizione": "Schermo nero"
+  },
+  {
+    "id": 6,
+    "dataApertura": "20-03-2023",
+    "nome": "Bob",
+    "cognome": "Johnson",
+    "marca": "Sony",
+    "modello": "Xperia 5 II",
+    "stato": "ATTESA_CONFERMA_PREVENTIVO",
+    "descrizione": "Schermo nero"
+  }
+]

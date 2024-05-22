@@ -1,27 +1,53 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./components/Login";
+
 import Sidebar from "./components/Sidebar";
 import logo from "./img/cropped-LOGO1-1.png";
-import DashboardPartner from "./components/DashboardPartner";
-function App() {
+
+import DashboardPartner from "./pages/Partner/DashboardPartner";
+import AggiungiCliente from "./pages/Partner/AggiungiCliente";
+import ApriTicket from "./pages/Partner/ApriTicket";
+import Clienti from "./pages/Partner/Clienti";
+
+import Partner from "./pages/Admin/Partner";
+import Tecnici from "./pages/Admin/Tecnici";
+import AggiungiTecnico from "./pages/Admin/AggiungiTecnico";
+import AggiungiPartner from "./pages/Admin/AggiungiPartner";
+
+
+import AboutUs from "./pages/AboutUs";
+import Login from "./pages/Login"
+import Logout from "./pages/Logout";
+
+
+const App = () => {
   return (
     <Router>
       <div className="d-flex">
-        <div className="flex-grow-1">
-          <Sidebar />
-          <div className="container">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/dashboardpartner" element={<DashboardPartner />} />
-              {/*<Route path="/dashboard" element={<DashboardRouter user={user} />} />*/}
-            </Routes>
-          </div>
+        <Sidebar />
+        <div
+          className="flex-grow-1"
+          style={{ marginLeft: "200px", padding: "20px" }}
+        >
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/dashboard" element={<DashboardPartner />} />
+            <Route path="/aboutus" element={<AboutUs />} />
+            <Route path="/clienti" element={<Clienti />} />
+            <Route path="/partner" element={<Partner />} />
+            <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />
+            <Route path="/aggiungi-partner" element={<AggiungiPartner />} />
+            <Route path="/tecnici" element={<Tecnici />} />
+            <Route path="/aggiungi-tecnico" element={<AggiungiTecnico />} />
+            <Route path="/apri-ticket" element={<ApriTicket />} />
+            {/*<Route path="/dashboard" element={<DashboardRouter user={user} />} />*/}
+          </Routes>
         </div>
       </div>
     </Router>
   );
-}
+};
 
 function HomePage() {
   return (
@@ -33,35 +59,9 @@ function HomePage() {
       }}
     >
       <h1>Benvenuto!</h1>
-      <img src={logo} style={{ width: "50%", margin: "auto" }} />
+      <img src={logo} style={{ width: "50%", margin: "auto" }} alt="Logo" />
     </div>
   );
 }
 
 export default App;
-
-{
-  /*
-import TechnicianDashboard from "./components/TechnicianDashboard";
-import AdminDashboard from "./components/AdminDashboard";
-import PartnerDashboard from "./components/PartnerDashboard";
-import { ADMIN, PARTNER, TECHNICIAN } from "../../backend/src/conf/role";
-
-function DashboardRouter({ user }) {
-  if (user) {
-    switch (user.role) {
-      case TECHNICIAN:
-        return <TechnicianDashboard />;
-      case ADMIN:
-        return <AdminDashboard />;
-      case PARTNER:
-        return <PartnerDashboard />;
-      default:
-        return <Navigate to="/login" />;
-    }
-  } else {
-    return <Navigate to="/login" />;
-  }
-}
-*/
-}

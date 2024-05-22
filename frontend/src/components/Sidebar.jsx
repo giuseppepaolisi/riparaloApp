@@ -1,246 +1,237 @@
-/*import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-
-function NavigationBar() {
-  return (
-    <Navbar expand="lg" bg="dark" variant="dark">
-      <Container>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            <Nav.Link href="/login">Login</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
-}
-
-export default NavigationBar;
-*/
-
-/*
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Offcanvas, Button } from "react-bootstrap";
-import logo from "../img/cropped-LOGO1-1.png"; // Assicurati che il percorso sia corretto
-function NavigationBar() {
-  const [show, setShow] = useState(true);
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faHome,
+  faTachometerAlt,
+  faUsers,
+  faHandshake,
+  faCogs,
+  faShapes,
+  faSignInAlt,
+  faUser,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import logo from "../img/cropped-LOGO1-1.png";
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  return (
-    <>
-      <Button
-        variant="dark"
-        onClick={handleShow}
-        className="mb-2"
-        style={{ borderRadius: "50%" }}
-      >
-        <span
-          style={{
-            display: "inline-block",
-            width: "30px",
-            height: "30px",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.75)' stroke-width='3' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E")`,
-          }}
-        ></span>
-      </Button>
-
-      <Offcanvas
-        show={show}
-        onHide={handleClose}
-        placement="start"
-        className="bg-dark text-white"
-        style={{ width: "250px" }}
-      >
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>
-            <Link
-              to="/"
-              className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
-            >
-              <img
-                src={logo}
-                alt="Logo"
-                style={{ width: "50%", margin: "auto" }}
-              />
-            </Link>
-          </Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          <ul className="nav nav-pills flex-column mb-auto">
-            <li className="nav-item">
-              <Link to="/" className="nav-link active" aria-current="page">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/about" className="nav-link">
-                Partner
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/dashboardpartner" className="nav-link">
-                Dashboard
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/contact" className="nav-link">
-                Clienti
-              </Link>
-            </li>
-          </ul>
-          <div className="dropdown">
-            <a
-              href="/"
-              className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-              id="dropdownUser1"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Account
-            </a>
-            <ul
-              className="dropdown-menu dropdown-menu-dark text-small shadow"
-              aria-labelledby="dropdownUser1"
-            >
-              <li>
-                <Link className="dropdown-item" to="/profile">
-                  Profile
-                </Link>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/logout">
-                  Sign out
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </Offcanvas.Body>
-      </Offcanvas>
-    </>
-  );
-}
-
-export default NavigationBar;
-*/
-
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Offcanvas, Button } from "react-bootstrap";
-import logo from "../img/cropped-LOGO1-1.png"; // Assicurati che il percorso sia corretto
-
-function NavigationBar() {
+function Sidebar() {
   const [show, setShow] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) {
+        setShow(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const getLinkClass = (path) => {
+    return location.pathname === path ? "nav-link active" : "nav-link";
+  };
+
   return (
     <>
-      <Button
-        variant="dark"
-        onClick={handleShow}
-        className="mb-2"
-        style={{ borderRadius: "50%" }}
-      >
-        <span
-          style={{
-            display: "inline-block",
-            width: "30px",
-            height: "30px",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.75)' stroke-width='3' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E")`,
-          }}
-        ></span>
-      </Button>
+      {isMobile && (
+        <Button
+          variant="dark"
+          onClick={handleShow}
+          className="mb-2"
+          style={{ width: "40px", height: "40px", padding: 0 }}
+        >
+          <span
+            style={{
+              display: "inline-block",
+              width: "30px",
+              height: "30px",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.75)' stroke-width='3' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E")`,
+            }}
+          ></span>
+        </Button>
+      )}
 
-      <Offcanvas
-        show={show}
-        onHide={handleClose}
-        placement="start"
-        className="bg-dark text-white"
-        style={{ width: "250px" }}
-      >
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>
-            <Link
-              to="/"
-              className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
-            >
-              <img
-                src={logo}
-                alt="Logo"
-                style={{ width: "50%", margin: "auto" }}
-              />
-            </Link>
-          </Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          <ul className="nav nav-pills flex-column mb-auto">
-            <li className="nav-item">
-              <Link to="/" className="nav-link active" aria-current="page">
-                Home
+      {isMobile ? (
+        <Offcanvas
+          show={show}
+          onHide={handleClose}
+          placement="start"
+          className="bg-dark text-white"
+          style={{ width: "250px" }}
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>
+              <Link
+                to="/"
+                className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+              >
+                <img
+                  src={logo}
+                  alt="Logo"
+                  style={{ width: "50%", margin: "auto" }}
+                />
               </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/about" className="nav-link">
-                Partner
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/dashboardpartner" className="nav-link">
-                Dashboard
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/contact" className="nav-link">
-                Clienti
-              </Link>
-            </li>
-          </ul>
-          <div className="dropdown">
-            <a
-              href="/"
-              className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-              id="dropdownUser1"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Account
-            </a>
-            <ul
-              className="dropdown-menu dropdown-menu-dark text-small shadow"
-              aria-labelledby="dropdownUser1"
-            >
-              <li>
-                <Link className="dropdown-item" to="/profile">
-                  Profile
-                </Link>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/logout">
-                  Sign out
-                </Link>
-              </li>
-            </ul>
+            </Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body className="d-flex flex-column justify-content-between">
+            <div style={{ flexGrow: 1 }}>
+              <ul className="nav nav-pills flex-column mb-auto">
+                <li className="nav-item">
+                  <Link to="/" className={getLinkClass("/")}>
+                    <FontAwesomeIcon icon={faHome} /> Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/dashboard" className={getLinkClass("/dashboard")}>
+                    <FontAwesomeIcon icon={faTachometerAlt} /> Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/clienti" className={getLinkClass("/clienti")}>
+                    <FontAwesomeIcon icon={faUsers} /> Clienti
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/partner" className={getLinkClass("/partner")}>
+                    <FontAwesomeIcon icon={faHandshake} /> Partner
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/tecnici" className={getLinkClass("/tecnici")}>
+                    <FontAwesomeIcon icon={faCogs} /> Tecnici
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/dashboardpartner"
+                    className={getLinkClass("/dashboardpartner")}
+                  >
+                    <FontAwesomeIcon icon={faShapes} /> Modelli
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+              <ul className="nav nav-pills flex-column mb-auto">
+                <li className="nav-item">
+                  <Link to="/login" className={getLinkClass("/login")}>
+                    <FontAwesomeIcon icon={faSignInAlt} /> Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/account" className={getLinkClass("/account")}>
+                    <FontAwesomeIcon icon={faUser} /> Account
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/logout"
+                    className={getLinkClass("/logout")}
+                    style={{ color: "#b22222" }}
+                  >
+                    <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </Offcanvas.Body>
+        </Offcanvas>
+      ) : (
+        <div
+          className="bg-dark text-white d-flex flex-column"
+          style={{
+            width: "200px",
+            position: "fixed",
+            top: 0,
+            bottom: 0,
+            left: 0,
+          }}
+        >
+          <div className="d-flex align-items-center mb-3 text-white text-decoration-none p-2">
+            <img
+              src={logo}
+              alt="Logo"
+              style={{ width: "60%", margin: "auto" }}
+            />
           </div>
-        </Offcanvas.Body>
-      </Offcanvas>
+          <div className="d-flex flex-column justify-content-between flex-grow-1">
+            <div>
+              <ul className="nav nav-pills flex-column">
+                <li className="nav-item" style={{ padding: "5px 0" }}>
+                  <Link to="/" className={getLinkClass("/")}>
+                    <FontAwesomeIcon icon={faHome} /> Home
+                  </Link>
+                </li>
+                <li className="nav-item" style={{ padding: "5px 0" }}>
+                  <Link to="/dashboard" className={getLinkClass("/dashboard")}>
+                    <FontAwesomeIcon icon={faTachometerAlt} /> Dashboard
+                  </Link>
+                </li>
+                <li className="nav-item" style={{ padding: "5px 0" }}>
+                  <Link to="/clienti" className={getLinkClass("/clienti")}>
+                    <FontAwesomeIcon icon={faUsers} /> Clienti
+                  </Link>
+                </li>
+                <li className="nav-item" style={{ padding: "5px 0" }}>
+                  <Link to="/partner" className={getLinkClass("/partner")}>
+                    <FontAwesomeIcon icon={faHandshake} /> Partner
+                  </Link>
+                </li>
+                <li className="nav-item" style={{ padding: "5px 0" }}>
+                  <Link to="/tecnici" className={getLinkClass("/tecnici")}>
+                    <FontAwesomeIcon icon={faCogs} /> Tecnici
+                  </Link>
+                </li>
+                <li className="nav-item" style={{ padding: "5px 0" }}>
+                  <Link
+                    to="/dashboardpartner"
+                    className={getLinkClass("/dashboardpartner")}
+                  >
+                    <FontAwesomeIcon icon={faShapes} /> Modelli
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div className="mt-auto">
+              <ul className="nav nav-pills flex-column">
+                <li className="nav-item" style={{ padding: "5px 0" }}>
+                  <Link to="/login" className={getLinkClass("/login")}>
+                    <FontAwesomeIcon icon={faSignInAlt} /> Login
+                  </Link>
+                </li>
+                <li className="nav-item" style={{ padding: "5px 0" }}>
+                  <Link to="/account" className={getLinkClass("/account")}>
+                    <FontAwesomeIcon icon={faUser} /> Account
+                  </Link>
+                </li>
+                <li className="nav-item" style={{ padding: "5px 0" }}>
+                  <Link
+                    to="/logout"
+                    className={getLinkClass("/logout")}
+                    style={{ color: "#b22222" }}
+                  >
+                    <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
 
-export default NavigationBar;
+export default Sidebar;

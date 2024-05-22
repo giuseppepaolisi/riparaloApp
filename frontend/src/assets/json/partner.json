@@ -1,0 +1,20 @@
+[
+  {
+    "ragioneSociale": "Azienda XYZ S.p.A.",
+    "rappresentanteLegale": "Mario Rossi",
+    "email": "mario@aziendaxyz.com",
+    "provincia": "Milano"
+  },
+  {
+    "ragioneSociale": "Studio Legale ABC",
+    "rappresentanteLegale": "Anna Bianchi",
+    "email": "anna@studiolegaleabc.it",
+    "provincia": "Roma"
+  },
+  {
+    "ragioneSociale": "Studio Architetti DEF",
+    "rappresentanteLegale": "Luigi Verdi",
+    "email": "luigi@studioarchitettidef.com",
+    "provincia": "Firenze"
+  }
+]

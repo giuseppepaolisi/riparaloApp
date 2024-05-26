@@ -18,7 +18,10 @@ const publicKey = fs.readFileSync(
 
 // Funzione per generare un token JWT
 const generateToken = (payload) => {
-  return jwt.sign(payload, privateKey, { algorithm: 'RS256', expiresIn: '24h' });
+  return jwt.sign(payload, privateKey, {
+    algorithm: 'RS256',
+    expiresIn: '24h',
+  });
 };
 
 // Middleware base per verificare l'autenticazione

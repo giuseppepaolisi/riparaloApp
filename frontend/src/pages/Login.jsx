@@ -1,5 +1,5 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-
+import { login } from "../redux/auth/slice";
+import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 
 const LoginPage = () => {
@@ -7,10 +7,12 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
+  //redux
+  const dispatch = useDispatch();
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      console.log(email);
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
@@ -18,17 +20,14 @@ const LoginPage = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-      const text = await response.text();
-      console.log("TESTO" + text);
-      const data = JSON.parse(text);
+      const data = await response.json();
       if (response.ok) {
-        console.log("Login effettuato con successo", data);
-        //login({ token: data.token, user: data.user })
-        //dispatch(login({ token: data.token, user: data.user }));
+        // salvataggio token e sati user
+        dispatch(login({ token: data.token, user: data.user }));
       } else {
-        setError(data.error);
+        setError(data.error.message);
         throw new Error(
-          data.error || "Non è stato possibile effettuare il login"
+          data.error.message || "Non è stato possibile effettuare il login"
         );
       }
     } catch (error) {

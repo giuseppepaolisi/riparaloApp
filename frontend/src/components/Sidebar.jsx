@@ -94,7 +94,10 @@ function Sidebar() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/dashboard" className={getLinkClass("/dashboard")}>
+                  <Link
+                    to="/partner-dashboard"
+                    className={getLinkClass("/partner-dashboard")}
+                  >
                     <FontAwesomeIcon icon={faTachometerAlt} /> Dashboard
                   </Link>
                 </li>

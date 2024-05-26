@@ -13,11 +13,9 @@ import Tecnici from "./pages/Admin/Tecnici";
 import AggiungiTecnico from "./pages/Admin/AggiungiTecnico";
 import AggiungiPartner from "./pages/Admin/AggiungiPartner";
 
-
 import AboutUs from "./pages/AboutUs";
-import Login from "./pages/Login"
+import Login from "./pages/Login";
 import Logout from "./pages/Logout";
-
 
 const App = () => {
   return (

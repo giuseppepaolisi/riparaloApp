@@ -5,7 +5,6 @@ import servicesData from "../../assets/json/services.json";
 
 import { useEffect, useState } from "react";
 
-
 const ApriTicket = () => {
   const [cellulareCliente, setCellulareCliente] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");

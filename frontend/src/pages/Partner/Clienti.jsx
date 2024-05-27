@@ -1,36 +1,71 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-
-import clientiData from "../../assets/json/clienti.json";
-import CustomModal from "../../components/CustomModal";
-
-import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import DeleteButton from "../../components/DeleteButtorn";
+import DeleteModal from "../../components/DeleteModal";
 
 const Clienti = () => {
   const [clienti, setClienti] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedClientIndex, setSelectedClientIndex] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchType, setSearchType] = useState("cellulare");
+  const [searchType, setSearchType] = useState("telefono");
+
+  const [delModal, setDelModal] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState(null);
+
+  const { token } = useSelector((state) => state.auth);
+
+  const fetchClienti = useCallback(async () => {
+    if (!token) {
+      return;
+    }
+    try {
+      const response = await fetch("/api/customers", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Errore nella lista clienti");
+      }
+
+      const json = await response.json();
+
+      if (Array.isArray(json.customers)) {
+        setClienti(json.customers);
+      } else {
+        throw new Error("La risposta del server non è un array");
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }, [token]);
+
+  //eliminazione cliente
+  const deleteCustomer = async (id) => {
+    try {
+      const response = await fetch(`/api/customer/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Errore nell'eliminazione del cliente");
+      }
+      setClienti(clienti.filter((cliente) => cliente._id !== id));
+      setDelModal(false); // Chiudere il modal dopo l'eliminazione
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    setClienti(clientiData);
-  }, []);
-
-  const handleDelete = (index) => {
-    setSelectedClientIndex(index);
-    setShowModal(true);
-  };
-
-  const confirmDelete = () => {
-    if (selectedClientIndex !== null) {
-      const newClienti = [...clienti];
-      newClienti.splice(selectedClientIndex, 1);
-      setClienti(newClienti);
-      setSelectedClientIndex(null);
-    }
-    setShowModal(false);
-  };
+    fetchClienti();
+  }, [fetchClienti]);
 
   const handleSearchTermChange = (e) => {
     setSearchTerm(e.target.value);
@@ -43,6 +78,11 @@ const Clienti = () => {
   const filteredClienti = clienti.filter((cliente) => {
     return cliente[searchType].toLowerCase().includes(searchTerm.toLowerCase());
   });
+
+  const handleDeleteClick = (id) => {
+    setSelectedClientId(id);
+    setDelModal(true);
+  };
 
   return (
     <div className="container mt-3 mb-4">
@@ -67,7 +107,7 @@ const Clienti = () => {
             value={searchType}
             onChange={handleSearchTypeChange}
           >
-            <option value="cellulare">Cellulare</option>
+            <option value="telefono">Telefono</option>
             <option value="nome">Nome</option>
             <option value="cognome">Cognome</option>
           </select>
@@ -77,44 +117,32 @@ const Clienti = () => {
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Cellulare</th>
+            <th>Telefono</th>
             <th>Nome</th>
             <th>Cognome</th>
-            <th>Ticket Attivi</th>
-            <th>Ticket Totali</th>
             <th>Elimina</th>
           </tr>
         </thead>
         <tbody>
-          {filteredClienti.map((cliente, index) => (
-            <tr key={index}>
-              <td>{cliente.cellulare}</td>
+          {filteredClienti.map((cliente) => (
+            <tr key={cliente._id}>
+              <td>{cliente.telefono}</td>
               <td>{cliente.nome}</td>
               <td>{cliente.cognome}</td>
-              <td>{cliente.ticket_aperti}</td>
-              <td>{cliente.ticket_totali}</td>
               <td>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDelete(index)}
-                >
-                  Elimina
-                </button>
+                <DeleteButton onClick={() => handleDeleteClick(cliente._id)} />
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <CustomModal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        title="Conferma Eliminazione"
-        body="Sei sicuro di voler eliminare questo cliente?"
-        onConfirm={confirmDelete}
-        confirmText="Elimina"
-        cancelText="Annulla"
-      />
+      {delModal && (
+        <DeleteModal
+          message={"Vuoi eliminare il cliente?"}
+          onDelete={() => deleteCustomer(selectedClientId)}
+          onCancel={() => setDelModal(false)}
+        />
+      )}
     </div>
   );
 };

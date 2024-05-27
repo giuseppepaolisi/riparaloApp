@@ -5,7 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Sidebar from "./components/Sidebar";
+import SidebarFactory from "./components/Sidebar/SidebarFactory";
 import logo from "./img/cropped-LOGO1-1.png";
 import DashboardPartner from "./pages/Partner/DashboardPartner";
 import AggiungiCliente from "./pages/Partner/AggiungiCliente";
@@ -40,7 +40,7 @@ const App = () => {
   return (
     <Router>
       <div className="d-flex">
-        {isAuthenticated && <Sidebar />}
+        {isAuthenticated && <SidebarFactory />}
         <div
           className="flex-grow-1"
           style={{

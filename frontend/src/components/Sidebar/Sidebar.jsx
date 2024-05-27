@@ -13,7 +13,7 @@ import {
   faUser,
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import logo from "../img/cropped-LOGO1-1.png";
+import logo from "../../img/cropped-LOGO1-1.png";
 
 function Sidebar() {
   const [show, setShow] = useState(false);

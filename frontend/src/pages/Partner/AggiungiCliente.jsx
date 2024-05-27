@@ -1,14 +1,42 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const AggiungiCliente = () => {
+  const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
-  const [cellulare, setCellulare] = useState("");
+  const [telefono, setTelefono] = useState("");
 
-  const handleAggiungiCliente = (event) => {
+  const { token } = useSelector((state) => state.auth);
+  let navigate = useNavigate();
+
+  const handleAggiungiCliente = async (event) => {
     event.preventDefault();
+    if (!token) {
+      return;
+    }
+    try {
+      const response = await fetch("/api/customer", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, nome, cognome, telefono }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Cliente registrato con successo", data);
+        navigate("/clienti");
+      } else {
+        throw new Error(
+          data.error || "Non è stato possibile aggiungere il cliente"
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
   useEffect(() => {
     document.body.style.backgroundColor = "#007bff";
@@ -26,6 +54,19 @@ const AggiungiCliente = () => {
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Aggiungi Cliente</h2>
               <form onSubmit={handleAggiungiCliente}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
                 <div className="mb-3">
                   <label htmlFor="nome" className="form-label">
                     Nome
@@ -53,15 +94,15 @@ const AggiungiCliente = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="cellulare" className="form-label">
-                    Cellulare
+                  <label htmlFor="telefono" className="form-label">
+                    Telefono
                   </label>
                   <input
                     type="tel"
                     className="form-control"
-                    id="cellulare"
-                    value={cellulare}
-                    onChange={(e) => setCellulare(e.target.value)}
+                    id="telefono"
+                    value={telefono}
+                    onChange={(e) => setTelefono(e.target.value)}
                     required
                   />
                 </div>

@@ -1,4 +1,5 @@
 const Customer = require('../../models/customer');
+const mongoose = require('mongoose');
 const { ErrorResponse } = require('../../middleware/errorManager');
 
 // Creazione di un cliente con email, nome, cognome, telefono e partner associato
@@ -48,12 +49,29 @@ const createCustomer = async (req, res, next) => {
 const getCustomers = async (req, res, next) => {
   const partner = req.user._id;
   try {
-    if (!partner) {
-      throw new ErrorResponse('Sessione scaduta', 400);
-    }
     const customers = await Customer.find({ partner });
 
     res.status(200).json({ customers });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// elimina un cliente dal sistema
+const deleteCustomer = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return next(new ErrorResponse('ID cliente non valido', 400));
+    }
+
+    const customer = await Customer.findOneAndDelete({ _id: id });
+
+    if (!customer) {
+      return next(new ErrorResponse('Nessun cliente trovato', 400));
+    }
+    res.status(200).json({ customer });
   } catch (error) {
     next(error);
   }
@@ -76,4 +94,5 @@ const getCustomer = async (req, res, next) => {
 module.exports = {
   createCustomer,
   getCustomers,
+  deleteCustomer,
 };

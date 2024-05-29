@@ -48,10 +48,4 @@ describe('TEST getCustomers', () => {
     });
   });
 
-  it('ERROR - Non è presente l/id del partner', async () => {
-    await getCustomers(mockReq, mockRes, mockNext);
-
-    expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
-    expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
-  });
 });

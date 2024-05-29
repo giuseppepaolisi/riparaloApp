@@ -1,14 +1,13 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-
+import { useSelector } from "react-redux";
 import CustomModal from "../../components/CustomModal";
 import TableHeader from "../../components/TableHeader";
 import TableRow from "../../components/TableRow";
 
 import stateColors from "../../assets/json/state.json";
-import ticketsData from "../../assets/json/tickets.json";
 import fs from "fs";
 
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
+import { fetchTickets } from "./apiPartner";
 
 function DashboardPartner() {
   const [tickets, setTickets] = useState([]);
@@ -21,11 +20,23 @@ function DashboardPartner() {
   const [searchField, setSearchField] = useState("id");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const { token } = useSelector((state) => state.auth);
+
+  const loadTickets = useCallback(async () => {
+    if (!token) {
+      return;
+    }
+    try {
+      const tickets = await fetchTickets(token);
+      setTickets(tickets);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }, [token]);
 
   useEffect(() => {
-    // Carica i dati dei ticket da tickets.json al caricamento del componente
-    setTickets(ticketsData);
-  }, []);
+    loadTickets();
+  }, [loadTickets]);
 
   const openModal = (ticket) => {
     setSelectedTicket(ticket);

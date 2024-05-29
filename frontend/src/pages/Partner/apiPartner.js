@@ -79,8 +79,13 @@ export const fetchTickets = async (token) => {
       throw new Error("Errore nel recupero dei ticket");
     }
 
-    const data = await response.json();
-    return data;
+    const json = await response.json();
+    if (Array.isArray(json.tickets)) {
+      console.log(json);
+      return json.tickets;
+    } else {
+      throw new Error("La risposta del server non è un array");
+    }
   } catch (error) {
     throw new Error(error.message);
   }

@@ -1,8 +1,9 @@
 import { useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import DeleteButton from "../../components/DeleteButtorn";
+import DeleteButton from "../../components/DeleteButton";
 import DeleteModal from "../../components/DeleteModal";
+import { fetchClienti, deleteCliente } from "./apiPartner";
 
 const Clienti = () => {
   const [clienti, setClienti] = useState([]);
@@ -14,48 +15,21 @@ const Clienti = () => {
 
   const { token } = useSelector((state) => state.auth);
 
-  const fetchClienti = useCallback(async () => {
+  const loadClienti = useCallback(async () => {
     if (!token) {
       return;
     }
     try {
-      const response = await fetch("/api/customers", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Errore nella lista clienti");
-      }
-
-      const json = await response.json();
-
-      if (Array.isArray(json.customers)) {
-        setClienti(json.customers);
-      } else {
-        throw new Error("La risposta del server non è un array");
-      }
+      const customers = await fetchClienti(token);
+      setClienti(customers);
     } catch (error) {
       console.error(error.message);
     }
   }, [token]);
 
-  //eliminazione cliente
-  const deleteCustomer = async (id) => {
+  const handleDeleteCustomer = async (id) => {
     try {
-      const response = await fetch(`/api/customer/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Errore nell'eliminazione del cliente");
-      }
+      await deleteCliente(token, id);
       setClienti(clienti.filter((cliente) => cliente._id !== id));
       setDelModal(false); // Chiudere il modal dopo l'eliminazione
     } catch (error) {
@@ -64,8 +38,8 @@ const Clienti = () => {
   };
 
   useEffect(() => {
-    fetchClienti();
-  }, [fetchClienti]);
+    loadClienti();
+  }, [loadClienti]);
 
   const handleSearchTermChange = (e) => {
     setSearchTerm(e.target.value);
@@ -139,7 +113,7 @@ const Clienti = () => {
       {delModal && (
         <DeleteModal
           message={"Vuoi eliminare il cliente?"}
-          onDelete={() => deleteCustomer(selectedClientId)}
+          onDelete={() => handleDeleteCustomer(selectedClientId)}
           onCancel={() => setDelModal(false)}
         />
       )}

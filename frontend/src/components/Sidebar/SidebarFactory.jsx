@@ -1,21 +1,12 @@
 import { useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
-
 import Sidebar from "./Sidebar";
+import useMenuItems from "../../CustomHooks/useMenuItems";
 
 const SidebarFactory = () => {
   const { user } = useSelector((state) => state.auth);
+  const menuItems = useMenuItems(user.role);
 
-  switch (user.role) {
-    case "admin":
-      return <Sidebar />;
-    case "tecnico":
-      return <Sidebar />;
-    case "partner":
-      return <Sidebar />;
-    default:
-      return <Outlet />;
-  }
+  return <Sidebar menuItems={menuItems} />;
 };
 
 export default SidebarFactory;

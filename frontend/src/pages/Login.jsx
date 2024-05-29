@@ -1,3 +1,4 @@
+// pages/Login.jsx
 import { login } from "../redux/auth/slice";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
@@ -5,6 +6,7 @@ import { useState, useEffect } from "react";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState(null);
 
   //redux
@@ -22,8 +24,14 @@ const LoginPage = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        // salvataggio token e sati user
+        // salvataggio token e stato user
         dispatch(login({ token: data.token, user: data.user }));
+
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", true);
+        } else {
+          localStorage.removeItem("rememberMe");
+        }
       } else {
         setError(data.error.message);
         throw new Error(
@@ -45,6 +53,7 @@ const LoginPage = () => {
       document.body.style.backgroundColor = null;
     };
   }, []);
+
   return (
     <div className="container">
       <div className="row justify-content-center mt-5">
@@ -84,6 +93,8 @@ const LoginPage = () => {
                     type="checkbox"
                     className="form-check-input"
                     id="rememberMe"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
                   />
                   <label className="form-check-label" htmlFor="rememberMe">
                     Rimani connesso
@@ -114,4 +125,5 @@ const LoginPage = () => {
     </div>
   );
 };
+
 export default LoginPage;

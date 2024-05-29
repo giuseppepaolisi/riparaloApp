@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { addCliente } from "./apiPartner";
 
 const AggiungiCliente = () => {
   const [email, setEmail] = useState("");
@@ -17,27 +18,15 @@ const AggiungiCliente = () => {
       return;
     }
     try {
-      const response = await fetch("/api/customer", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, nome, cognome, telefono }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Cliente registrato con successo", data);
-        navigate("/clienti");
-      } else {
-        throw new Error(
-          data.error || "Non è stato possibile aggiungere il cliente"
-        );
-      }
+      const newCustomer = { email, nome, cognome, telefono };
+      const data = await addCliente(token, newCustomer);
+      console.log("Cliente registrato con successo", data);
+      navigate("/clienti");
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     }
   };
+
   useEffect(() => {
     document.body.style.backgroundColor = "#007bff";
 

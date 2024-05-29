@@ -1,24 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { Offcanvas, Button } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHome,
-  faTachometerAlt,
-  faUsers,
-  faHandshake,
-  faCogs,
-  faShapes,
-  faSignInAlt,
-  faUser,
-  faSignOutAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import logo from "../../img/cropped-LOGO1-1.png";
+import PropTypes from "prop-types";
+import SidebarLink from "./SidebarLink";
+import logo from "../../assets/img/logo-riparalo.png";
+import { faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
-function Sidebar() {
+function Sidebar({ menuItems }) {
   const [show, setShow] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const location = useLocation();
 
   useEffect(() => {
     const handleResize = () => {
@@ -36,10 +25,6 @@ function Sidebar() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const getLinkClass = (path) => {
-    return location.pathname === path ? "nav-link active" : "nav-link";
-  };
 
   return (
     <>
@@ -73,80 +58,30 @@ function Sidebar() {
         >
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
-              <Link
-                to="/"
-                className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
-              >
-                <img
-                  src={logo}
-                  alt="Logo"
-                  style={{ width: "50%", margin: "auto" }}
-                />
-              </Link>
+              <img
+                src={logo}
+                alt="Logo"
+                style={{ width: "50%", margin: "auto" }}
+              />
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body className="d-flex flex-column justify-content-between">
             <div style={{ flexGrow: 1 }}>
               <ul className="nav nav-pills flex-column mb-auto">
-                <li className="nav-item">
-                  <Link to="/" className={getLinkClass("/")}>
-                    <FontAwesomeIcon icon={faHome} /> Home
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    to="/partner-dashboard"
-                    className={getLinkClass("/partner-dashboard")}
-                  >
-                    <FontAwesomeIcon icon={faTachometerAlt} /> Dashboard
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/clienti" className={getLinkClass("/clienti")}>
-                    <FontAwesomeIcon icon={faUsers} /> Clienti
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/partner" className={getLinkClass("/partner")}>
-                    <FontAwesomeIcon icon={faHandshake} /> Partner
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/tecnici" className={getLinkClass("/tecnici")}>
-                    <FontAwesomeIcon icon={faCogs} /> Tecnici
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    to="/dashboardpartner"
-                    className={getLinkClass("/dashboardpartner")}
-                  >
-                    <FontAwesomeIcon icon={faShapes} /> Modelli
-                  </Link>
-                </li>
+                {menuItems.map((item) => (
+                  <SidebarLink key={item.path} {...item} />
+                ))}
               </ul>
             </div>
             <div style={{ marginBottom: "20px" }}>
               <ul className="nav nav-pills flex-column mb-auto">
-                <li className="nav-item">
-                  <Link to="/login" className={getLinkClass("/login")}>
-                    <FontAwesomeIcon icon={faSignInAlt} /> Login
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/account" className={getLinkClass("/account")}>
-                    <FontAwesomeIcon icon={faUser} /> Account
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    to="/logout"
-                    className={getLinkClass("/logout")}
-                    style={{ color: "#b22222" }}
-                  >
-                    <FontAwesomeIcon icon={faSignOutAlt} /> Logout
-                  </Link>
-                </li>
+                <SidebarLink path="/account" label="Account" icon={faUser} />
+                <SidebarLink
+                  path="/logout"
+                  label="Logout"
+                  icon={faSignOutAlt}
+                  style={{ color: "#b22222" }}
+                />
               </ul>
             </div>
           </Offcanvas.Body>
@@ -172,62 +107,20 @@ function Sidebar() {
           <div className="d-flex flex-column justify-content-between flex-grow-1">
             <div>
               <ul className="nav nav-pills flex-column">
-                <li className="nav-item" style={{ padding: "5px 0" }}>
-                  <Link to="/" className={getLinkClass("/")}>
-                    <FontAwesomeIcon icon={faHome} /> Home
-                  </Link>
-                </li>
-                <li className="nav-item" style={{ padding: "5px 0" }}>
-                  <Link to="/dashboard" className={getLinkClass("/dashboard")}>
-                    <FontAwesomeIcon icon={faTachometerAlt} /> Dashboard
-                  </Link>
-                </li>
-                <li className="nav-item" style={{ padding: "5px 0" }}>
-                  <Link to="/clienti" className={getLinkClass("/clienti")}>
-                    <FontAwesomeIcon icon={faUsers} /> Clienti
-                  </Link>
-                </li>
-                <li className="nav-item" style={{ padding: "5px 0" }}>
-                  <Link to="/partner" className={getLinkClass("/partner")}>
-                    <FontAwesomeIcon icon={faHandshake} /> Partner
-                  </Link>
-                </li>
-                <li className="nav-item" style={{ padding: "5px 0" }}>
-                  <Link to="/tecnici" className={getLinkClass("/tecnici")}>
-                    <FontAwesomeIcon icon={faCogs} /> Tecnici
-                  </Link>
-                </li>
-                <li className="nav-item" style={{ padding: "5px 0" }}>
-                  <Link
-                    to="/dashboardpartner"
-                    className={getLinkClass("/dashboardpartner")}
-                  >
-                    <FontAwesomeIcon icon={faShapes} /> Modelli
-                  </Link>
-                </li>
+                {menuItems.map((item) => (
+                  <SidebarLink key={item.path} {...item} />
+                ))}
               </ul>
             </div>
             <div className="mt-auto">
               <ul className="nav nav-pills flex-column">
-                <li className="nav-item" style={{ padding: "5px 0" }}>
-                  <Link to="/login" className={getLinkClass("/login")}>
-                    <FontAwesomeIcon icon={faSignInAlt} /> Login
-                  </Link>
-                </li>
-                <li className="nav-item" style={{ padding: "5px 0" }}>
-                  <Link to="/account" className={getLinkClass("/account")}>
-                    <FontAwesomeIcon icon={faUser} /> Account
-                  </Link>
-                </li>
-                <li className="nav-item" style={{ padding: "5px 0" }}>
-                  <Link
-                    to="/logout"
-                    className={getLinkClass("/logout")}
-                    style={{ color: "#b22222" }}
-                  >
-                    <FontAwesomeIcon icon={faSignOutAlt} /> Logout
-                  </Link>
-                </li>
+                <SidebarLink path="/account" label="Account" icon={faUser} />
+                <SidebarLink
+                  path="/logout"
+                  label="Logout"
+                  icon={faSignOutAlt}
+                  style={{ color: "#b22222" }}
+                />
               </ul>
             </div>
           </div>
@@ -236,5 +129,15 @@ function Sidebar() {
     </>
   );
 }
+
+Sidebar.propTypes = {
+  menuItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      path: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      icon: PropTypes.object.isRequired,
+    })
+  ).isRequired,
+};
 
 export default Sidebar;

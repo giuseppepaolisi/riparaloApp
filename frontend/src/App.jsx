@@ -1,3 +1,4 @@
+// App.jsx
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,7 +7,6 @@ import {
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import SidebarFactory from "./components/Sidebar/SidebarFactory";
-import logo from "./img/cropped-LOGO1-1.png";
 import DashboardPartner from "./pages/Partner/DashboardPartner";
 import AggiungiCliente from "./pages/Partner/AggiungiCliente";
 import ApriTicket from "./pages/Partner/ApriTicket";
@@ -19,21 +19,9 @@ import AboutUs from "./pages/AboutUs";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import PrivateRoute from "./redux/auth/PrivateRoute";
-
-const HomePage = () => {
-  return (
-    <div
-      style={{
-        fontFamily: "Open sans",
-        textAlign: "center",
-        color: "#009be3",
-      }}
-    >
-      <h1>Benvenuto!</h1>
-      <img src={logo} style={{ width: "50%", margin: "auto" }} alt="Logo" />
-    </div>
-  );
-};
+import DashboardAdmin from "./pages/Admin/DashboardAdmin"; // Importa il componente della dashboard dell'admin
+import HomePage from "./pages/Homepage";
+import DashboardTecnico from "./pages/Tecnico/DashboardTecnico";
 
 const App = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -60,7 +48,7 @@ const App = () => {
 
             {/* Admin Routes */}
             <Route element={<PrivateRoute roles={["admin"]} />}>
-              <Route path="/admin-dashboard" element={<HomePage />} />
+              <Route path="/admin-dashboard" element={<DashboardAdmin />} />
               <Route path="/partner" element={<Partner />} />
               <Route path="/aggiungi-partner" element={<AggiungiPartner />} />
               <Route path="/tecnici" element={<Tecnici />} />
@@ -77,7 +65,7 @@ const App = () => {
 
             {/* Tecnico Routes */}
             <Route element={<PrivateRoute roles={["tecnico", "admin"]} />}>
-              <Route path="/tecnico-dashboard" element={<HomePage />} />
+              <Route path="/tecnico-dashboard" element={<DashboardTecnico />} />
             </Route>
           </Routes>
         </div>

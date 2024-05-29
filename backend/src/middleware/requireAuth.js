@@ -31,7 +31,7 @@ const requireAuth = async (req, res, next) => {
   if (!authorization) {
     return res.status(401).json({ error: 'Token richiesto' });
   }
-  const token = authorization;
+  const token = authorization.split(' ')[1];
 
   try {
     const payload = jwt.verify(token, publicKey, { algorithms: ['RS256'] });

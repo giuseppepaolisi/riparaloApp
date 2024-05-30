@@ -177,7 +177,7 @@ const getPDF = async (req, res, next) => {
     }
 
     // generazione PDF
-    const pdf = generatePDF(ticket);
+    const pdf = await generatePDF(ticket);
 
     // invio PDF
     res.setHeader('Content-Type', 'application/pdf');

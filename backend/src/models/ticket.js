@@ -142,7 +142,7 @@ const ticketSchema = new mongoose.Schema({
   acconto: {
     type: Number,
   },
-  imie: {
+  imei: {
     type: String,
   },
   pin: {

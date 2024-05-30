@@ -62,7 +62,7 @@ html(lang="it")
         text-align: right;
       }
       .barcode img {
-        width: 100px;
+        width: 100%;
       }
       .details, .note, .signature {
         margin-top: 5px;
@@ -134,7 +134,7 @@ html(lang="it")
         .header-right.inline
           span Data:
           .bold.inline
-            span= date
+            span= storico_stato[0].data
         
       .section
         .columns
@@ -142,28 +142,42 @@ html(lang="it")
             div
               span Indirizzo: 
               .bold.inline 
-                span= indirizzo
+                span= via 
+                span= provincia 
+                span= cap
             div
               span Telefono: 
               .bold.inline 
-                span= telefono
+                span= telefono_partner
             div 
-              span Email: 
+              span Ragine Sociale: 
               .bold.inline 
-                span= email
+                span= ragione_sociale
+            div 
+              span Codice Univoco: 
+              .bold.inline 
+                span= codiceUnivoco
+            div 
+              span PEC: 
+              .bold.inline 
+                span= pec
           .column.margin-right
             div
-              span Indirizzo: 
+              span ID: 
               .bold.inline 
-                span= indirizzo
+                span= _id
             div
-              span Telefono: 
+              span Stato: 
               .bold.inline 
-                span= telefono
+                span= storico_stato[0].stato
             div 
-              span Email: 
+              span Acconto: €
               .bold.inline 
-                span= email
+                span= acconto
+            div 
+              span Totale stimato: €
+              .bold.inline 
+                span= prezzo_stimato
           .column1.margin.barcode
             img(src=barcode, alt="Barcode")
         
@@ -171,19 +185,14 @@ html(lang="it")
         .section-content
           .column
             div
-              span Tipologia: 
-              .bold.inline 
-                span= tipologia
-          .column
-            div
               span Brand: 
               .bold.inline 
-                span= brand
+                span= marca
           .column
             div
               span Prodotto: 
               .bold.inline 
-                span= prodotto
+                span= modello
           .column
             div
               span IMEI: 
@@ -199,9 +208,12 @@ html(lang="it")
         .columns
           .column.margin-right.large
             div
-              span Note e Accessori: 
-              .bold.inline
-                span SCOCCA POSTERIORE ROTTA
+              span Servizi: 
+              each servizio in servizi
+                div
+                  span= servizio.servizio
+                  .bold.inline
+                    span= ' - €' + servizio.prezzo
           .column.small
             div 
               span Pin: 
@@ -214,7 +226,7 @@ html(lang="it")
             div
               span Guasto riscontrato: 
               .bold.inline
-                span SOSTITUZIONE LCD
+                span=  descrizione_problema
         
       .section
         .columns
@@ -241,25 +253,25 @@ html(lang="it")
         .header-right
           span Data:
           .bold.inline 
-            span= date
+            span= storico_stato[0].data
         
       .section
         .columns
           .column.margin-right
             .bold
-              p Centri Assistenza Tecnica Riparalo
-            p Via XXV Aprile, 96, Crotone (KR)
-            p P.IVA: 03702220793 CF: -------------
-            p Tel: +393293033166
-            p Cellulare: 3293033166
-            p Email: riparalokro@gmail.com
+              div Centri Assistenza Tecnica Riparalo
+            div Via XXV Aprile, 96, Crotone (KR)
+            div P.IVA: 03702220793 CF: -------------
+            div Tel: +393293033166
+            div Cellulare: 3293033166
+            div Email: riparalokro@gmail.com
           .column
             .bold 
-              p Cliente
-            p= clienteNome
-            p= clienteCognome
-            p= clienteIndirizzo
-            p= clienteTelefono
+              div Cliente
+            div= nome_cliente
+            div= cognome_cliente
+            div= via
+            div= telefono_cliente
 
       .section
         .section-content
@@ -272,7 +284,7 @@ html(lang="it")
             div
               span Stato: 
               .bold.inline 
-                span= stato
+                span= storico_stato[0].stato
           .column
             div
               span Acconto: 
@@ -282,25 +294,20 @@ html(lang="it")
             div
               span Totale Stimato: 
               .bold.inline 
-                span= totaleStimato
+                span= prezzo_stimato
 
       .section
         .section-content
           .column
             div
-              span Tipologia: 
-              .bold.inline 
-                span= tipologia
-          .column
-            div
               span Brand: 
               .bold.inline 
-                span= brand
+                span= marca
           .column
             div
               span Prodotto: 
               .bold.inline 
-                span= prodotto
+                span= modello
           .column
             div
               span IMEI: 
@@ -317,11 +324,15 @@ html(lang="it")
           .column.margin-right
             .bold.inline 
               p Guasto riscontrato
-            p SOSTITUZIONE LCD
+            p= descrizione_problema
           .column
-            .bold.inline 
-              p Note e Accessori
-            p SCOCCA POSTERIORE ROTTA
+            div
+              span Servizi: 
+              each servizio in servizi
+                div
+                  span= servizio.servizio
+                  .bold.inline
+                    span= ' - €' + servizio.prezzo
         
       .section
         .columns

@@ -2,6 +2,7 @@ const pug = require('pug');
 const puppeteer = require('puppeteer');
 const path = require('path');
 const { generateBarcode } = require('./barcode');
+// curl -o document.pdf -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjI4MGRjNDIwYmU5M2E4NTUwNTY1NzEiLCJpYXQiOjE3MTcwODUyNDcsImV4cCI6MTcxNzE3MTY0N30.r-nrEGnaXEjblCdvH44PnijgY_p52ZKbTutLax_n0St4NTnQ0jd0LQWuZKQazxhvX3LIvK6qYOKo8Nm-EDPKiJ5xc0zSl7OrgF9J6mTYs1tKHEGk7gD9IVDYzQjDFP0csuY-yVAqUilywc1a8VN1J9EHkDXMUipkTiDz3GaVDWGS5mcxLi6qt2CYgySgexvsc9QY0mPuiqfnlc7bq4-4oDLxNaYq7-uMVV6iJQmqKHBiLzzq-2Tu-HLLDeEgn2tyxafuqy0xRECLWXXFKssA4X6FDhjeAxkOX-85VbOc-z00qAXq-IsnnR8BzBB4gsQBv8wfI4WN7qrEYFWn60cvZA" "http://localhost:4000/api/pdf/663bbab69f4e2dc79bce564e"
 
 async function generatePDF(data) {
   try {

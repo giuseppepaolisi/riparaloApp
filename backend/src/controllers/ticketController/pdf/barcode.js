@@ -7,7 +7,7 @@ function generateBarcode(id) {
     bwipjs.toBuffer(
       {
         bcid: 'code128', // Tipo di codice a barre
-        text: id, // Testo del codice a barre
+        text: id.toString(), // Testo del codice a barre
         scale: 5, // Aumenta la scala per ingrandire l'immagine
         height: 50, // Aumenta l'altezza del codice a barre
         includetext: true, // Include il testo sotto il barcode

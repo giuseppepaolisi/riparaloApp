@@ -14,10 +14,6 @@ async function generatePDF(data) {
     );
     const html = compiledFunction(data);
 
-    // Salva il contenuto HTML in un file per il debug
-    fs.writeFileSync('debug.html', html);
-    console.log('Contenuto HTML salvato in debug.html');
-
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],

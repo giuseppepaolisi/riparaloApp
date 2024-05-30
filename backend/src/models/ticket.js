@@ -139,6 +139,18 @@ const ticketSchema = new mongoose.Schema({
   prezzo: {
     type: Number,
   },
+  acconto: {
+    type: Number,
+  },
+  imie: {
+    type: String,
+  },
+  pin: {
+    type: String,
+  },
+  seriale: {
+    type: String,
+  }
 });
 
 const Ticket = mongoose.model('Ticket', ticketSchema);

@@ -55,6 +55,10 @@ describe('TEST openTicket', () => {
             prezzo: 30,
           },
         ],
+        acconto: 20,
+        pin: '12345',
+        imei: '123456789',
+        seriale: '12334',
       },
     };
     mockRes = {
@@ -96,6 +100,10 @@ describe('TEST openTicket', () => {
           data: new Date('2024-04-27T12:00:00Z'),
         },
       ],
+      acconto: 20,
+      pin: '12345',
+      imei: '123456789',
+      seriale: '12334',
     };
     mockUser = {
       _id: '601c546d4d3f8b2f243d58e6',

@@ -18,6 +18,10 @@ const openTicket = async (req, res, next) => {
     marca,
     modello,
     servizi, // array di oggetti { problema, prezzo }
+    acconto,
+    imei,
+    pin,
+    seriale,
   } = req.body;
 
   // Calcola il totale stimato
@@ -64,6 +68,10 @@ const openTicket = async (req, res, next) => {
           data: new Date(),
         },
       ],
+      acconto: acconto,
+      imei: imei,
+      pin: pin,
+      seriale: seriale,
     });
 
     const ticket = await newTicket.save();

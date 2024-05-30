@@ -1,0 +1,342 @@
+doctype html
+html(lang="it")
+  head
+    meta(charset="UTF-8")
+    title Scheda Assistenza
+    style.
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        width: 100%;
+        /*border: 1px solid #000;*/
+        padding: 0px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+      }
+      .header, .footer {
+        width: 100%;
+        text-align: right;
+        font-size: 12px;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .header-left {
+        text-align: left;
+        font-weight: bold;
+      }
+      .header-right {
+        text-align: right;
+      }
+      .section {
+        margin-bottom: 10px;
+      }
+      .section-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      .section-content {
+        display: flex;
+        justify-content: space-between;
+        padding: 0px; /* Add padding for better spacing */
+      }
+      .left, .right {
+        width: 30%;
+         
+      }
+      .border {
+        border: 1px solid #000; /* Add border to make the margin visible */
+      }
+      .wide-left {
+        width: 70%; /* Increase the width for address section */
+      }
+      .barcode {
+        text-align: right;
+      }
+      .barcode img {
+        width: 100px;
+      }
+      .details, .note, .signature {
+        margin-top: 5px;
+      }
+      .note-content, .signature-content {
+        border: 1px solid #000;
+        padding: 5px;
+      }
+      .note-content {
+        height: 30px;
+      }
+      .signature-content {
+        height: 20px;
+      }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table, .table th, .table td {
+        border: 1px solid black;
+      }
+      .table th, .table td {
+        padding: 5px;
+        text-align: left;
+      }
+      .dashed-line {
+        border-top: 1px dashed black;
+        margin: 20px 0;
+      }
+      .columns {
+        display: flex;
+      }
+      .column {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #000;
+        margin: 0px;
+      }
+      .column1 {
+        flex: 1;
+        padding: 10px;
+        margin: 0px;
+      }
+      .margin-right {
+        margin-right: 10px;
+      }
+      .small {
+        width: 20%;
+      }
+      .large {
+        width: 75%;
+      }
+      .signature {
+        border-bottom: 1px solid black;
+        margin-top: 30px;
+        width: 200px;
+      }
+      .inline {
+        display: inline;
+      }
+      .nb {
+        text-size: 10px;
+      }
+  body
+    .container
+      .header
+        .header-left
+          div Scheda Assistenza
+        .header-right.inline
+          span Data:
+          .bold.inline
+            span= date
+        
+      .section
+        .columns
+          .column.margin-right
+            div
+              span Indirizzo: 
+              .bold.inline 
+                span= indirizzo
+            div
+              span Telefono: 
+              .bold.inline 
+                span= telefono
+            div 
+              span Email: 
+              .bold.inline 
+                span= email
+          .column.margin-right
+            div
+              span Indirizzo: 
+              .bold.inline 
+                span= indirizzo
+            div
+              span Telefono: 
+              .bold.inline 
+                span= telefono
+            div 
+              span Email: 
+              .bold.inline 
+                span= email
+          .column1.margin.barcode
+            img(src=barcode, alt="Barcode")
+        
+      .section
+        .section-content
+          .column
+            div
+              span Tipologia: 
+              .bold.inline 
+                span= tipologia
+          .column
+            div
+              span Brand: 
+              .bold.inline 
+                span= brand
+          .column
+            div
+              span Prodotto: 
+              .bold.inline 
+                span= prodotto
+          .column
+            div
+              span IMEI: 
+              .bold.inline 
+                span= imei
+          .column
+            div
+              span Seriale: 
+              .bold.inline 
+                span= seriale
+        
+      .section
+        .columns
+          .column.margin-right.large
+            div
+              span Note e Accessori: 
+              .bold.inline
+                span SCOCCA POSTERIORE ROTTA
+          .column.small
+            div 
+              span Pin: 
+              .bold.inline 
+                span= pin
+        
+      .section
+        .columns
+          .column
+            div
+              span Guasto riscontrato: 
+              .bold.inline
+                span SOSTITUZIONE LCD
+        
+      .section
+        .columns
+          .column
+            div 
+              .bold 
+                span Laboratorio 
+              span Sede Legale 
+              .bold 
+                span Data Consegna: 
+                .inline
+                  span= dataConsegna
+          .column 
+            div 
+              span Firma per Accettazione
+              .signature
+
+    .dashed-line
+
+    .container
+      .header
+        .header-left
+          div Scheda Assistenza
+        .header-right
+          span Data:
+          .bold.inline 
+            span= date
+        
+      .section
+        .columns
+          .column.margin-right
+            .bold
+              p Centri Assistenza Tecnica Riparalo
+            p Via XXV Aprile, 96, Crotone (KR)
+            p P.IVA: 03702220793 CF: -------------
+            p Tel: +393293033166
+            p Cellulare: 3293033166
+            p Email: riparalokro@gmail.com
+          .column
+            .bold 
+              p Cliente
+            p= clienteNome
+            p= clienteCognome
+            p= clienteIndirizzo
+            p= clienteTelefono
+
+      .section
+        .section-content
+          .column
+            div
+              span ID: 
+              .bold.inline 
+                span= _id
+          .column
+            div
+              span Stato: 
+              .bold.inline 
+                span= stato
+          .column
+            div
+              span Acconto: 
+              .bold.inline 
+                span= acconto
+          .column
+            div
+              span Totale Stimato: 
+              .bold.inline 
+                span= totaleStimato
+
+      .section
+        .section-content
+          .column
+            div
+              span Tipologia: 
+              .bold.inline 
+                span= tipologia
+          .column
+            div
+              span Brand: 
+              .bold.inline 
+                span= brand
+          .column
+            div
+              span Prodotto: 
+              .bold.inline 
+                span= prodotto
+          .column
+            div
+              span IMEI: 
+              .bold.inline 
+                span= imei
+          .column
+            div
+              span Seriale: 
+              .bold.inline 
+                span= seriale
+        
+      .section
+        .columns
+          .column.margin-right
+            .bold.inline 
+            p Guasto riscontrato
+            p SOSTITUZIONE LCD
+          .column
+            .bold.inline 
+              p Note e Accessori
+              p SCOCCA POSTERIORE ROTTA
+        
+      .section
+        .columns
+          .column
+            div 
+              .bold 
+                span Laboratorio 
+              span Sede Legale 
+              .bold 
+                span Data Consegna: 
+                span= dataConsegna
+          .column 
+            div 
+              span Firma per Accettazione
+              .signature
+
+    .footer.nb
+      div N.B.: La riparazione comporta una garanzia di 3 (tre) mesi solo sui componenti sostituiti. Si avvisa il cliente di realizzare delle copie di sicurezza dei dati presenti nella memoria del telefono, prima di consegnare il telefono al centro di assistenza per la riparazione.

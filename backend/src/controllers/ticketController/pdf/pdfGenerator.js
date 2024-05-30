@@ -1,40 +1,42 @@
+const pug = require('pug');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
+const { generateBarcode } = require('./barcode');
 
 async function generatePDF(data) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  try {
+    const barcodeDataURI = await generateBarcode(data._id);
+    data.barcode = barcodeDataURI;
 
-  // Leggi il file template HTML
-  let htmlContent = fs.readFileSync(
-    path.join(__dirname, 'template.html'),
-    'utf8'
-  );
+    const compiledFunction = pug.compileFile(
+      path.join(__dirname, 'template.pug')
+    );
+    const html = compiledFunction(data);
 
-  // Sostituisci i placeholder con i dati reali
-  Object.keys(data).forEach((key) => {
-    htmlContent = htmlContent.replace(new RegExp(`{{${key}}}`, 'g'), data[key]);
-  });
+    // Salva il contenuto HTML in un file per il debug
+    fs.writeFileSync('debug.html', html);
+    console.log('Contenuto HTML salvato in debug.html');
 
-  await page.setContent(htmlContent);
-  await page.pdf({
-    path: 'output.pdf',
-    format: 'A4',
-  });
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    }); // Esegui in modalità headless con opzioni extra
+    const page = await browser.newPage();
 
-  await browser.close();
-  console.log('PDF generato con successo!');
+    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 60000 });
+
+    const pdfPath = path.join(__dirname, 'scheda_assistenza.pdf');
+    const pdfBuffer = await page.pdf({ format: 'A4', printBackground: true });
+
+    await browser.close();
+
+    return pdfBuffer;
+  } catch (error) {
+    console.error('Errore durante la generazione del PDF:', error);
+  }
 }
-const data = {
-  ragioneSociale: 'Elettrodomestici Rossi S.r.l.',
-  cellulare: '+39 123 456 7890',
-  indirizzo: 'Via Roma, 101, 00100 Roma, Italia',
-  modello: 'EcoMax 500',
-  marca: 'TechLine',
-  prezzo: '€350,00',
-  problema: 'Non si avvia il ciclo di lavaggio.',
-  barcodeImage: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...',
-};
 
-generatePDF(data);
+module.exports = {
+  generatePDF,
+};

@@ -5,6 +5,7 @@ const {
   getTickets,
   getTicket,
   deleteTicket,
+  getPDF,
 } = require('../controllers/ticketController/ticket');
 const { requirePartner, requireAuth } = require('../middleware/requireAuth');
 
@@ -22,6 +23,7 @@ router.get('/tickets/:state', getTickets);
 router.get('/tickets', getTickets);
 
 router.get('/ticket/:id', getTicket);
+router.get('/pdf/:id', getPDF);
 
 router.delete('/ticket/:id', requirePartner, deleteTicket);
 

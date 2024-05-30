@@ -3,6 +3,7 @@ const User = require('../../models/user');
 const { ErrorResponse } = require('../../middleware/errorManager');
 const { PARTNER } = require('../../conf/role');
 const { APERTO, STATES } = require('../../conf/state');
+const { generatePDF } = require('./pdf/pdfGenerator');
 const mongoose = require('mongoose');
 
 // Permette la creazione di un ticket
@@ -155,9 +156,45 @@ const deleteTicket = async (req, res, next) => {
   }
 };
 
+// genera un pdf relativo a un ticket passato un id
+const getPDF = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    if (!id) {
+      throw new ErrorResponse('ID non valido', 400);
+    }
+
+    let filters = { _id: id };
+    // aggiungi un filtro se si tratta di un partner
+    if (req.user.role === PARTNER) {
+      filters.id_partner = req.user._id;
+    }
+
+    const ticket = await Ticket.findOne(filters);
+    if (!ticket) {
+      throw new ErrorResponse('Ticket non trovato', 404);
+    }
+
+    // generazione PDF
+    const pdf = generatePDF(ticket);
+
+    // invio PDF
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename="scheda_assistenza.pdf"'
+    );
+    res.send(pdf);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   openTicket,
   getTickets,
   getTicket,
   deleteTicket,
+  getPDF,
 };

@@ -150,7 +150,7 @@ const ticketSchema = new mongoose.Schema({
   },
   seriale: {
     type: String,
-  }
+  },
 });
 
 const Ticket = mongoose.model('Ticket', ticketSchema);

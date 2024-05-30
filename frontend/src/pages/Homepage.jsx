@@ -1,16 +1,21 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/img/logo-riparalo.png"; // Assicurati che il percorso sia corretto
 import { Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import logo from "../assets/img/logo-riparalo.png"; // Assicurati che il percorso sia corretto
 
 const HomePage = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   return (
     <div style={{ fontFamily: "Open Sans", color: "#009be3" }}>
       <div className="d-flex justify-content-end p-3">
-        <Link to="/login">
-          <Button variant="outline-primary" size="lg">
-            Login
-          </Button>
-        </Link>
+        {!isAuthenticated && (
+          <Link to="/login">
+            <Button variant="outline-primary" size="lg">
+              Login
+            </Button>
+          </Link>
+        )}
       </div>
       <div className="text-center">
         <h1>Benvenuto!</h1>

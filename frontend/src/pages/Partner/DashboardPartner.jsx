@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import CustomModal from "../../components/CustomModal";
 import TableHeader from "../../components/TableHeader";
 import TableRow from "../../components/TableRow";
-
+import { Link } from "react-router-dom";
 import stateColors from "../../assets/json/state.json";
 import fs from "fs";
 
@@ -56,14 +56,11 @@ function DashboardPartner() {
 
   const deleteTicket = () => {
     const ticketId = confirmModal.ticketId;
-    // Elimina il ticket dallo stato locale
     const updatedTickets = tickets.filter((ticket) => ticket.id !== ticketId);
     setTickets(updatedTickets);
 
-    // Chiudi il modale subito dopo aver aggiornato lo stato
     closeConfirmModal();
 
-    // Aggiorna il file tickets.json
     fs.writeFile("./tickets.json", JSON.stringify(updatedTickets), (err) => {
       if (err) {
         console.error(
@@ -149,6 +146,9 @@ function DashboardPartner() {
   return (
     <div className="container">
       <h2 className="text-left mb-4">DASHBOARD - TICKET</h2>
+      <Link to="/apri-ticket" className="btn btn-primary mb-4">
+        + Apri ticket
+      </Link>
       <div className="d-flex justify-content-between mb-3">
         <div className="d-flex">
           {Object.entries(buttonLabels).map(([key, label]) => (

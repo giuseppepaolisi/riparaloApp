@@ -38,6 +38,7 @@ const App = () => {
         >
           <Routes>
             {/* Senza autenticazione */}
+            
             <Route path="/" element={<HomePage />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/aboutus" element={<AboutUs />} />
@@ -57,6 +58,7 @@ const App = () => {
 
             {/* Partner Routes */}
             <Route element={<PrivateRoute roles={["partner"]} />}>
+              
               <Route path="/partner-dashboard" element={<DashboardPartner />} />
               <Route path="/clienti" element={<Clienti />} />
               <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />

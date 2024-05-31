@@ -30,6 +30,7 @@ function DashboardAdmin() {
       tableHeaders={tableHeaders}
       buttonLabels={buttonLabels}
       searchFields={searchFields}
+      showOpenTicketButton={false}
     />
   );
 }

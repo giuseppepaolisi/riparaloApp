@@ -10,14 +10,15 @@ const PrivateRoute = ({ roles }) => {
   }
 
   if (roles && !roles.includes(user.role)) {
-    if (user.role === "admin") {
-      return <Navigate to="/admin-dashboard" />;
-    } else if (user.role === "partner") {
-      return <Navigate to="/partner-dashboard" />;
-    } else if (user.role === "tecnico") {
-      return <Navigate to="/tecnico-dashboard" />;
-    } else {
-      return <Navigate to="/" />;
+    switch (user.role) {
+      case "admin":
+        return <Navigate to="/admin-dashboard" />;
+      case "partner":
+        return <Navigate to="/partner-dashboard" />;
+      case "tecnico":
+        return <Navigate to="/tecnico-dashboard" />;
+      default:
+        return <Navigate to="/403" />;
     }
   }
 

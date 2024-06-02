@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 import deviceData from "../../assets/json/devices.json";
 import CustomModal from "../../components/CustomModal";
+import SearchBar from "../../components/SearchBar";
 
 const Modello = () => {
   const [devices, setDevices] = useState(deviceData);
@@ -14,15 +15,17 @@ const Modello = () => {
     direction: "ascending",
   });
 
-  const handleDelete = (brandIndex, modelIndex) => {
-    const updatedDevices = [...devices];
-    updatedDevices[brandIndex].models.splice(modelIndex, 1);
-    setDevices(updatedDevices);
+  const handleDelete = useCallback((brandIndex, modelIndex) => {
+    setDevices((prevDevices) => {
+      const updatedDevices = [...prevDevices];
+      updatedDevices[brandIndex].models.splice(modelIndex, 1);
+      return updatedDevices;
+    });
     setSelectedModel(null);
     setShowModal(false);
-  };
+  }, []);
 
-  const confirmDelete = () => {
+  const confirmDelete = useCallback(() => {
     if (selectedModel) {
       const brandIndex = devices.findIndex(
         (brand) => brand.brand === selectedModel.brand
@@ -32,77 +35,77 @@ const Modello = () => {
       );
       handleDelete(brandIndex, modelIndex);
     }
-  };
+  }, [selectedModel, devices, handleDelete]);
 
-  const handleSearchTermChange = (e) => {
+  const handleSearchTermChange = useCallback((e) => {
     setSearchTerm(e.target.value);
-  };
+  }, []);
 
-  const handleSearchTypeChange = (e) => {
+  const handleSearchTypeChange = useCallback((e) => {
     setSearchType(e.target.value);
-  };
+  }, []);
 
-  const sortedDevices = [...devices];
-
-  if (sortConfig.key === "brand") {
-    sortedDevices.sort((a, b) => {
-      if (a.brand < b.brand) {
-        return sortConfig.direction === "ascending" ? -1 : 1;
-      }
-      if (a.brand > b.brand) {
-        return sortConfig.direction === "ascending" ? 1 : -1;
-      }
-      return 0;
-    });
-  } else {
-    sortedDevices.forEach((brand) => {
-      brand.models.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? 1 : -1;
-        }
-        return 0;
-      });
-    });
-  }
-
-  const filteredDevices = sortedDevices
-    .map((brand) => {
-      if (searchType === "brand") {
-        if (brand.brand.toLowerCase().startsWith(searchTerm.toLowerCase())) {
-          return brand;
-        } else {
-          return { ...brand, models: [] };
-        }
-      } else {
-        const filteredModels = brand.models.filter((model) =>
-          model.model.toLowerCase().startsWith(searchTerm.toLowerCase())
+  const sortedDevices = useMemo(() => {
+    const sortableDevices = [...devices];
+    if (sortConfig.key === "brand") {
+      sortableDevices.sort(
+        (a, b) =>
+          a.brand.localeCompare(b.brand) *
+          (sortConfig.direction === "ascending" ? 1 : -1)
+      );
+    } else {
+      sortableDevices.forEach((brand) => {
+        brand.models.sort(
+          (a, b) =>
+            a[sortConfig.key].localeCompare(b[sortConfig.key]) *
+            (sortConfig.direction === "ascending" ? 1 : -1)
         );
-        return { ...brand, models: filteredModels };
-      }
-    })
-    .filter((brand) => brand.models.length > 0);
-
-  const requestSort = (key) => {
-    let direction = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
+      });
     }
-    setSortConfig({ key, direction });
-  };
+    return sortableDevices;
+  }, [devices, sortConfig]);
 
-  const getSortIcon = (key) => {
-    if (sortConfig.key === key) {
-      if (sortConfig.direction === "ascending") {
-        return " ▲";
-      } else {
-        return " ▼";
+  const filteredDevices = useMemo(() => {
+    return sortedDevices
+      .map((brand) => {
+        if (searchType === "brand") {
+          if (brand.brand.toLowerCase().startsWith(searchTerm.toLowerCase())) {
+            return brand;
+          } else {
+            return { ...brand, models: [] };
+          }
+        } else {
+          const filteredModels = brand.models.filter((model) =>
+            model.model.toLowerCase().startsWith(searchTerm.toLowerCase())
+          );
+          return { ...brand, models: filteredModels };
+        }
+      })
+      .filter((brand) => brand.models.length > 0);
+  }, [sortedDevices, searchTerm, searchType]);
+
+  const requestSort = useCallback((key) => {
+    setSortConfig((prevSortConfig) => {
+      let direction = "ascending";
+      if (
+        prevSortConfig.key === key &&
+        prevSortConfig.direction === "ascending"
+      ) {
+        direction = "descending";
       }
-    }
-    return null;
-  };
+      return { key, direction };
+    });
+  }, []);
+
+  const getSortIcon = useCallback(
+    (key) => {
+      if (sortConfig.key === key) {
+        return sortConfig.direction === "ascending" ? " ▲" : " ▼";
+      }
+      return null;
+    },
+    [sortConfig]
+  );
 
   return (
     <div className="container mt-3 mb-2">
@@ -111,26 +114,13 @@ const Modello = () => {
         <Link to="/aggiungi-modello" className="btn btn-primary">
           + Aggiungi modello
         </Link>
-        <div
-          className="input-group input-group-sm"
-          style={{ maxWidth: "400px" }}
-        >
-          <input
-            type="text"
-            className="form-control"
-            placeholder={`Cerca per ${searchType}`}
-            value={searchTerm}
-            onChange={handleSearchTermChange}
-          />
-          <select
-            className="form-select"
-            value={searchType}
-            onChange={handleSearchTypeChange}
-          >
-            <option value="model">Modello</option>
-            <option value="brand">Brand</option>
-          </select>
-        </div>
+        <SearchBar
+          searchFields={{ model: "Modello", brand: "Brand" }}
+          selectedSearchField={searchType}
+          onSearchFieldChange={handleSearchTypeChange}
+          searchQuery={searchTerm}
+          onSearchQueryChange={handleSearchTermChange}
+        />
       </div>
       <table className="table table-striped table-bordered">
         <thead className="thead-dark">

@@ -1,9 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import partnerData from "../../assets/json/partner.json";
 import CustomModal from "../../components/CustomModal";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 const Partner = () => {
@@ -17,32 +15,34 @@ const Partner = () => {
     setPartner(partnerData);
   }, []);
 
-  const handleDelete = (index) => {
+  const handleDelete = useCallback((index) => {
     setSelectedPartnerIndex(index);
     setShowModal(true);
-  };
+  }, []);
 
-  const confirmDelete = () => {
+  const confirmDelete = useCallback(() => {
     if (selectedPartnerIndex !== null) {
-      const newPartner = [...partner];
-      newPartner.splice(selectedPartnerIndex, 1);
-      setPartner(newPartner);
+      setPartner((prevPartner) => {
+        const newPartner = [...prevPartner];
+        newPartner.splice(selectedPartnerIndex, 1);
+        return newPartner;
+      });
       setSelectedPartnerIndex(null);
+      setShowModal(false);
     }
-    setShowModal(false);
-  };
+  }, [selectedPartnerIndex]);
 
-  const handleSearchTermChange = (e) => {
+  const handleSearchTermChange = useCallback((e) => {
     setSearchTerm(e.target.value);
-  };
+  }, []);
 
-  const handleSearchTypeChange = (e) => {
+  const handleSearchTypeChange = useCallback((e) => {
     setSearchType(e.target.value);
-  };
+  }, []);
 
-  const filteredPartner = partner.filter((partner) => {
-    return partner[searchType].toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const filteredPartner = partner.filter((partner) =>
+    partner[searchType].toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="container mt-3 mb-4">
@@ -50,7 +50,7 @@ const Partner = () => {
       <div className="mt-3 mb-5 d-flex justify-content-between">
         <Link to="/aggiungi-partner" className="btn btn-primary">
           + Aggiungi partner
-        </Link>{" "}
+        </Link>
         <div
           className="input-group input-group-sm"
           style={{ maxWidth: "400px" }}

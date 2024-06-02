@@ -134,8 +134,11 @@ html(lang="it")
         .header-right.inline
           span Data:
           .bold.inline
-            span= storico_stato[0].data
-        
+            span= storico_stato[0].data.getDate().toString().padStart(2, '0')
+            span /
+            span= (storico_stato[0].data.getMonth() + 1).toString().padStart(2, '0')
+            span /
+            span= storico_stato[0].data.getFullYear()
       .section
         .columns
           .column.margin-right
@@ -253,7 +256,11 @@ html(lang="it")
         .header-right
           span Data:
           .bold.inline 
-            span= storico_stato[0].data
+            span= storico_stato[0].data.getDate().toString().padStart(2, '0')
+            span /
+            span= (storico_stato[0].data.getMonth() + 1).toString().padStart(2, '0')
+            span /
+            span= storico_stato[0].data.getFullYear()
         
       .section
         .columns

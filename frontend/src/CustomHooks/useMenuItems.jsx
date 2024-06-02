@@ -5,6 +5,7 @@ import {
   faHandshake,
   faCogs,
   faShapes,
+  faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 const useMenuItems = (role) => {
@@ -24,16 +25,26 @@ const useMenuItems = (role) => {
     { path: "/tecnico-dashboard", label: "Dashboard", icon: faTachometerAlt },
   ];
 
+  const commonMenu = [
+    { path: "/about-us", label: "Sedi e contatti", icon: faMapMarkerAlt }, // Nuova voce
+  ];
+
+  let menuItems = [];
   switch (role) {
     case "admin":
-      return adminMenu;
+      menuItems = adminMenu;
+      break;
     case "partner":
-      return partnerMenu;
+      menuItems = partnerMenu;
+      break;
     case "tecnico":
-      return tecnicoMenu;
+      menuItems = tecnicoMenu;
+      break;
     default:
-      return [];
+      menuItems = [];
   }
+
+  return { menuItems, commonMenu };
 };
 
 export default useMenuItems;

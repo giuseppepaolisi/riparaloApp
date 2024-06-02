@@ -5,7 +5,7 @@ import SidebarLink from "./SidebarLink";
 import logo from "../../assets/img/logo-riparalo.png";
 import { faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
-function Sidebar({ menuItems }) {
+function Sidebar({ menuItems, commonMenu }) {
   const [show, setShow] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -75,6 +75,9 @@ function Sidebar({ menuItems }) {
             </div>
             <div style={{ marginBottom: "20px" }}>
               <ul className="nav nav-pills flex-column mb-auto">
+                {commonMenu.map((item) => (
+                  <SidebarLink key={item.path} {...item} />
+                ))}
                 <SidebarLink path="/account" label="Account" icon={faUser} />
                 <SidebarLink
                   path="/logout"
@@ -114,6 +117,9 @@ function Sidebar({ menuItems }) {
             </div>
             <div className="mt-auto">
               <ul className="nav nav-pills flex-column">
+                {commonMenu.map((item) => (
+                  <SidebarLink key={item.path} {...item} />
+                ))}
                 <SidebarLink path="/account" label="Account" icon={faUser} />
                 <SidebarLink
                   path="/logout"
@@ -132,6 +138,13 @@ function Sidebar({ menuItems }) {
 
 Sidebar.propTypes = {
   menuItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      path: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      icon: PropTypes.object.isRequired,
+    })
+  ).isRequired,
+  commonMenu: PropTypes.arrayOf(
     PropTypes.shape({
       path: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,

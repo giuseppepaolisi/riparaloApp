@@ -9,16 +9,13 @@ const Clienti = () => {
   const [clienti, setClienti] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("telefono");
-
   const [delModal, setDelModal] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState(null);
 
   const { token } = useSelector((state) => state.auth);
 
   const loadClienti = useCallback(async () => {
-    if (!token) {
-      return;
-    }
+    if (!token) return;
     try {
       const customers = await fetchClienti(token);
       setClienti(customers);
@@ -27,27 +24,27 @@ const Clienti = () => {
     }
   }, [token]);
 
-  const handleDeleteCustomer = async (id) => {
-    try {
-      await deleteCliente(token, id);
-      setClienti(clienti.filter((cliente) => cliente._id !== id));
-      setDelModal(false); // Chiudere il modal dopo l'eliminazione
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleDeleteCustomer = useCallback(
+    async (id) => {
+      try {
+        await deleteCliente(token, id);
+        setClienti((prevClienti) =>
+          prevClienti.filter((cliente) => cliente._id !== id)
+        );
+        setDelModal(false);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [token]
+  );
 
   useEffect(() => {
     loadClienti();
   }, [loadClienti]);
 
-  const handleSearchTermChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleSearchTypeChange = (e) => {
-    setSearchType(e.target.value);
-  };
+  const handleSearchTermChange = (e) => setSearchTerm(e.target.value);
+  const handleSearchTypeChange = (e) => setSearchType(e.target.value);
 
   const filteredClienti = clienti.filter((cliente) => {
     return cliente[searchType].toLowerCase().includes(searchTerm.toLowerCase());
@@ -64,7 +61,7 @@ const Clienti = () => {
       <div className="mt-3 mb-5 d-flex justify-content-between">
         <Link to="/aggiungi-cliente" className="btn btn-primary">
           + Aggiungi cliente
-        </Link>{" "}
+        </Link>
         <div
           className="input-group input-group-sm"
           style={{ maxWidth: "400px" }}
@@ -87,7 +84,6 @@ const Clienti = () => {
           </select>
         </div>
       </div>
-
       <table className="table table-striped">
         <thead>
           <tr>
@@ -112,7 +108,7 @@ const Clienti = () => {
       </table>
       {delModal && (
         <DeleteModal
-          message={"Vuoi eliminare il cliente?"}
+          message="Vuoi eliminare il cliente?"
           onDelete={() => handleDeleteCustomer(selectedClientId)}
           onCancel={() => setDelModal(false)}
         />

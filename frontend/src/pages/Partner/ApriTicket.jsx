@@ -1,9 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import devicesData from "../../assets/json/devices.json";
 import servicesData from "../../assets/json/services.json";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 const ApriTicket = () => {
   const [cellulareCliente, setCellulareCliente] = useState("");
@@ -14,9 +12,9 @@ const ApriTicket = () => {
   const [totaleStimato, setTotaleStimato] = useState(0);
   const [availableServices, setAvailableServices] = useState([]);
 
-  const handleApriTicket = (event) => {
+  const handleApriTicket = useCallback((event) => {
     event.preventDefault();
-  };
+  }, []);
 
   useEffect(() => {
     document.body.style.backgroundColor = "#007bff";
@@ -55,12 +53,12 @@ const ApriTicket = () => {
     }
   }, [selectedBrand, selectedModel]);
 
-  const handleServiceChange = (id, price, isChecked) => {
+  const handleServiceChange = useCallback((id, price, isChecked) => {
     setSelectedServices((prevServices) => ({
       ...prevServices,
       [id]: isChecked ? price : 0,
     }));
-  };
+  }, []);
 
   return (
     <div className="container">

@@ -1,17 +1,21 @@
-// pages/Logout.jsx
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/auth/slice";
+import { useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Logout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     dispatch(logout());
     navigate("/login");
-  };
+  }, [dispatch, navigate]);
+
+  const handleCancel = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
@@ -23,7 +27,7 @@ const Logout = () => {
           Cliccando su &apos;Logout&apos;, verrai disconnesso dall&apos;account.
         </p>
         <div className="d-flex justify-content-center">
-          <button className="btn btn-primary me-3" onClick={() => navigate(-1)}>
+          <button className="btn btn-primary me-3" onClick={handleCancel}>
             Annulla
           </button>
           <button className="btn btn-danger" onClick={handleLogout}>

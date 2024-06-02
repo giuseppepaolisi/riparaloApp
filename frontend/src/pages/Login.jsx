@@ -1,7 +1,7 @@
-// pages/Login.jsx
 import { login } from "../redux/auth/slice";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
+import FormInput from "../components/FormInput";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -9,7 +9,6 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState(null);
 
-  //redux
   const dispatch = useDispatch();
 
   const handleLogin = async (event) => {
@@ -24,7 +23,6 @@ const LoginPage = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        // salvataggio token e stato user
         dispatch(login({ token: data.token, user: data.user }));
 
         if (rememberMe) {
@@ -43,12 +41,9 @@ const LoginPage = () => {
     }
   };
 
-  //aggiunge la classe al body
   useEffect(() => {
-    // Aggiungere una classe al body quando il componente viene montato
     document.body.style.backgroundColor = "#007bff";
 
-    // Rimuovere la classe quando il componente viene smontato
     return () => {
       document.body.style.backgroundColor = null;
     };
@@ -62,32 +57,22 @@ const LoginPage = () => {
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Login</h2>
               <form onSubmit={handleLogin}>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
-                    E-mail
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
+                <FormInput
+                  label="E-mail"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  id="email"
+                  required
+                />
+                <FormInput
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  id="password"
+                  required
+                />
                 <div className="form-check mb-3">
                   <input
                     type="checkbox"
@@ -106,7 +91,7 @@ const LoginPage = () => {
                   </button>
                 </div>
               </form>
-              {error ? (
+              {error && (
                 <div
                   className="alert alert-danger"
                   style={{ marginTop: "20px" }}
@@ -114,10 +99,7 @@ const LoginPage = () => {
                 >
                   {error}
                 </div>
-              ) : (
-                <div></div>
               )}
-              <div className="text-center mt-3"></div>
             </div>
           </div>
         </div>

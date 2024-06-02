@@ -8,7 +8,6 @@ const DettagliPartner = () => {
 
   useEffect(() => {
     document.body.style.backgroundColor = "#007bff";
-
     return () => {
       document.body.style.backgroundColor = null;
     };
@@ -17,6 +16,19 @@ const DettagliPartner = () => {
   if (!partner) {
     return <div>Partner non trovato</div>;
   }
+
+  const partnerDetails = [
+    { label: "Ragione Sociale", value: partner.ragioneSociale },
+    { label: "Rappresentante Legale", value: partner.rappresentanteLegale },
+    { label: "Email", value: partner.email },
+    { label: "Provincia", value: partner.provincia },
+    { label: "Codice Univoco", value: partner["codice univoco"] },
+    { label: "Partita IVA", value: partner.piva },
+    { label: "Telefono", value: partner.telefono },
+    { label: "Città", value: partner.citta },
+    { label: "Indirizzo", value: partner.indirizzo },
+    { label: "CAP", value: partner.cap },
+  ];
 
   return (
     <div className="container mt-5">
@@ -30,37 +42,11 @@ const DettagliPartner = () => {
           }}
         >
           <h2 className="text-center mb-4">Dettagli Partner</h2>
-          <p>
-            <strong>Ragione Sociale:</strong> {partner.ragioneSociale}
-          </p>
-          <p>
-            <strong>Rappresentante Legale:</strong>{" "}
-            {partner.rappresentanteLegale}
-          </p>
-          <p>
-            <strong>Email:</strong> {partner.email}
-          </p>
-          <p>
-            <strong>Provincia:</strong> {partner.provincia}
-          </p>
-          <p>
-            <strong>Codice Univoco:</strong> {partner["codice univoco"]}
-          </p>
-          <p>
-            <strong>Partita IVA:</strong> {partner.piva}
-          </p>
-          <p>
-            <strong>Telefono:</strong> {partner.telefono}
-          </p>
-          <p>
-            <strong>Città:</strong> {partner.citta}
-          </p>
-          <p>
-            <strong>Indirizzo:</strong> {partner.indirizzo}
-          </p>
-          <p>
-            <strong>CAP:</strong> {partner.cap}
-          </p>
+          {partnerDetails.map((detail, index) => (
+            <p key={index}>
+              <strong>{detail.label}:</strong> {detail.value}
+            </p>
+          ))}
         </div>
       </div>
     </div>

@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import deviceData from "../../assets/json/devices.json";
-import serviceData from "../../assets/json/services.json"; // Assicurati che il percorso sia corretto
-import CustomModal from "../../components/CustomModal"; // Assicurati che il percorso sia corretto
+import serviceData from "../../assets/json/services.json";
+import CustomModal from "../../components/CustomModal";
+import ServiceRow from "../../components/ServiceRow";
 import { isEqual } from "lodash";
 
 const DettagliModello = () => {
@@ -49,7 +50,8 @@ const DettagliModello = () => {
         });
         setDevice(brandData);
         setModelDetails({ ...modelData, services: updatedServices });
-        setOriginalModelDetails({ ...modelData, services: updatedServices }); // Save the original state
+        setOriginalModelDetails({ ...modelData, services: updatedServices });
+
         const initialPriceValidity = updatedServices.reduce((acc, _, index) => {
           acc[index] = true;
           return acc;
@@ -59,45 +61,49 @@ const DettagliModello = () => {
     }
   }, [brand, model]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
     setModelDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
     }));
-  };
+  }, []);
 
-  const handleServiceChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedServices = [...modelDetails.services];
-    const updatedValidity = { ...priceValidity };
-    if (name === "price") {
-      const isValid = /^(\d+|\d{1,3}(,\d{3})*)(\.\d+)?$/.test(
-        value.replace(",", ".")
-      );
-      updatedValidity[index] = isValid;
-      setPriceValidity(updatedValidity);
+  const handleServiceChange = useCallback(
+    (index, e) => {
+      const { name, value } = e.target;
+      const updatedServices = [...modelDetails.services];
+      const updatedValidity = { ...priceValidity };
+      if (name === "price") {
+        const isValid = /^(\d+|\d{1,3}(,\d{3})*)(\.\d+)?$/.test(
+          value.replace(",", ".")
+        );
+        updatedValidity[index] = isValid;
+        setPriceValidity(updatedValidity);
+      }
       updatedServices[index] = { ...updatedServices[index], [name]: value };
-    } else {
-      updatedServices[index] = { ...updatedServices[index], [name]: value };
-    }
-    setModelDetails((prevDetails) => ({
-      ...prevDetails,
-      services: updatedServices,
-    }));
-  };
+      setModelDetails((prevDetails) => ({
+        ...prevDetails,
+        services: updatedServices,
+      }));
+    },
+    [modelDetails.services, priceValidity]
+  );
 
-  const handleServiceToggle = (index) => {
-    const updatedServices = [...modelDetails.services];
-    updatedServices[index].active = !updatedServices[index].active;
-    setModelDetails((prevDetails) => ({
-      ...prevDetails,
-      services: updatedServices,
-    }));
-  };
+  const handleServiceToggle = useCallback(
+    (index) => {
+      const updatedServices = [...modelDetails.services];
+      updatedServices[index].active = !updatedServices[index].active;
+      setModelDetails((prevDetails) => ({
+        ...prevDetails,
+        services: updatedServices,
+      }));
+    },
+    [modelDetails.services]
+  );
 
-  const handleAddService = () => {
-    if (canAddService()) {
+  const handleAddService = useCallback(() => {
+    if (canAddService) {
       setModelDetails((prevDetails) => ({
         ...prevDetails,
         services: [
@@ -110,26 +116,29 @@ const DettagliModello = () => {
         [modelDetails.services.length]: true,
       }));
     }
-  };
+  }, [canAddService, modelDetails.services.length]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!isEqual(originalModelDetails, modelDetails)) {
-      setModalAction("save");
-      setShowModal(true);
-    }
-  };
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (!isEqual(originalModelDetails, modelDetails)) {
+        setModalAction("save");
+        setShowModal(true);
+      }
+    },
+    [originalModelDetails, modelDetails]
+  );
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     if (!isEqual(originalModelDetails, modelDetails)) {
       setModalAction("cancel");
       setShowModal(true);
     } else {
       navigate("/modelli");
     }
-  };
+  }, [originalModelDetails, modelDetails, navigate]);
 
-  const confirmAction = () => {
+  const confirmAction = useCallback(() => {
     if (modalAction === "save") {
       console.log("Updated model details:", modelDetails);
       navigate("/modelli");
@@ -137,9 +146,9 @@ const DettagliModello = () => {
       navigate("/modelli");
     }
     setShowModal(false);
-  };
+  }, [modalAction, modelDetails, navigate]);
 
-  const canAddService = () => {
+  const canAddService = useMemo(() => {
     if (modelDetails.services.length === 0) return true;
     const lastService = modelDetails.services[modelDetails.services.length - 1];
     return (
@@ -147,7 +156,7 @@ const DettagliModello = () => {
       lastService.price &&
       priceValidity[modelDetails.services.length - 1]
     );
-  };
+  }, [modelDetails.services, priceValidity]);
 
   if (!device) {
     return <div>Loading...</div>;
@@ -203,48 +212,14 @@ const DettagliModello = () => {
                 </div>
                 <div className="row mb-3">
                   {modelDetails.services.map((service, index) => (
-                    <div
+                    <ServiceRow
                       key={service.id}
-                      className="row mb-2 align-items-center"
-                    >
-                      <div className="col-md-1">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          checked={service.active}
-                          onChange={() => handleServiceToggle(index)}
-                        />
-                      </div>
-                      <div className="col-md-5">
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="name"
-                          value={service.name}
-                          onChange={(e) => handleServiceChange(index, e)}
-                          disabled={!service.active}
-                          style={{ maxWidth: "300px" }}
-                        />
-                      </div>
-                      <div className="col-md-5">
-                        <input
-                          type="text"
-                          className={`form-control ${
-                            priceValidity[index] === false ? "is-invalid" : ""
-                          }`}
-                          name="price"
-                          value={service.price}
-                          onChange={(e) => handleServiceChange(index, e)}
-                          disabled={!service.active}
-                          style={{ maxWidth: "300px" }}
-                        />
-                        {priceValidity[index] === false && (
-                          <div className="invalid-feedback">
-                            Prezzo non valido
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                      service={service}
+                      index={index}
+                      handleServiceChange={handleServiceChange}
+                      handleServiceToggle={handleServiceToggle}
+                      priceValidity={priceValidity}
+                    />
                   ))}
                 </div>
                 <div className="d-grid gap-2 mb-3">
@@ -253,7 +228,7 @@ const DettagliModello = () => {
                     className="btn btn-primary"
                     onClick={handleAddService}
                     style={{ width: "auto", margin: "0 auto" }}
-                    disabled={!canAddService()}
+                    disabled={!canAddService}
                   >
                     Aggiungi Servizio
                   </button>

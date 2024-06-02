@@ -1,4 +1,3 @@
-// App.jsx
 import {
   BrowserRouter as Router,
   Routes,
@@ -19,9 +18,13 @@ import AboutUs from "./pages/AboutUs";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import PrivateRoute from "./redux/auth/PrivateRoute";
-import DashboardAdmin from "./pages/Admin/DashboardAdmin"; // Importa il componente della dashboard dell'admin
+import DashboardAdmin from "./pages/Admin/DashboardAdmin";
 import HomePage from "./pages/Homepage";
 import DashboardTecnico from "./pages/Tecnico/DashboardTecnico";
+import Error403 from "./pages/error/Error403";
+import Error404 from "./pages/error/Error404";
+import Error500 from "./pages/error/Error500";
+//import AccountEdit from "./pages/AccountEdit";  // Importa il nuovo componente
 
 const App = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -38,10 +41,8 @@ const App = () => {
         >
           <Routes>
             {/* Senza autenticazione */}
-            
             <Route path="/" element={<HomePage />} />
             <Route path="/logout" element={<Logout />} />
-            <Route path="/aboutus" element={<AboutUs />} />
             <Route
               path="/login"
               element={isAuthenticated ? <Navigate to="/" /> : <Login />}
@@ -54,21 +55,29 @@ const App = () => {
               <Route path="/aggiungi-partner" element={<AggiungiPartner />} />
               <Route path="/tecnici" element={<Tecnici />} />
               <Route path="/aggiungi-tecnico" element={<AggiungiTecnico />} />
+              {/*<Route path="/account" element={<AccountEdit userType="Admin" userData={{ email: 'admin@example.com' }} />} />*/}
             </Route>
 
             {/* Partner Routes */}
             <Route element={<PrivateRoute roles={["partner"]} />}>
-              
               <Route path="/partner-dashboard" element={<DashboardPartner />} />
               <Route path="/clienti" element={<Clienti />} />
               <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />
               <Route path="/apri-ticket" element={<ApriTicket />} />
+              <Route path="/about-us" element={<AboutUs />} />
+              {/*<Route path="/account" element={<AccountEdit userType="Partner" userData={{ ragioneSociale: 'Partner Srl' }} />} />*/}
             </Route>
 
             {/* Tecnico Routes */}
             <Route element={<PrivateRoute roles={["tecnico", "admin"]} />}>
               <Route path="/tecnico-dashboard" element={<DashboardTecnico />} />
+              {/*<Route path="/account" element={<AccountEdit userType="Tecnico" userData={{ cognome: 'Rossi', nome: 'Mario' }} />} />*/}
             </Route>
+
+            {/* Error Routes */}
+            <Route path="/403" element={<Error403 />} />
+            <Route path="/500" element={<Error500 />} />
+            <Route path="*" element={<Error404 />} />
           </Routes>
         </div>
       </div>

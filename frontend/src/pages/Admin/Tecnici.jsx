@@ -1,9 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import tecniciData from "../../assets/json/tecnici.json";
 import CustomModal from "../../components/CustomModal";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 const Tecnici = () => {
@@ -17,32 +15,34 @@ const Tecnici = () => {
     setTecnici(tecniciData);
   }, []);
 
-  const handleDelete = (index) => {
+  const handleDelete = useCallback((index) => {
     setSelectedTecnicoIndex(index);
     setShowModal(true);
-  };
+  }, []);
 
-  const confirmDelete = () => {
+  const confirmDelete = useCallback(() => {
     if (selectedTecnicoIndex !== null) {
-      const newTecnici = [...tecnici];
-      newTecnici.splice(selectedTecnicoIndex, 1);
-      setTecnici(newTecnici);
+      setTecnici((prevTecnici) => {
+        const newTecnici = [...prevTecnici];
+        newTecnici.splice(selectedTecnicoIndex, 1);
+        return newTecnici;
+      });
       setSelectedTecnicoIndex(null);
+      setShowModal(false);
     }
-    setShowModal(false);
-  };
+  }, [selectedTecnicoIndex]);
 
-  const handleSearchTermChange = (e) => {
+  const handleSearchTermChange = useCallback((e) => {
     setSearchTerm(e.target.value);
-  };
+  }, []);
 
-  const handleSearchTypeChange = (e) => {
+  const handleSearchTypeChange = useCallback((e) => {
     setSearchType(e.target.value);
-  };
+  }, []);
 
-  const filteredTecnici = tecnici.filter((tecnico) => {
-    return tecnico[searchType].toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const filteredTecnici = tecnici.filter((tecnico) =>
+    tecnico[searchType].toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="container mt-3 mb-4">
@@ -50,7 +50,7 @@ const Tecnici = () => {
       <div className="mt-3 mb-5 d-flex justify-content-between">
         <Link to="/aggiungi-tecnico" className="btn btn-primary">
           + Aggiungi tecnico
-        </Link>{" "}
+        </Link>
         <div
           className="input-group input-group-sm"
           style={{ maxWidth: "400px" }}

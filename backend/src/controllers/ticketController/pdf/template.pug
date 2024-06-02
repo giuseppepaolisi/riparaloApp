@@ -146,7 +146,9 @@ html(lang="it")
               span Indirizzo: 
               .bold.inline 
                 span= via 
+                span , 
                 span= provincia 
+                span , 
                 span= cap
             div
               span Telefono: 
@@ -211,7 +213,8 @@ html(lang="it")
         .columns
           .column.margin-right.large
             div
-              span Servizi: 
+              .bold
+                span Servizi: 
               each servizio in servizi
                 div
                   span= servizio.servizio
@@ -275,9 +278,8 @@ html(lang="it")
           .column
             .bold 
               div Cliente
-            div= nome_cliente
-            div= cognome_cliente
-            div= via
+            div= nome_cliente 
+            span= cognome_cliente
             div= telefono_cliente
 
       .section
@@ -330,11 +332,12 @@ html(lang="it")
         .columns
           .column.margin-right
             .bold.inline 
-              p Guasto riscontrato
-            p= descrizione_problema
+              div Guasto riscontrato
+            div= descrizione_problema
           .column
             div
-              span Servizi: 
+              .bold
+                span Servizi: 
               each servizio in servizi
                 div
                   span= servizio.servizio

@@ -1,7 +1,8 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { addCliente } from "./apiPartner";
+import FormInput from "../../components/FormInput";
 
 const AggiungiCliente = () => {
   const [email, setEmail] = useState("");
@@ -10,30 +11,65 @@ const AggiungiCliente = () => {
   const [telefono, setTelefono] = useState("");
 
   const { token } = useSelector((state) => state.auth);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
-  const handleAggiungiCliente = async (event) => {
-    event.preventDefault();
-    if (!token) {
-      return;
-    }
-    try {
-      const newCustomer = { email, nome, cognome, telefono };
-      const data = await addCliente(token, newCustomer);
-      console.log("Cliente registrato con successo", data);
-      navigate("/clienti");
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+  const handleAggiungiCliente = useCallback(
+    async (event) => {
+      event.preventDefault();
+      if (!token) return;
+
+      try {
+        const newCustomer = { email, nome, cognome, telefono };
+        const data = await addCliente(token, newCustomer);
+        console.log("Cliente registrato con successo", data);
+        navigate("/clienti");
+      } catch (error) {
+        console.error(error.message);
+      }
+    },
+    [email, nome, cognome, telefono, token, navigate]
+  );
 
   useEffect(() => {
     document.body.style.backgroundColor = "#007bff";
-
     return () => {
       document.body.style.backgroundColor = null;
     };
   }, []);
+
+  const formFields = useMemo(
+    () => [
+      {
+        id: "email",
+        label: "Email",
+        type: "email",
+        value: email,
+        onChange: setEmail,
+      },
+      {
+        id: "nome",
+        label: "Nome",
+        type: "text",
+        value: nome,
+        onChange: setNome,
+      },
+      {
+        id: "cognome",
+        label: "Cognome",
+        type: "text",
+        value: cognome,
+        onChange: setCognome,
+      },
+      {
+        id: "telefono",
+        label: "Telefono",
+        type: "tel",
+        value: telefono,
+        onChange: setTelefono,
+      },
+    ],
+    [email, nome, cognome, telefono]
+  );
 
   return (
     <div className="container">
@@ -43,58 +79,17 @@ const AggiungiCliente = () => {
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Aggiungi Cliente</h2>
               <form onSubmit={handleAggiungiCliente}>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                {formFields.map(({ id, label, type, value, onChange }) => (
+                  <FormInput
+                    key={id}
+                    id={id}
+                    label={label}
+                    type={type}
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
                     required
                   />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="nome" className="form-label">
-                    Nome
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="nome"
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="cognome" className="form-label">
-                    Cognome
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="cognome"
-                    value={cognome}
-                    onChange={(e) => setCognome(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor="telefono" className="form-label">
-                    Telefono
-                  </label>
-                  <input
-                    type="tel"
-                    className="form-control"
-                    id="telefono"
-                    value={telefono}
-                    onChange={(e) => setTelefono(e.target.value)}
-                    required
-                  />
-                </div>
+                ))}
                 <div className="d-grid gap-2">
                   <button type="submit" className="btn btn-primary">
                     Aggiungi

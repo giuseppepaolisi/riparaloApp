@@ -7,13 +7,13 @@ function TableRow({ ticket, onRead, onDelete }) {
   };
 
   const handleDelete = () => {
-    onDelete(ticket.id);
+    onDelete(ticket._id);
   };
 
   return (
     <tr>
-      <td>{ticket.id}</td>
-      <td>{ticket.dataApertura}</td>
+      <td>{ticket._id}</td>
+      <td>{ticket.storico_stato[0].data}</td>
       <td>{ticket.nome}</td>
       <td>{ticket.cognome}</td>
       <td>{ticket.marca}</td>
@@ -40,8 +40,8 @@ function TableRow({ ticket, onRead, onDelete }) {
 
 TableRow.propTypes = {
   ticket: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    dataApertura: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+    storico_stato: PropTypes.array.isRequired,
     nome: PropTypes.string.isRequired,
     cognome: PropTypes.string.isRequired,
     marca: PropTypes.string.isRequired,

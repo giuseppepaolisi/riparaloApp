@@ -17,7 +17,7 @@ function DashboardPartner() {
     ticketId: null,
   });
   const [filter, setFilter] = useState("ALL");
-  const [searchField, setSearchField] = useState("id");
+  const [searchField, setSearchField] = useState("_id");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const { token } = useSelector((state) => state.auth);
@@ -56,7 +56,7 @@ function DashboardPartner() {
 
   const deleteTicket = () => {
     const ticketId = confirmModal.ticketId;
-    const updatedTickets = tickets.filter((ticket) => ticket.id !== ticketId);
+    const updatedTickets = tickets.filter((ticket) => ticket._id !== ticketId);
     setTickets(updatedTickets);
 
     closeConfirmModal();
@@ -124,7 +124,7 @@ function DashboardPartner() {
   };
 
   const searchFields = {
-    id: "ID Ticket",
+    _id: "ID Ticket",
     nome: "Nome",
     cognome: "Cognome",
     marca: "Marca",
@@ -132,7 +132,7 @@ function DashboardPartner() {
   };
 
   const tableHeaders = [
-    { key: "id", label: "ID Ticket" },
+    { key: "_id", label: "ID Ticket" },
     { key: "dataApertura", label: "Data apertura" },
     { key: "nome", label: "Nome" },
     { key: "cognome", label: "Cognome" },
@@ -195,7 +195,7 @@ function DashboardPartner() {
         <tbody>
           {sortedTickets.map((ticket) => (
             <TableRow
-              key={ticket.id}
+              key={ticket._id}
               ticket={ticket}
               onRead={openModal}
               onDelete={openConfirmModal}
@@ -207,7 +207,7 @@ function DashboardPartner() {
         show={selectedTicket !== null}
         onHide={closeModal}
         title="Descrizione Problema"
-        body={selectedTicket && selectedTicket.descrizione}
+        body={selectedTicket && selectedTicket.descrizione_problema}
         cancelText="Chiudi"
       />
       <CustomModal

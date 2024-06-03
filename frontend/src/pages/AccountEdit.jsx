@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Form, Button } from 'react-bootstrap';
-import FormInput from '../components/FormInput';
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { Form, Button } from "react-bootstrap";
+import FormInput from "../components/FormInput";
 
 const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
   const [formData, setFormData] = useState({});
@@ -25,7 +25,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
 
   const renderFormFields = () => {
     switch (userType) {
-      case 'Admin':
+      case "Admin":
         return (
           <>
             <FormInput
@@ -33,7 +33,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="email"
               id="email"
               name="email"
-              value={formData.email || ''}
+              value={formData.email || ""}
               onChange={handleChange}
               required
             />
@@ -42,13 +42,13 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="password"
               id="password"
               name="password"
-              value={formData.password || ''}
+              value={formData.password || ""}
               onChange={handleChange}
               required
             />
           </>
         );
-      case 'Tecnico':
+      case "Tecnico":
         return (
           <>
             <FormInput
@@ -56,7 +56,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="cognome"
               name="cognome"
-              value={formData.cognome || ''}
+              value={formData.cognome || ""}
               onChange={handleChange}
               required
             />
@@ -65,7 +65,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="nome"
               name="nome"
-              value={formData.nome || ''}
+              value={formData.nome || ""}
               onChange={handleChange}
               required
             />
@@ -74,7 +74,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="email"
               id="email"
               name="email"
-              value={formData.email || ''}
+              value={formData.email || ""}
               onChange={handleChange}
               required
             />
@@ -83,13 +83,13 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="password"
               id="password"
               name="password"
-              value={formData.password || ''}
+              value={formData.password || ""}
               onChange={handleChange}
               required
             />
           </>
         );
-      case 'Partner':
+      case "Partner":
         return (
           <>
             <FormInput
@@ -97,7 +97,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="ragioneSociale"
               name="ragioneSociale"
-              value={formData.ragioneSociale || ''}
+              value={formData.ragioneSociale || ""}
               onChange={handleChange}
               required
             />
@@ -106,7 +106,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="rappresentanteLegale"
               name="rappresentanteLegale"
-              value={formData.rappresentanteLegale || ''}
+              value={formData.rappresentanteLegale || ""}
               onChange={handleChange}
               required
             />
@@ -115,7 +115,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="codiceUnivoco"
               name="codiceUnivoco"
-              value={formData.codiceUnivoco || ''}
+              value={formData.codiceUnivoco || ""}
               onChange={handleChange}
               required
             />
@@ -124,7 +124,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="piva"
               name="piva"
-              value={formData.piva || ''}
+              value={formData.piva || ""}
               onChange={handleChange}
               required
             />
@@ -133,7 +133,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="email"
               id="pec"
               name="pec"
-              value={formData.pec || ''}
+              value={formData.pec || ""}
               onChange={handleChange}
               required
             />
@@ -142,7 +142,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="telefono"
               name="telefono"
-              value={formData.telefono || ''}
+              value={formData.telefono || ""}
               onChange={handleChange}
               required
             />
@@ -151,7 +151,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="citta"
               name="citta"
-              value={formData.citta || ''}
+              value={formData.citta || ""}
               onChange={handleChange}
               required
             />
@@ -160,7 +160,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="via"
               name="via"
-              value={formData.via || ''}
+              value={formData.via || ""}
               onChange={handleChange}
               required
             />
@@ -169,7 +169,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="cap"
               name="cap"
-              value={formData.cap || ''}
+              value={formData.cap || ""}
               onChange={handleChange}
               required
             />
@@ -178,7 +178,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
               type="text"
               id="provincia"
               name="provincia"
-              value={formData.provincia || ''}
+              value={formData.provincia || ""}
               onChange={handleChange}
               required
             />
@@ -203,7 +203,7 @@ const AccountEdit = ({ userType, userData, onSave, onCancel }) => {
 };
 
 AccountEdit.propTypes = {
-  userType: PropTypes.oneOf(['Admin', 'Tecnico', 'Partner']).isRequired,
+  userType: PropTypes.oneOf(["Admin", "Tecnico", "Partner"]).isRequired,
   userData: PropTypes.object.isRequired,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,

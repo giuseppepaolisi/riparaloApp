@@ -31,9 +31,9 @@ const LoginPage = () => {
           localStorage.removeItem("rememberMe");
         }
       } else {
-        setError(data.error.message);
+        setError(data.error);
         throw new Error(
-          data.error.message || "Non è stato possibile effettuare il login"
+          data.error || "Non è stato possibile effettuare il login"
         );
       }
     } catch (error) {
@@ -91,7 +91,7 @@ const LoginPage = () => {
                   </button>
                 </div>
               </form>
-              {error && (
+              {error ? (
                 <div
                   className="alert alert-danger"
                   style={{ marginTop: "20px" }}
@@ -99,6 +99,8 @@ const LoginPage = () => {
                 >
                   {error}
                 </div>
+              ) : (
+                <div></div>
               )}
             </div>
           </div>

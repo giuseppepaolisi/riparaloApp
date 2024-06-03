@@ -30,9 +30,12 @@ function TableRow({ ticket, onRead, onDelete }) {
         </button>
       </td>
       <td>
-        <button className="btn btn-danger" onClick={handleDelete}>
-          Elimina
-        </button>
+        {ticket.stato === "Aperto" ? (
+          <button className="btn btn-danger" onClick={handleDelete}>
+            Elimina
+          </button>
+        ) : null
+        }
       </td>
     </tr>
   );

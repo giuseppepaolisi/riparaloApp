@@ -69,7 +69,11 @@ function Sidebar({ menuItems, commonMenu }) {
             <Offcanvas.Title>
               <Link
                 to="/"
-                style={{ display: "flex", justifyContent: "center", width: "100%" }}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
               >
                 <img
                   src={logo}
@@ -80,9 +84,7 @@ function Sidebar({ menuItems, commonMenu }) {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body className="d-flex flex-column justify-content-between">
-            <div style={{ flexGrow: 1 }}>
-              {renderMenuItems(menuItems)}
-            </div>
+            <div style={{ flexGrow: 1 }}>{renderMenuItems(menuItems)}</div>
             <div style={{ marginBottom: "20px" }}>
               {renderMenuItems(commonMenu)}
               <ul className="nav nav-pills flex-column mb-auto">
@@ -111,7 +113,11 @@ function Sidebar({ menuItems, commonMenu }) {
           <div className="d-flex align-items-center mb-3 text-white text-decoration-none p-2">
             <Link
               to="/"
-              style={{ display: "flex", justifyContent: "center", width: "100%" }}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              }}
             >
               <img
                 src={logo}
@@ -121,9 +127,7 @@ function Sidebar({ menuItems, commonMenu }) {
             </Link>
           </div>
           <div className="d-flex flex-column justify-content-between flex-grow-1">
-            <div>
-              {renderMenuItems(menuItems)}
-            </div>
+            <div>{renderMenuItems(menuItems)}</div>
             <div className="mt-auto">
               {renderMenuItems(commonMenu)}
               <ul className="nav nav-pills flex-column">

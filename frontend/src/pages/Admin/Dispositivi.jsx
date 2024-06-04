@@ -1,11 +1,11 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
-import deviceData from "../../assets/json/devices.json";
 import CustomModal from "../../components/CustomModal";
 import SearchBar from "../../components/SearchBar";
+import { useSelector } from "react-redux";
 
-const Modello = () => {
-  const [devices, setDevices] = useState(deviceData);
+const Dispositivi = () => {
+  const [devices, setDevices] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedModel, setSelectedModel] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,6 +14,27 @@ const Modello = () => {
     key: "model",
     direction: "ascending",
   });
+
+  const { token } = useSelector((state) => state.auth);
+  const fetchDevices = useCallback(async () => {
+    if (!token) {
+      return;
+    }
+    const response = await fetch("/api/devices", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore nella lsita dispositivi");
+    }
+    let data = await response.json();
+    console.log(data.devices);
+    setDevices(data.devices);
+  }, [token]);
 
   const handleDelete = useCallback((brandIndex, modelIndex) => {
     setDevices((prevDevices) => {
@@ -45,44 +66,6 @@ const Modello = () => {
     setSearchType(e.target.value);
   }, []);
 
-  const sortedDevices = useMemo(() => {
-    const sortableDevices = [...devices];
-    if (sortConfig.key === "brand") {
-      sortableDevices.sort(
-        (a, b) =>
-          a.brand.localeCompare(b.brand) *
-          (sortConfig.direction === "ascending" ? 1 : -1)
-      );
-    } else {
-      sortableDevices.forEach((brand) => {
-        brand.models.sort(
-          (a, b) =>
-            a[sortConfig.key].localeCompare(b[sortConfig.key]) *
-            (sortConfig.direction === "ascending" ? 1 : -1)
-        );
-      });
-    }
-    return sortableDevices;
-  }, [devices, sortConfig]);
-
-  const filteredDevices = useMemo(() => {
-    return sortedDevices
-      .map((brand) => {
-        if (searchType === "brand") {
-          if (brand.brand.toLowerCase().startsWith(searchTerm.toLowerCase())) {
-            return brand;
-          } else {
-            return { ...brand, models: [] };
-          }
-        } else {
-          const filteredModels = brand.models.filter((model) =>
-            model.model.toLowerCase().startsWith(searchTerm.toLowerCase())
-          );
-          return { ...brand, models: filteredModels };
-        }
-      })
-      .filter((brand) => brand.models.length > 0);
-  }, [sortedDevices, searchTerm, searchType]);
 
   const requestSort = useCallback((key) => {
     setSortConfig((prevSortConfig) => {
@@ -106,7 +89,9 @@ const Modello = () => {
     },
     [sortConfig]
   );
-
+  useEffect(() => {
+    fetchDevices();
+  }, [fetchDevices]);
   return (
     <div className="container mt-3 mb-2">
       <h2>Modelli</h2>
@@ -140,39 +125,36 @@ const Modello = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredDevices.map((brand, brandIndex) =>
-            brand.models.map((model, modelIndex) => (
-              <tr key={`${brandIndex}-${modelIndex}`}>
-                {modelIndex === 0 && (
-                  <td rowSpan={brand.models.length} className="align-middle">
-                    {brand.brand}
-                  </td>
-                )}
-                <td className="align-middle">{model.model}</td>
-                <td className="text-center align-middle">
-                  <Link
-                    to={`/dettagli-modello/${encodeURIComponent(
-                      brand.brand
-                    )}/${encodeURIComponent(model.model)}`}
-                    className="btn btn-warning btn-sm"
-                  >
-                    Modifica
-                  </Link>
-                </td>
-                <td className="text-center align-middle">
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => {
-                      setSelectedModel({ ...model, brand: brand.brand });
-                      setShowModal(true);
-                    }}
-                  >
-                    Elimina
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
+          {devices.map((device) => (
+            <tr key={`${device._id}`}>
+              <td className="align-middle">{device.marca}</td>
+              <td className="align-middle">{device.modello}</td>
+              <td className="text-center align-middle">
+                <Link
+                  to={`/dettagli-modello/${encodeURIComponent(
+                    device.marca
+                  )}/${encodeURIComponent(device.modello)}`}
+                  className="btn btn-warning btn-sm"
+                >
+                  Modifica
+                </Link>
+              </td>
+              <td className="text-center align-middle">
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => {
+                    setSelectedModel({
+                      ...device.modello,
+                      brand: device.marca,
+                    });
+                    setShowModal(true);
+                  }}
+                >
+                  Elimina
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <CustomModal
@@ -190,4 +172,4 @@ const Modello = () => {
   );
 };
 
-export default Modello;
+export default Dispositivi;

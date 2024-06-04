@@ -34,7 +34,11 @@ const useMenuItems = (role) => {
       break;
     case "partner":
       menuItems = partnerMenu;
-      commonMenu.push({ path: "/about-us", label: "Sedi e contatti", icon: faMapMarkerAlt }); // Aggiungi "Sedi e contatti" solo per il partner
+      commonMenu.push({
+        path: "/about-us",
+        label: "Sedi e contatti",
+        icon: faMapMarkerAlt,
+      }); // Aggiungi "Sedi e contatti" solo per il partner
       break;
     case "tecnico":
       menuItems = tecnicoMenu;

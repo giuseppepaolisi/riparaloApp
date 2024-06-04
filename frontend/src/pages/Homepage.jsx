@@ -9,32 +9,14 @@ const HomePage = () => {
 
   return (
     <div style={{ fontFamily: "Open Sans", color: "#009be3" }}>
-      <Header isAuthenticated={isAuthenticated} />
-      <Benvenuto />
+      <Benvenuto isAuthenticated={isAuthenticated} />
     </div>
   );
 };
 
-const Header = ({ isAuthenticated }) => (
-  <div className="d-flex justify-content-end p-3">
-    {!isAuthenticated && (
-      <Link to="/login">
-        <Button variant="outline-primary" size="lg">
-          Login
-        </Button>
-      </Link>
-    )}
-  </div>
-);
-
-Header.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
-};
-
-const Benvenuto = () => (
+const Benvenuto = ({ isAuthenticated }) => (
   <div className="text-center">
-    <h1>Benvenuto!</h1>
-    <div className="d-flex justify-content-center">
+    <div className="d-flex justify-content-center mt-5">
       <img
         src={logo}
         className="img-fluid"
@@ -42,7 +24,20 @@ const Benvenuto = () => (
         alt="Logo"
       />
     </div>
+    {!isAuthenticated && (
+      <div className="d-flex justify-content-center mt-3">
+        <Link to="/login">
+          <Button variant="outline-primary" size="lg">
+            Login
+          </Button>
+        </Link>
+      </div>
+    )}
   </div>
 );
+
+Benvenuto.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+};
 
 export default HomePage;

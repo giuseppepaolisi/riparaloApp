@@ -1,4 +1,3 @@
-// SidebarFactory.js
 import { useSelector } from "react-redux";
 import Sidebar from "./Sidebar";
 import useMenuItems from "../../CustomHooks/useMenuItems";

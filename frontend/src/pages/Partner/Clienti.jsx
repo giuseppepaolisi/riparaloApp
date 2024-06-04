@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DeleteButton from "../../components/DeleteButton";
 import DeleteModal from "../../components/DeleteModal";
-import { fetchClienti, deleteCliente } from "./apiPartner";
+import { fetchClienti, deleteCliente } from "../../api/apiPartner";
 
 const Clienti = () => {
   const [clienti, setClienti] = useState([]);

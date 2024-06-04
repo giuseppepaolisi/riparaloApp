@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import SidebarLink from "./SidebarLink";
 import logo from "../../assets/img/logo-riparalo.png";
 import { faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
@@ -25,6 +26,14 @@ function Sidebar({ menuItems, commonMenu }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const renderMenuItems = (items) => (
+    <ul className="nav nav-pills flex-column mb-auto">
+      {items.map((item) => (
+        <SidebarLink key={item.path} {...item} />
+      ))}
+    </ul>
+  );
 
   return (
     <>
@@ -58,26 +67,25 @@ function Sidebar({ menuItems, commonMenu }) {
         >
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
-              <img
-                src={logo}
-                alt="Logo"
-                style={{ width: "50%", margin: "auto" }}
-              />
+              <Link
+                to="/"
+                style={{ display: "flex", justifyContent: "center", width: "100%" }}
+              >
+                <img
+                  src={logo}
+                  alt="Logo"
+                  style={{ width: "50%", margin: "auto" }}
+                />
+              </Link>
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body className="d-flex flex-column justify-content-between">
             <div style={{ flexGrow: 1 }}>
-              <ul className="nav nav-pills flex-column mb-auto">
-                {menuItems.map((item) => (
-                  <SidebarLink key={item.path} {...item} />
-                ))}
-              </ul>
+              {renderMenuItems(menuItems)}
             </div>
             <div style={{ marginBottom: "20px" }}>
+              {renderMenuItems(commonMenu)}
               <ul className="nav nav-pills flex-column mb-auto">
-                {commonMenu.map((item) => (
-                  <SidebarLink key={item.path} {...item} />
-                ))}
                 <SidebarLink path="/account" label="Account" icon={faUser} />
                 <SidebarLink
                   path="/logout"
@@ -101,25 +109,24 @@ function Sidebar({ menuItems, commonMenu }) {
           }}
         >
           <div className="d-flex align-items-center mb-3 text-white text-decoration-none p-2">
-            <img
-              src={logo}
-              alt="Logo"
-              style={{ width: "60%", margin: "auto" }}
-            />
+            <Link
+              to="/"
+              style={{ display: "flex", justifyContent: "center", width: "100%" }}
+            >
+              <img
+                src={logo}
+                alt="Logo"
+                style={{ width: "60%", margin: "auto" }}
+              />
+            </Link>
           </div>
           <div className="d-flex flex-column justify-content-between flex-grow-1">
             <div>
-              <ul className="nav nav-pills flex-column">
-                {menuItems.map((item) => (
-                  <SidebarLink key={item.path} {...item} />
-                ))}
-              </ul>
+              {renderMenuItems(menuItems)}
             </div>
             <div className="mt-auto">
+              {renderMenuItems(commonMenu)}
               <ul className="nav nav-pills flex-column">
-                {commonMenu.map((item) => (
-                  <SidebarLink key={item.path} {...item} />
-                ))}
                 <SidebarLink path="/account" label="Account" icon={faUser} />
                 <SidebarLink
                   path="/logout"

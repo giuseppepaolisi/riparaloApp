@@ -7,7 +7,7 @@ import stateColors from "../../assets/json/state.json";
 import fs from "fs";
 
 import { useCallback, useState, useEffect } from "react";
-import { fetchTickets } from "./apiPartner";
+import { fetchTickets } from "../../api/apiPartner";
 
 function DashboardPartner() {
   const [tickets, setTickets] = useState([]);

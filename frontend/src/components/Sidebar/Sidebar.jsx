@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom"; // Importa Link
+import { Link } from "react-router-dom";
 import SidebarLink from "./SidebarLink";
 import logo from "../../assets/img/logo-riparalo.png";
 import { faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +26,14 @@ function Sidebar({ menuItems, commonMenu }) {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const renderMenuItems = (items) => (
+    <ul className="nav nav-pills flex-column mb-auto">
+      {items.map((item) => (
+        <SidebarLink key={item.path} {...item} />
+      ))}
+    </ul>
+  );
 
   return (
     <>
@@ -73,17 +81,11 @@ function Sidebar({ menuItems, commonMenu }) {
           </Offcanvas.Header>
           <Offcanvas.Body className="d-flex flex-column justify-content-between">
             <div style={{ flexGrow: 1 }}>
-              <ul className="nav nav-pills flex-column mb-auto">
-                {menuItems.map((item) => (
-                  <SidebarLink key={item.path} {...item} />
-                ))}
-              </ul>
+              {renderMenuItems(menuItems)}
             </div>
             <div style={{ marginBottom: "20px" }}>
+              {renderMenuItems(commonMenu)}
               <ul className="nav nav-pills flex-column mb-auto">
-                {commonMenu.map((item) => (
-                  <SidebarLink key={item.path} {...item} />
-                ))}
                 <SidebarLink path="/account" label="Account" icon={faUser} />
                 <SidebarLink
                   path="/logout"
@@ -120,17 +122,11 @@ function Sidebar({ menuItems, commonMenu }) {
           </div>
           <div className="d-flex flex-column justify-content-between flex-grow-1">
             <div>
-              <ul className="nav nav-pills flex-column">
-                {menuItems.map((item) => (
-                  <SidebarLink key={item.path} {...item} />
-                ))}
-              </ul>
+              {renderMenuItems(menuItems)}
             </div>
             <div className="mt-auto">
+              {renderMenuItems(commonMenu)}
               <ul className="nav nav-pills flex-column">
-                {commonMenu.map((item) => (
-                  <SidebarLink key={item.path} {...item} />
-                ))}
                 <SidebarLink path="/account" label="Account" icon={faUser} />
                 <SidebarLink
                   path="/logout"

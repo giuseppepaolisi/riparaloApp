@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { addCliente } from "./apiPartner";
+import { addCliente } from "../../api/apiPartner";
 import FormInput from "../../components/FormInput";
 
 const AggiungiCliente = () => {

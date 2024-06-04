@@ -11,6 +11,7 @@ const Clienti = () => {
   const [searchType, setSearchType] = useState("telefono");
   const [delModal, setDelModal] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { token } = useSelector((state) => state.auth);
 
@@ -19,6 +20,7 @@ const Clienti = () => {
     try {
       const customers = await fetchClienti(token);
       setClienti(customers);
+      setIsLoading(false);
     } catch (error) {
       console.error(error.message);
     }
@@ -84,6 +86,8 @@ const Clienti = () => {
           </select>
         </div>
       </div>
+      {isLoading && <div>Loading...</div>}
+
       <table className="table table-striped">
         <thead>
           <tr>
@@ -94,16 +98,19 @@ const Clienti = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredClienti.map((cliente) => (
-            <tr key={cliente._id}>
-              <td>{cliente.telefono}</td>
-              <td>{cliente.nome}</td>
-              <td>{cliente.cognome}</td>
-              <td>
-                <DeleteButton onClick={() => handleDeleteClick(cliente._id)} />
-              </td>
-            </tr>
-          ))}
+          {!isLoading &&
+            filteredClienti.map((cliente) => (
+              <tr key={cliente._id}>
+                <td>{cliente.telefono}</td>
+                <td>{cliente.nome}</td>
+                <td>{cliente.cognome}</td>
+                <td>
+                  <DeleteButton
+                    onClick={() => handleDeleteClick(cliente._id)}
+                  />
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       {delModal && (

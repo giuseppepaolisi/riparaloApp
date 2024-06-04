@@ -34,8 +34,7 @@ function TableRow({ ticket, onRead, onDelete }) {
           <button className="btn btn-danger" onClick={handleDelete}>
             Elimina
           </button>
-        ) : null
-        }
+        ) : null}
       </td>
     </tr>
   );

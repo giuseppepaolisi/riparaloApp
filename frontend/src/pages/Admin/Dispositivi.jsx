@@ -66,7 +66,6 @@ const Dispositivi = () => {
     setSearchType(e.target.value);
   }, []);
 
-
   const requestSort = useCallback((key) => {
     setSortConfig((prevSortConfig) => {
       let direction = "ascending";

@@ -24,7 +24,7 @@ import DashboardTecnico from "./pages/Tecnico/DashboardTecnico";
 import Error403 from "./pages/error/Error403";
 import Error404 from "./pages/error/Error404";
 import Error500 from "./pages/error/Error500";
-import Dispositivi from "./pages/Admin/Dispositivi";
+import Devices from "./pages/Admin/Devices";
 //import AccountEdit from "./pages/AccountEdit";  // Importa il nuovo componente
 
 const App = () => {
@@ -56,7 +56,7 @@ const App = () => {
               <Route path="/aggiungi-partner" element={<AggiungiPartner />} />
               <Route path="/tecnici" element={<Tecnici />} />
               <Route path="/aggiungi-tecnico" element={<AggiungiTecnico />} />
-              <Route path="/modelli" element={<Dispositivi />} />
+              <Route path="/modelli" element={<Devices />} />
               {/*<Route path="/account" element={<AccountEdit userType="Admin" userData={{ email: 'admin@example.com' }} />} />*/}
             </Route>
 

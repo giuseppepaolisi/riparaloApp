@@ -5,10 +5,13 @@ import TableFooter from "./TableFooter";
 import TableBody from "./TableBody";
 import GlobalFilter from "./GlobalFilter";
 import RowsPerPage from "./RowsPerPage";
+import TableInfo from "./TableInfo";
+import TablePagination from "./TablePagination";
 
 const Table = ({ headers, data, columns, actions }) => {
   const [filter, setFilter] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filteredData = data.filter((item) =>
     columns.some((column) =>
@@ -19,7 +22,20 @@ const Table = ({ headers, data, columns, actions }) => {
     )
   );
 
-  const displayedData = filteredData.slice(0, rowsPerPage);
+  const totalEntries = filteredData.length;
+  const totalPages = Math.ceil(totalEntries / rowsPerPage);
+  const displayedData = filteredData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="card-body">
@@ -28,7 +44,7 @@ const Table = ({ headers, data, columns, actions }) => {
           rowsPerPage={rowsPerPage}
           setRowsPerPage={setRowsPerPage}
         />
-        <GlobalFilter filter={filter} setFilter={setFilter} />
+        <GlobalFilter filter={filter} setFilter={handleFilterChange} />
       </div>
       <table
         className="table table-bordered"
@@ -40,6 +56,22 @@ const Table = ({ headers, data, columns, actions }) => {
         <TableBody data={displayedData} columns={columns} actions={actions} />
         <TableFooter headers={[...headers, "Actions"]} />
       </table>
+      <div className="row">
+        <div className="col-sm-12 col-md-5">
+          <TableInfo 
+            currentPage={currentPage} 
+            rowsPerPage={rowsPerPage} 
+            totalEntries={totalEntries} 
+          />
+        </div>
+        <div className="col-sm-12 col-md-7">
+          <TablePagination 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={handlePageChange} 
+          />
+        </div>
+      </div>
     </div>
   );
 };

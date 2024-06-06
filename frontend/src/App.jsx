@@ -25,6 +25,7 @@ import Error403 from "./pages/error/Error403";
 import Error404 from "./pages/error/Error404";
 import Error500 from "./pages/error/Error500";
 import Devices from "./pages/Admin/Devices";
+import AddDevice from "./pages/Admin/AddDevice";
 //import AccountEdit from "./pages/AccountEdit";  // Importa il nuovo componente
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="/tecnici" element={<Tecnici />} />
               <Route path="/aggiungi-tecnico" element={<AggiungiTecnico />} />
               <Route path="/modelli" element={<Devices />} />
+              <Route path="/aggiungi-modello" element={<AddDevice />} />
               {/*<Route path="/account" element={<AccountEdit userType="Admin" userData={{ email: 'admin@example.com' }} />} />*/}
             </Route>
 

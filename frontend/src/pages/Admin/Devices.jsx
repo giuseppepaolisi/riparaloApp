@@ -66,7 +66,7 @@ const Devices = () => {
       <h2 className="h3 mb-2 text-gray-800">Dispositivi</h2>
       <div className="row ">
         <div className="mt-3 mb-5 d-flex justify-content-between">
-          <AddButton label="Dispositivo" link="/add-device" />
+          <AddButton label="Dispositivo" link="/aggiungi-modello" />
         </div>
       </div>
       {/* DataTables Example */}

@@ -3,11 +3,10 @@ const Service = require('../../../models/service');
 const { ErrorResponse } = require('../../../middleware/errorManager');
 const mongoose = require('mongoose');
 const { ADMIN } = require('../../../conf/role');
-// npm test -- src/controllers/serviceController/tests/
 
 jest.mock('../../../models/service');
 
-describe('deleteDevice', () => {
+describe('updateDevice', () => {
   let mockReq, mockRes, mockNext, mockDevice;
 
   beforeEach(() => {
@@ -38,6 +37,7 @@ describe('deleteDevice', () => {
       ],
     };
     mongoose.Types.ObjectId.isValid = jest.fn();
+    Service.findById = jest.fn();
     Service.findByIdAndUpdate = jest.fn();
   });
 
@@ -49,10 +49,16 @@ describe('deleteDevice', () => {
     mockReq.body.modello = 'Iphone 13';
     mockReq.body.marca = 'Apple';
     mongoose.Types.ObjectId.isValid.mockReturnValue(true);
+    Service.findById.mockResolvedValue(mockDevice);
     Service.findByIdAndUpdate.mockResolvedValue(mockDevice);
     await updateDevice(mockReq, mockRes, mockNext);
 
-    expect(Service.findByIdAndUpdate).toHaveBeenCalled();
+    expect(Service.findById).toHaveBeenCalledWith('507f1f77bcf86cd799439011');
+    expect(Service.findByIdAndUpdate).toHaveBeenCalledWith(
+      '507f1f77bcf86cd799439011',
+      { modello: 'Iphone 13', marca: 'Apple' },
+      { new: true }
+    );
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({ device: mockDevice });
   });
@@ -60,10 +66,16 @@ describe('deleteDevice', () => {
   it('SUCCESS - Device aggiornato con marca', async () => {
     mockReq.body.marca = 'Apple';
     mongoose.Types.ObjectId.isValid.mockReturnValue(true);
+    Service.findById.mockResolvedValue(mockDevice);
     Service.findByIdAndUpdate.mockResolvedValue(mockDevice);
     await updateDevice(mockReq, mockRes, mockNext);
 
-    expect(Service.findByIdAndUpdate).toHaveBeenCalled();
+    expect(Service.findById).toHaveBeenCalledWith('507f1f77bcf86cd799439011');
+    expect(Service.findByIdAndUpdate).toHaveBeenCalledWith(
+      '507f1f77bcf86cd799439011',
+      { marca: 'Apple' },
+      { new: true }
+    );
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({ device: mockDevice });
   });
@@ -71,10 +83,16 @@ describe('deleteDevice', () => {
   it('SUCCESS - Device aggiornato con modello', async () => {
     mockReq.body.modello = 'Iphone 13';
     mongoose.Types.ObjectId.isValid.mockReturnValue(true);
+    Service.findById.mockResolvedValue(mockDevice);
     Service.findByIdAndUpdate.mockResolvedValue(mockDevice);
     await updateDevice(mockReq, mockRes, mockNext);
 
-    expect(Service.findByIdAndUpdate).toHaveBeenCalled();
+    expect(Service.findById).toHaveBeenCalledWith('507f1f77bcf86cd799439011');
+    expect(Service.findByIdAndUpdate).toHaveBeenCalledWith(
+      '507f1f77bcf86cd799439011',
+      { modello: 'Iphone 13' },
+      { new: true }
+    );
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({ device: mockDevice });
   });

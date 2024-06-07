@@ -7,9 +7,11 @@ import DeleteModal from "../../components/DeleteModal";
 import EditButton from "../../components/Action/EditButton";
 import DetailButton from "../../components/Action/DetailButton";
 import Table from "../../components/Table/Table";
+import Loading from "../../components/Loading";
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
 
   // ottieni il token
@@ -35,6 +37,7 @@ const Devices = () => {
     let data = await response.json();
     console.log("Devices fetched:", data.devices);
     setDevices(data.devices);
+    setLoading(false); // Imposta loading su false dopo aver caricato i dati
   }, [token]);
 
   useEffect(() => {
@@ -109,18 +112,24 @@ const Devices = () => {
   return (
     <div className="container mt-3 mb-4">
       <h2 className="h3 mb-2 text-gray-800">Dispositivi</h2>
-      <Table
-        columns={columns}
-        rows={devices}
-        actions={<AddButton label="Dispositivo" link="/aggiungi-modello" />}
-        searchFields={searchFields}
-      />
-      {deleteModal.isOpen && (
-        <DeleteModal
-          message={`Sei sicuro di voler eliminare ${deleteModal.item.marca} ${deleteModal.item.modello}?`}
-          onDelete={confirmDelete}
-          onCancel={cancelDelete}
-        />
+      {loading ? ( // Mostra il componente di caricamento se loading è true
+        <Loading open={loading} />
+      ) : (
+        <>
+          <Table
+            columns={columns}
+            rows={devices}
+            actions={<AddButton label="Dispositivo" link="/aggiungi-modello" />}
+            searchFields={searchFields}
+          />
+          {deleteModal.isOpen && (
+            <DeleteModal
+              message={`Sei sicuro di voler eliminare ${deleteModal.item.marca} ${deleteModal.item.modello}?`}
+              onDelete={confirmDelete}
+              onCancel={cancelDelete}
+            />
+          )}
+        </>
       )}
     </div>
   );

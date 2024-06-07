@@ -8,11 +8,13 @@ import EditButton from "../../components/Action/EditButton";
 import DetailButton from "../../components/Action/DetailButton";
 import Table from "../../components/Table/Table";
 import Loading from "../../components/Loading";
+import { useNavigate } from "react-router-dom";
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
+  const navigate = useNavigate();
 
   // ottieni il token
   const { token } = useSelector((state) => state.auth);
@@ -86,8 +88,7 @@ const Devices = () => {
   };
 
   const handleEdit = (item) => {
-    console.log("Edit clicked for item:", item);
-    // Implementa la logica per la modifica
+    navigate(`/modifica-modello/${item._id}`);
   };
 
   const columns = [

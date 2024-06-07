@@ -69,7 +69,7 @@ const getDevice = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return next(new ErrorResponse('ID dispositivo non valido', 400));
     }
-    const device = await Service.findById({ id_: id });
+    const device = await Service.findById(id);
 
     if (!device) {
       return next(new ErrorResponse('Dispositivo non trovato', 404));
@@ -126,7 +126,7 @@ const deleteDevice = async (req, res, next) => {
 
 // Aggiorna solo non e marca di un dispositivo
 const updateDevice = async (req, res, next) => {
-  const { marca, modello } = req.body;
+  const { marca, modello, servizi } = req.body;
   const { id } = req.params;
   const data = {};
 
@@ -141,7 +141,31 @@ const updateDevice = async (req, res, next) => {
     if (marca && marca.trim() !== '') {
       data.marca = marca;
     }
-    const device = await Service.findByIdAndUpdate({ _id: id }, data);
+
+    let device = await Service.findById(id);
+    if (!device) {
+      return next(new ErrorResponse('Dispositivo non trovato', 404));
+    }
+
+    // Verifica e aggiorna i servizi esistenti
+    if (servizi && Array.isArray(servizi)) {
+      for (const service of servizi) {
+        if (!service.servizio || service.servizio.trim() === '') {
+          return next(
+            new ErrorResponse('Ogni servizio deve avere un nome valido.', 400)
+          );
+        }
+        if (typeof service.prezzo !== 'number' || isNaN(service.prezzo)) {
+          return next(
+            new ErrorResponse('Ogni servizio deve avere un prezzo valido.', 400)
+          );
+        }
+      }
+      data.servizi = servizi;
+    }
+
+    // Aggiorna il dispositivo con i nuovi dati
+    device = await Service.findByIdAndUpdate(id, data, { new: true });
     res.status(200).json({ device });
   } catch (error) {
     next(error);

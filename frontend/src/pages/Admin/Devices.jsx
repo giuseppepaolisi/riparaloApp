@@ -1,19 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { useState, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { DataGrid } from "@mui/x-data-grid";
-import { TextField, Box } from "@mui/material";
-import { css } from "@emotion/react";
+import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
 import DeleteModal from "../../components/DeleteModal";
 import EditButton from "../../components/Action/EditButton";
 import DetailButton from "../../components/Action/DetailButton";
-import AddButton from "../../components/Action/AddButton";
+import Table from "../../components/Table/Table";
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
-  const [filteredDevices, setFilteredDevices] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
 
   // ottieni il token
@@ -39,7 +35,6 @@ const Devices = () => {
     let data = await response.json();
     console.log("Devices fetched:", data.devices);
     setDevices(data.devices);
-    setFilteredDevices(data.devices);
   }, [token]);
 
   useEffect(() => {
@@ -71,9 +66,6 @@ const Devices = () => {
       setDevices((devices) =>
         devices.filter((device) => device._id !== deleteModal.item._id)
       );
-      setFilteredDevices((devices) =>
-        devices.filter((device) => device._id !== deleteModal.item._id)
-      );
     } catch (error) {
       console.error(error);
     }
@@ -95,18 +87,6 @@ const Devices = () => {
     // Implementa la logica per la modifica
   };
 
-  const handleSearch = (event) => {
-    const value = event.target.value.toLowerCase();
-    setSearchTerm(value);
-    setFilteredDevices(
-      devices.filter(
-        (device) =>
-          device.marca.toLowerCase().includes(value) ||
-          device.modello.toLowerCase().includes(value)
-      )
-    );
-  };
-
   const columns = [
     { field: "marca", headerName: "Marca", flex: 1 },
     { field: "modello", headerName: "Modello", flex: 1 },
@@ -124,32 +104,16 @@ const Devices = () => {
     },
   ];
 
+  const searchFields = ["marca", "modello"];
+
   return (
     <div className="container mt-3 mb-4">
       <h2 className="h3 mb-2 text-gray-800">Dispositivi</h2>
-      <Box display="flex" justifyContent="space-between" mb={3}>
-        <AddButton label="Dispositivo" link="/aggiungi-modello" />
-        <TextField
-          label="Cerca"
-          variant="outlined"
-          value={searchTerm}
-          onChange={handleSearch}
-          css={css`
-            width: 25%;
-          `}
-        />
-      </Box>
-      <DataGrid
-        rows={filteredDevices}
+      <Table
         columns={columns}
-        getRowId={(row) => row._id}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 20 },
-          },
-        }}
-        pageSizeOptions={[20, 50]}
-        autoHeight
+        rows={devices}
+        actions={<AddButton label="Dispositivo" link="/aggiungi-modello" />}
+        searchFields={searchFields}
       />
       {deleteModal.isOpen && (
         <DeleteModal

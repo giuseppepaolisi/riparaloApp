@@ -1,12 +1,148 @@
 import { useState } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+const smartphoneBrands = [
+  "",
+  "Acer",
+  "alcatel",
+  "Allview",
+  "Amazon",
+  "Amoi",
+  "Apple",
+  "Archos",
+  "Asus",
+  "AT&T",
+  "Benefon",
+  "BenQ",
+  "BenQ-Siemens",
+  "Bird",
+  "BlackBerry",
+  "Blackview",
+  "BLU",
+  "Bosch",
+  "BQ",
+  "Casio",
+  "Cat",
+  "Celkon",
+  "Chea",
+  "Coolpad",
+  "Cubot",
+  "Dell",
+  "Doogee",
+  "Emporia",
+  "Energizer",
+  "Ericsson",
+  "Eten",
+  "Fairphone",
+  "Fujitsu Siemens",
+  "Garmin-Asus",
+  "Gigabyte",
+  "Gionee",
+  "Google",
+  "Haier",
+  "HMD",
+  "Honor",
+  "HP",
+  "HTC",
+  "Huawei",
+  "i-mate",
+  "i-mobile",
+  "Icemobile",
+  "Infinix",
+  "Innostream",
+  "iNQ",
+  "Intex",
+  "itel",
+  "Jolla",
+  "Karbonn",
+  "Kyocera",
+  "Lava",
+  "LeEco",
+  "Lenovo",
+  "LG",
+  "Maxon",
+  "Maxwest",
+  "Meizu",
+  "Micromax",
+  "Microsoft",
+  "Mitac",
+  "Mitsubishi",
+  "Modu",
+  "Motorola",
+  "MWg",
+  "NEC",
+  "Neonode",
+  "NIU",
+  "Nokia",
+  "Nothing",
+  "Nvidia",
+  "O2",
+  "OnePlus",
+  "Oppo",
+  "Orange",
+  "Oscal",
+  "Oukitel",
+  "Palm",
+  "Panasonic",
+  "Pantech",
+  "Parla",
+  "Philips",
+  "Plum",
+  "Posh",
+  "Prestigio",
+  "QMobile",
+  "Qtek",
+  "Razer",
+  "Realme",
+  "Sagem",
+  "Samsung",
+  "Sendo",
+  "Sewon",
+  "Sharp",
+  "Siemens",
+  "Sonim",
+  "Sony",
+  "Sony Ericsson",
+  "Spice",
+  "T-Mobile",
+  "TCL",
+  "Tecno",
+  "Tel.Me.",
+  "Telit",
+  "Thuraya",
+  "Toshiba",
+  "Ulefone",
+  "Umidigi",
+  "Unnecto",
+  "Vertu",
+  "verykool",
+  "vivo",
+  "VK Mobile",
+  "Vodafone",
+  "Wiko",
+  "WND",
+  "XCute",
+  "Xiaomi",
+  "XOLO",
+  "Yezz",
+  "Yota",
+  "YU",
+  "ZTE",
+];
 
 const AddDevice = () => {
   const { token } = useSelector((state) => state.auth);
   const [modello, setModello] = useState("");
   const [marca, setMarca] = useState("");
   const [servizi, setServizi] = useState([{ servizio: "", prezzo: "" }]);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setMarca(value);
+  };
 
   const handleServizioChange = (index, event) => {
     const values = [...servizi];
@@ -52,7 +188,9 @@ const AddDevice = () => {
         data.error || "Non è stato possibile aggiungere il cliente"
       );
     }
-    console.log(data);
+    //console.log(data);
+    // Redirect alla apgina modelli se la richiesta è stata eseguita con successo
+    navigate("/modelli");
   };
 
   return (
@@ -64,11 +202,21 @@ const AddDevice = () => {
             <Form.Group controlId="formMarca">
               <Form.Label>Marca</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Inserisci la marca"
+                as="select"
                 value={marca}
-                onChange={(e) => setMarca(e.target.value)}
-              />
+                onChange={handleChange}
+                required
+              >
+                {smartphoneBrands.map((brand, index) => (
+                  <option
+                    key={index}
+                    value={brand}
+                    disabled={brand === "" && marca !== ""}
+                  >
+                    {brand === "" ? "Seleziona una marca" : brand}
+                  </option>
+                ))}
+              </Form.Control>
             </Form.Group>
           </Col>
           <Col>

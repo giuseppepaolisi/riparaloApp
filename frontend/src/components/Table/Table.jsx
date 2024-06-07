@@ -24,7 +24,10 @@ const Table = ({ headers, data, columns, actions }) => {
 
   const totalEntries = filteredData.length;
   const totalPages = Math.ceil(totalEntries / rowsPerPage);
-  const displayedData = filteredData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+  const displayedData = filteredData.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -58,17 +61,17 @@ const Table = ({ headers, data, columns, actions }) => {
       </table>
       <div className="row">
         <div className="col-sm-12 col-md-5">
-          <TableInfo 
-            currentPage={currentPage} 
-            rowsPerPage={rowsPerPage} 
-            totalEntries={totalEntries} 
+          <TableInfo
+            currentPage={currentPage}
+            rowsPerPage={rowsPerPage}
+            totalEntries={totalEntries}
           />
         </div>
         <div className="col-sm-12 col-md-7">
-          <TablePagination 
-            currentPage={currentPage} 
-            totalPages={totalPages} 
-            onPageChange={handlePageChange} 
+          <TablePagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
           />
         </div>
       </div>

@@ -31,7 +31,7 @@ const Devices = () => {
       throw new Error("Errore nella lista dispositivi");
     }
     let data = await response.json();
-    console.log(data.devices);
+    //console.log(data.devices);
     setDevices(data.devices);
   }, [token]);
 
@@ -43,9 +43,32 @@ const Devices = () => {
     setDeleteModal({ isOpen: true, item });
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = useCallback(async () => {
+    try {
+      if (!token) {
+        return;
+      }
+      const response = await fetch(`/api/device/${deleteModal.item._id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Errore eliminazione dispositivo");
+      }
+      //let data = await response.json();
+      //console.log(data.result);
+      setDevices((devices) =>
+        devices.filter((device) => device._id !== deleteModal.item._id)
+      );
+    } catch (error) {
+      console.error(error);
+    }
     setDeleteModal({ isOpen: false, item: null });
-  };
+  }, [token, deleteModal]);
 
   const cancelDelete = () => {
     setDeleteModal({ isOpen: false, item: null });

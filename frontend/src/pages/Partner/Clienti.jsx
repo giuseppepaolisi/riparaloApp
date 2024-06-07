@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import DeleteButton from "../../components/DeleteButton";
+import DeleteButton from "../../components/Action/DeleteButton";
 import DeleteModal from "../../components/DeleteModal";
 import { fetchClienti, deleteCliente } from "../../api/apiPartner";
 

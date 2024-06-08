@@ -27,8 +27,8 @@ describe('updateDevice', () => {
     mockNext = jest.fn();
     mockDevice = {
       _id: '507f1f77bcf86cd799439011',
-      modello: 'Iphone 13',
-      marca: 'Apple',
+      modello: 'iphone 13',
+      marca: 'apple',
       servizi: [
         {
           servizio: 'cambio schermo',
@@ -56,7 +56,7 @@ describe('updateDevice', () => {
     expect(Service.findById).toHaveBeenCalledWith('507f1f77bcf86cd799439011');
     expect(Service.findByIdAndUpdate).toHaveBeenCalledWith(
       '507f1f77bcf86cd799439011',
-      { modello: 'Iphone 13', marca: 'Apple' },
+      { modello: 'iphone 13', marca: 'apple' },
       { new: true }
     );
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -73,7 +73,7 @@ describe('updateDevice', () => {
     expect(Service.findById).toHaveBeenCalledWith('507f1f77bcf86cd799439011');
     expect(Service.findByIdAndUpdate).toHaveBeenCalledWith(
       '507f1f77bcf86cd799439011',
-      { marca: 'Apple' },
+      { marca: 'apple' },
       { new: true }
     );
     expect(mockRes.status).toHaveBeenCalledWith(200);
@@ -90,7 +90,7 @@ describe('updateDevice', () => {
     expect(Service.findById).toHaveBeenCalledWith('507f1f77bcf86cd799439011');
     expect(Service.findByIdAndUpdate).toHaveBeenCalledWith(
       '507f1f77bcf86cd799439011',
-      { modello: 'Iphone 13' },
+      { modello: 'iphone 13' },
       { new: true }
     );
     expect(mockRes.status).toHaveBeenCalledWith(200);

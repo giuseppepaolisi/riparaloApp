@@ -134,12 +134,13 @@ const updateDevice = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new ErrorResponse('ID non valido', 400);
     }
-    // modello !== udefined e non vuoto
+
+    // modello !== undefined e non vuoto
     if (modello && modello.trim() !== '') {
-      data.modello = modello;
+      data.modello = modello.trim().toLowerCase();
     }
     if (marca && marca.trim() !== '') {
-      data.marca = marca;
+      data.marca = marca.trim().toLowerCase();
     }
 
     let device = await Service.findById(id);
@@ -149,19 +150,35 @@ const updateDevice = async (req, res, next) => {
 
     // Verifica e aggiorna i servizi esistenti
     if (servizi && Array.isArray(servizi)) {
+      const uniqueServices = new Set();
       for (const service of servizi) {
-        if (!service.servizio || service.servizio.trim() === '') {
+        const serviceName = service.servizio.trim().toLowerCase();
+        const servicePrice = Number(service.prezzo);
+
+        if (!serviceName) {
           return next(
             new ErrorResponse('Ogni servizio deve avere un nome valido.', 400)
           );
         }
-        if (typeof service.prezzo !== 'number' || isNaN(service.prezzo)) {
+        if (isNaN(servicePrice)) {
           return next(
             new ErrorResponse('Ogni servizio deve avere un prezzo valido.', 400)
           );
         }
+        if (uniqueServices.has(serviceName)) {
+          return next(
+            new ErrorResponse(
+              `Il servizio "${service.servizio}" è duplicato.`,
+              400
+            )
+          );
+        }
+        uniqueServices.add(serviceName);
       }
-      data.servizi = servizi;
+      data.servizi = servizi.map((service) => ({
+        servizio: service.servizio.trim().toLowerCase(),
+        prezzo: Number(service.prezzo),
+      }));
     }
 
     // Aggiorna il dispositivo con i nuovi dati

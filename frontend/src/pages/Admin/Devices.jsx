@@ -26,7 +26,6 @@ const Devices = () => {
     if (!token) {
       return;
     }
-    console.log("Fetching devices...");
     const response = await fetch("/api/devices", {
       method: "GET",
       headers: {
@@ -39,7 +38,6 @@ const Devices = () => {
       throw new Error("Errore nella lista dispositivi");
     }
     let data = await response.json();
-    console.log("Devices fetched:", data.devices);
     setDevices(data.devices);
     setLoading(false); // Imposta loading su false dopo aver caricato i dati
   }, [token]);
@@ -49,7 +47,6 @@ const Devices = () => {
   }, [fetchDevices]);
 
   const handleDelete = (item) => {
-    console.log("Delete clicked for item:", item);
     setDeleteModal({ isOpen: true, item });
   };
 
@@ -58,7 +55,6 @@ const Devices = () => {
       if (!token) {
         return;
       }
-      console.log("Confirming delete for item:", deleteModal.item);
       const response = await fetch(`/api/device/${deleteModal.item._id}`, {
         method: "DELETE",
         headers: {
@@ -90,7 +86,6 @@ const Devices = () => {
   }, [token, deleteModal]);
 
   const cancelDelete = () => {
-    console.log("Cancel delete");
     setDeleteModal({ isOpen: false, item: null });
   };
 

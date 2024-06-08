@@ -8,12 +8,14 @@ import EditButton from "../../components/Action/EditButton";
 import DetailButton from "../../components/Action/DetailButton";
 import Table from "../../components/Table/Table";
 import Loading from "../../components/Loading";
+import CustomAlert from "../../components/Alert/CustomAlert";
 import { useNavigate } from "react-router-dom";
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const navigate = useNavigate();
 
   // ottieni il token
@@ -71,8 +73,18 @@ const Devices = () => {
       setDevices((devices) =>
         devices.filter((device) => device._id !== deleteModal.item._id)
       );
+      setAlert({
+        open: true,
+        msg: "Dispositivo eliminato con successo",
+        severity: "success",
+      });
     } catch (error) {
       console.error(error);
+      setAlert({
+        open: true,
+        msg: "Errore eliminazione dispositivo",
+        severity: "error",
+      });
     }
     setDeleteModal({ isOpen: false, item: null });
   }, [token, deleteModal]);
@@ -129,6 +141,9 @@ const Devices = () => {
               onDelete={confirmDelete}
               onCancel={cancelDelete}
             />
+          )}
+          {alert.open && (
+            <CustomAlert msg={alert.msg} severity={alert.severity} />
           )}
         </>
       )}

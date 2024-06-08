@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import CustomAlert from "../../components/Alert/CustomAlert";
 import smartphoneBrands from "../../const/brands";
 
-// Aggiunge il campo nullo per il primp caricamento
+// Aggiunge il campo nullo per il primo caricamento
 smartphoneBrands.unshift("");
 
 const AddDevice = () => {
@@ -12,6 +13,7 @@ const AddDevice = () => {
   const [modello, setModello] = useState("");
   const [marca, setMarca] = useState("");
   const [servizi, setServizi] = useState([{ servizio: "", prezzo: "" }]);
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -47,25 +49,38 @@ const AddDevice = () => {
     };
     console.log(token);
     console.log(formData);
-    // Invia i dati tramite POST
-    const response = await fetch("/api/device", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      // Invia i dati tramite POST
+      const response = await fetch("/api/device", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Non è stato possibile aggiungere il cliente"
-      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          data.error || "Non è stato possibile aggiungere il cliente"
+        );
+      }
+      setAlert({
+        open: true,
+        msg: "Dispositivo aggiunto con successo",
+        severity: "success",
+      });
+      // Redirect alla pagina modelli se la richiesta è stata eseguita con successo
+      navigate("/modelli");
+    } catch (error) {
+      console.error(error);
+      setAlert({
+        open: true,
+        msg: error.message,
+        severity: "error",
+      });
     }
-    //console.log(data);
-    // Redirect alla apgina modelli se la richiesta è stata eseguita con successo
-    navigate("/modelli");
   };
 
   return (
@@ -159,6 +174,7 @@ const AddDevice = () => {
           </Col>
         </Row>
       </Form>
+      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
     </div>
   );
 };

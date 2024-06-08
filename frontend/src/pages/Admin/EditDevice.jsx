@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import CustomAlert from "../../components/Alert/CustomAlert";
 import smartphoneBrands from "../../const/brands";
 
 const EditDevice = () => {
@@ -10,6 +11,7 @@ const EditDevice = () => {
   const [modello, setModello] = useState("");
   const [marca, setMarca] = useState("");
   const [servizi, setServizi] = useState([{ servizio: "", prezzo: "" }]);
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +31,11 @@ const EditDevice = () => {
         setServizi(data.device.servizi);
       } else {
         console.error("Errore nel caricamento del dispositivo");
+        setAlert({
+          open: true,
+          msg: "Errore nel caricamento del dispositivo",
+          severity: "error",
+        });
       }
     };
     fetchDevice();
@@ -66,22 +73,37 @@ const EditDevice = () => {
       })),
     };
 
-    const response = await fetch(`/api/device/${id}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const response = await fetch(`/api/device/${id}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Non è stato possibile modificare il dispositivo"
-      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          data.error || "Non è stato possibile modificare il dispositivo"
+        );
+      }
+      setAlert({
+        open: true,
+        msg: "Dispositivo modificato con successo",
+        severity: "success",
+      });
+      // Redirect alla pagina modelli se la richiesta è stata eseguita con successo
+      navigate("/modelli");
+    } catch (error) {
+      console.error(error);
+      setAlert({
+        open: true,
+        msg: error.message,
+        severity: "error",
+      });
     }
-    navigate("/modelli");
   };
 
   return (
@@ -174,6 +196,7 @@ const EditDevice = () => {
           </Col>
         </Row>
       </Form>
+      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
     </div>
   );
 };

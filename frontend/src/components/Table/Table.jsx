@@ -4,6 +4,10 @@ import { TextField, Box } from "@mui/material";
 import { css } from "@emotion/react";
 import PropTypes from "prop-types";
 
+const capitalizeFirstLetter = (string) => {
+  return string.replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
 const Table = ({ columns, rows, actions, searchFields }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
@@ -27,6 +31,12 @@ const Table = ({ columns, rows, actions, searchFields }) => {
     );
   };
 
+  const enhancedColumns = columns.map((column) => ({
+    ...column,
+    renderCell:
+      column.renderCell || ((params) => capitalizeFirstLetter(params.value)),
+  }));
+
   return (
     <div>
       <Box display="flex" justifyContent="space-between" mb={3}>
@@ -43,7 +53,7 @@ const Table = ({ columns, rows, actions, searchFields }) => {
       </Box>
       <DataGrid
         rows={filteredRows}
-        columns={columns}
+        columns={enhancedColumns}
         getRowId={(row) => row._id}
         initialState={{
           pagination: {

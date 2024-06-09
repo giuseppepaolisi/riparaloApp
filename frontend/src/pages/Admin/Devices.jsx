@@ -10,15 +10,20 @@ import Table from "../../components/Table/Table";
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import { useNavigate } from "react-router-dom";
+import DeviceDetailModal from "../../components/Modal/DeviceDetailModal";
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
+  const [detailModal, setDetailModal] = useState({
+    isOpen: false,
+    device: null,
+  });
   const navigate = useNavigate();
 
-  // ottieni il token
+  // Ottieni il token
   const { token } = useSelector((state) => state.auth);
 
   // Chiamata API per la lista dispositivi
@@ -89,9 +94,32 @@ const Devices = () => {
     setDeleteModal({ isOpen: false, item: null });
   };
 
-  const handleDetail = (item) => {
-    console.log("Detail clicked for item:", item);
-    // Implementa la logica per il dettaglio
+  const handleDetail = async (item) => {
+    try {
+      if (!token) {
+        return;
+      }
+      const response = await fetch(`/api/device/${item._id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Errore nel recupero dei dettagli del dispositivo");
+      }
+      let data = await response.json();
+      setDetailModal({ isOpen: true, device: data.device });
+    } catch (error) {
+      console.error(error);
+      setAlert({
+        open: true,
+        msg: "Errore nel recupero dei dettagli del dispositivo",
+        severity: "error",
+      });
+    }
   };
 
   const handleEdit = (item) => {
@@ -139,6 +167,13 @@ const Devices = () => {
           )}
           {alert.open && (
             <CustomAlert msg={alert.msg} severity={alert.severity} />
+          )}
+          {detailModal.isOpen && (
+            <DeviceDetailModal
+              open={detailModal.isOpen}
+              onClose={() => setDetailModal({ isOpen: false, device: null })}
+              device={detailModal.device}
+            />
           )}
         </>
       )}

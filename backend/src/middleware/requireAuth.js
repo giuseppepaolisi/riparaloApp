@@ -48,9 +48,10 @@ const requireAuth = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log(error);
+    console.log('Token scaduto');
+    // Token scaduto
     if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ error: 'Token scaduto' });
+      return res.status(401).json({ user: null, token: null });
     }
     res.status(401).json({ error: 'Richiesta non autorizzata' });
   }

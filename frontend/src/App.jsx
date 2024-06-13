@@ -4,7 +4,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import SidebarFactory from "./components/Sidebar/SidebarFactory";
 import DashboardPartner from "./pages/Partner/DashboardPartner";
 import AggiungiCliente from "./pages/Partner/AggiungiCliente";
@@ -29,8 +30,17 @@ import AddDevice from "./pages/Admin/AddDevice";
 import EditDevice from "./pages/Admin/EditDevice";
 //import AccountEdit from "./pages/AccountEdit";  // Importa il nuovo componente
 
+import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
+
 const App = () => {
+  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(loadUserFromStorage());
+    dispatch(checkToken());
+  }, [dispatch]);
+
   return (
     <Router>
       <div className="d-flex">

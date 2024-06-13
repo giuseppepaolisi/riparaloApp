@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.use('/api/login', loginRoutes);
+app.use('/api', loginRoutes);
 app.use('/api', userRoutes);
 app.use('/api', serviceRoutes);
 app.use('/api', customerRoutes);

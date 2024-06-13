@@ -31,20 +31,29 @@ const Devices = () => {
     if (!token) {
       return;
     }
-    const response = await fetch("/api/devices", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const response = await fetch("/api/devices", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (!response.ok) {
-      throw new Error("Errore nella lista dispositivi");
+      let data = await response.json();
+      if (!response.ok) {
+        throw new Error("Errore nella lista dispositivi");
+      }
+      setDevices(data.devices);
+      setLoading(false); // Imposta loading su false dopo aver caricato i dati
+    } catch (error) {
+      console.error(error);
+      setAlert({
+        open: true,
+        msg: error,
+        severity: "error",
+      });
     }
-    let data = await response.json();
-    setDevices(data.devices);
-    setLoading(false); // Imposta loading su false dopo aver caricato i dati
   }, [token]);
 
   useEffect(() => {

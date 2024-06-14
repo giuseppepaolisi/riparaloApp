@@ -49,6 +49,26 @@ const getAll = async (req, res, next) => {
   }
 };
 
+// Ritorna un utente passato il suo id
+const getById = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return next(new ErrorResponse('ID utente non valido', 400));
+    }
+
+    const user = await User.findOne({ _id: id });
+
+    if (!user) {
+      return next(new ErrorResponse('Nessun utente trovato', 400));
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // elimina un utente dal sistema
 const deleteUser = async (req, res, next) => {
   const { id } = req.params;
@@ -105,4 +125,5 @@ module.exports = {
   getAll,
   deleteUser,
   updateUser,
+  getById,
 };

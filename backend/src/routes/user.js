@@ -4,6 +4,8 @@ const {
   signup,
   getAll,
   deleteUser,
+  updateUser,
+  getById,
 } = require('../controllers/userController/user');
 const { requireAdmin, requireAuth } = require('../middleware/requireAuth');
 
@@ -19,6 +21,10 @@ router.post('/user/signup/:role', requireAdmin, signup);
 router.get('/users/:role', requireAdmin, getAll);
 
 router.delete('/user/:id', requireAdmin, deleteUser);
+
+router.patch('/user/:id', updateUser);
+
+router.get('/user/:id', getById);
 
 router.use(errorHandler);
 

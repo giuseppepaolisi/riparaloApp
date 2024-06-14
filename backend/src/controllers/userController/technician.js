@@ -7,8 +7,19 @@ function signupTechnician(newuser, next) {
 }
 
 function updateTechnician(data, next) {
-  return data;
+  const allowedUpdates = ['email', 'password', 'nome', 'cognome', 'telefono'];
+  return filterUpdates(data, allowedUpdates, next);
 }
+
+const filterUpdates = (data, allowedUpdates, next) => {
+  const updates = {};
+  Object.keys(data).forEach((key) => {
+    if (allowedUpdates.includes(key)) {
+      updates[key] = data[key];
+    }
+  });
+  return updates;
+};
 
 module.exports = {
   signupTechnician,

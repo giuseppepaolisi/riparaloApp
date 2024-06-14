@@ -16,8 +16,23 @@ function signupPartner(newuser, next) {
   return newuser;
 }
 
-function updatePartner(data, next) {
-  if (!data.codiceUnivoco || data.codiceUnivoco.length !== 6) {
+const updatePartner = (data, next) => {
+  // Specifica quali campi possono essere aggiornati da un partner
+  const allowedUpdates = [
+    'email',
+    'nome',
+    'cognome',
+    'telefono',
+    'ragioneSociale',
+    'partitaIVA',
+    'codiceUnivoco',
+    'pec',
+    'cap',
+    'via',
+    'provincia',
+  ];
+
+  if (data.codiceUnivoco && data.codiceUnivoco.length !== 6) {
     return next(
       new ErrorResponse(
         'Il codice univoco deve avere esattamente 6 caratteri',
@@ -26,8 +41,19 @@ function updatePartner(data, next) {
     );
   }
 
-  return data;
-}
+  return filterUpdates(data, allowedUpdates, next);
+};
+
+const filterUpdates = (data, allowedUpdates, next) => {
+  const updates = {};
+  Object.keys(data).forEach((key) => {
+    if (allowedUpdates.includes(key)) {
+      updates[key] = data[key];
+    }
+  });
+  return updates;
+};
+
 module.exports = {
   signupPartner,
   updatePartner,

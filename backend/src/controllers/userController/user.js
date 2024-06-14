@@ -7,6 +7,7 @@ const User = require('../../models/user');
 const { PARTNER, TECHNICIAN } = require('../../conf/role');
 const mongoose = require('mongoose');
 const { ErrorResponse } = require('../../middleware/errorManager');
+const bcrypt = require('bcrypt');
 
 // Si occupa della creazione di utente
 const signup = async (req, res, next) => {
@@ -92,7 +93,7 @@ const deleteUser = async (req, res, next) => {
 // Aggiorna i dati di un utente dal sistema
 const updateUser = async (req, res, next) => {
   const { id } = req.params;
-  let { data } = req.body;
+  let data = req.body;
   const { role } = req.user;
 
   try {
@@ -100,21 +101,61 @@ const updateUser = async (req, res, next) => {
       return next(new ErrorResponse('ID utente non valido', 400));
     }
 
+    if (!data) {
+      return next(
+        new ErrorResponse("Nessun dato fornito per l'aggiornamento", 400)
+      );
+    }
+
     // Controlli comuni (es. validazione email e password)
     if (data.email && !/\S+@\S+\.\S+/.test(data.email)) {
       return next(new ErrorResponse("Inserire un'email valida", 400));
     }
 
-    if (data.password !== undefined && data.password.length < 8) {
+    if (data.newPassword && data.newPassword.length < 8) {
       return next(
-        new ErrorResponse('La password deve avere almeno 8 caratteri', 400)
+        new ErrorResponse(
+          'La nuova password deve avere almeno 8 caratteri',
+          400
+        )
       );
     }
-    const updateFuction = updateFactory(role, next);
-    data = updateFuction(data, next);
 
-    user = await User.findByIdAndUpdate({ _id: id }, data);
-    res.status(200).json({ user });
+    // Fetch user data from DB
+    const user = await User.findById(id);
+    if (!user) {
+      return next(new ErrorResponse('Utente non trovato', 404));
+    }
+
+    // Verifica della vecchia password
+    if (data.oldPassword) {
+      const match = await bcrypt.compare(data.oldPassword, user.password);
+      if (!match) {
+        return next(
+          new ErrorResponse('La vecchia password non è corretta', 400)
+        );
+      }
+    }
+
+    // Criptare la nuova password
+    if (data.newPassword) {
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(data.newPassword, salt);
+      data.password = hash;
+      delete data.newPassword;
+      delete data.oldPassword;
+    }
+
+    // Usa la funzione di aggiornamento specifica per il ruolo
+    const updateFunction = updateFactory(role, next);
+    const updatedData = updateFunction(data, next);
+    console.log(updatedData);
+
+    // Aggiorna l'utente
+    const updatedUser = await User.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+    res.status(200).json({ success: true, data: updatedUser });
   } catch (error) {
     next(error);
   }

@@ -1,4 +1,3 @@
-// redux/slice.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -39,6 +38,7 @@ const authSlice = createSlice({
     verifyToken: (state, action) => {
       if (action.payload.valid) {
         state.isAuthenticated = true;
+        state.user = action.payload.user;
       } else {
         state.isAuthenticated = false;
         state.token = null;
@@ -65,14 +65,20 @@ export const checkToken = () => async (dispatch) => {
   const token = localStorage.getItem("token");
   if (token) {
     try {
-      const response = await await fetch("/api/verify-token", {
+      const response = await fetch("/api/verify-token", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });
-      dispatch(verifyToken({ valid: true, user: response.data.user }));
+
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(verifyToken({ valid: true, user: data.user }));
+      } else {
+        dispatch(verifyToken({ valid: false }));
+      }
     } catch (error) {
       dispatch(verifyToken({ valid: false }));
     }

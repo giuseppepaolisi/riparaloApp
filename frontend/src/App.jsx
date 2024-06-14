@@ -28,8 +28,8 @@ import Error500 from "./pages/error/Error500";
 import Devices from "./pages/Admin/Devices";
 import AddDevice from "./pages/Admin/AddDevice";
 import EditDevice from "./pages/Admin/EditDevice";
-//import AccountEdit from "./pages/AccountEdit";  // Importa il nuovo componente
-
+import EditUser from "./pages/EditUser";
+import UserDetails from "./pages/UserDetails";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
 
 const App = () => {
@@ -71,7 +71,8 @@ const App = () => {
               <Route path="/modelli" element={<Devices />} />
               <Route path="/aggiungi-modello" element={<AddDevice />} />
               <Route path="/modifica-modello/:id" element={<EditDevice />} />
-              {/*<Route path="/account" element={<AccountEdit userType="Admin" userData={{ email: 'admin@example.com' }} />} />*/}
+              <Route path="/modifica-utente/:id" element={<EditUser />} />
+              <Route path="/utente/:id" element={<UserDetails />} />
             </Route>
 
             {/* Partner Routes */}
@@ -81,13 +82,11 @@ const App = () => {
               <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />
               <Route path="/apri-ticket" element={<ApriTicket />} />
               <Route path="/about-us" element={<AboutUs />} />
-              {/*<Route path="/account" element={<AccountEdit userType="Partner" userData={{ ragioneSociale: 'Partner Srl' }} />} />*/}
             </Route>
 
             {/* Tecnico Routes */}
             <Route element={<PrivateRoute roles={["tecnico", "admin"]} />}>
               <Route path="/tecnico-dashboard" element={<DashboardTecnico />} />
-              {/*<Route path="/account" element={<AccountEdit userType="Tecnico" userData={{ cognome: 'Rossi', nome: 'Mario' }} />} />*/}
             </Route>
 
             {/* Error Routes */}

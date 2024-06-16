@@ -11,6 +11,7 @@ import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import { useNavigate } from "react-router-dom";
 import DeviceDetailModal from "../../components/Modal/DeviceDetailModal";
+import { Typography } from "@mui/material";
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
@@ -156,8 +157,10 @@ const Devices = () => {
 
   return (
     <div className="container mt-3 mb-4">
-      <h2 className="h3 mb-2 text-gray-800">Dispositivi</h2>
-      {loading ? ( // Mostra il componente di caricamento se loading è true
+      <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
+        Dispositivi
+      </Typography>
+      {loading ? (
         <Loading open={loading} />
       ) : (
         <>

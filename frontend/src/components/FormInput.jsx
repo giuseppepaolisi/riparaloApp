@@ -1,30 +1,38 @@
 import PropTypes from "prop-types";
+import { TextField } from "@mui/material";
 
-const FormInput = ({ label, type, value, onChange, id, required = false }) => {
-  return (
-    <div className="mb-3">
-      <label htmlFor={id} className="form-label">
-        {label}
-      </label>
-      <input
-        type={type}
-        className="form-control"
-        id={id}
-        value={value}
-        onChange={onChange}
-        required={required}
-      />
-    </div>
-  );
-};
+const FormInput = ({
+  id,
+  label,
+  type,
+  value,
+  onChange,
+  required = false,
+  fullWidth = true,
+  margin = "normal",
+}) => (
+  <TextField
+    id={id}
+    label={label}
+    type={type}
+    value={value}
+    onChange={onChange}
+    required={required}
+    fullWidth={fullWidth}
+    margin={margin}
+    variant="outlined"
+  />
+);
 
 FormInput.propTypes = {
+  id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onChange: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
   required: PropTypes.bool,
+  fullWidth: PropTypes.bool,
+  margin: PropTypes.string,
 };
 
 export default FormInput;

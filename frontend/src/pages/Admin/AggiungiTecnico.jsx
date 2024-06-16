@@ -1,29 +1,43 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
+import { Grid } from "@mui/material";
+import { addTecnico } from "../../api/apiTecnico";
 import FormInput from "../../components/FormInput";
+import FormActions from "../../components/FormActions";
+import FormContainer from "../../components/FormContainer";
+import CustomAlert from "../../components/Alert/CustomAlert";
 
 const AggiungiTecnico = () => {
   const [cognome, setCognome] = useState("");
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState(""); // Aggiunto il campo password
+  const [error, setError] = useState(null); // Stato per gestire gli errori
+  const [success, setSuccess] = useState(null); // Stato per gestire il successo
+
+  const { token } = useSelector((state) => state.auth);
 
   const handleAggiungiTecnico = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
 
-      const nuovoTecnico = {
-        cognome,
-        nome,
-        email,
-      };
+      const nuovoTecnico = { cognome, nome, email, password };
 
-      console.log("Nuovo tecnico aggiunto:", nuovoTecnico);
+      try {
+        const response = await addTecnico(token, nuovoTecnico);
+        console.log("Nuovo tecnico aggiunto:", response.user);
 
-      setCognome("");
-      setNome("");
-      setEmail("");
+        setCognome("");
+        setNome("");
+        setEmail("");
+        setPassword("");
+        setSuccess("Tecnico aggiunto con successo");
+      } catch (error) {
+        console.error("Errore durante l'aggiunta del tecnico:", error);
+        setError(error.message);
+      }
     },
-    [cognome, nome, email]
+    [cognome, nome, email, password, token]
   );
 
   useEffect(() => {
@@ -34,48 +48,53 @@ const AggiungiTecnico = () => {
   }, []);
 
   return (
-    <div className="container">
-      <div className="row justify-content-center mt-5">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body">
-              <h2 className="card-title text-center mb-4">Aggiungi Tecnico</h2>
-              <form onSubmit={handleAggiungiTecnico}>
-                <FormInput
-                  label="Cognome"
-                  type="text"
-                  id="cognome"
-                  value={cognome}
-                  onChange={(e) => setCognome(e.target.value)}
-                  required
-                />
-                <FormInput
-                  label="Nome"
-                  type="text"
-                  id="nome"
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                  required
-                />
-                <FormInput
-                  label="Email"
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <div className="d-grid gap-2">
-                  <button type="submit" className="btn btn-primary">
-                    Aggiungi Tecnico
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <FormContainer title="Aggiungi Tecnico">
+      {error && <CustomAlert msg={error} severity="error" />}
+      {success && <CustomAlert msg={success} severity="success" />}
+      <form onSubmit={handleAggiungiTecnico} style={{ marginTop: 1 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <FormInput
+              label="Cognome"
+              id="cognome"
+              value={cognome}
+              onChange={(e) => setCognome(e.target.value)}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormInput
+              label="Nome"
+              id="nome"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormInput
+              label="Email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormInput
+              label="Password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              required
+            />
+          </Grid>
+        </Grid>
+        <FormActions onSubmit={handleAggiungiTecnico} />
+      </form>
+    </FormContainer>
   );
 };
 

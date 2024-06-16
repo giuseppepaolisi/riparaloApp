@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchClienteById, updateCliente } from "../../api/apiCliente";
+import { fetchClienteById, updateCliente } from "../../api/apiPartner";
 import {
   TextField,
   Button,

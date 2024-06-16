@@ -1,14 +1,19 @@
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { Grid } from "@mui/material";
 import { addCliente } from "../../api/apiPartner";
+import CustomAlert from "../../components/Alert/CustomAlert";
 import FormInput from "../../components/FormInput";
+import FormActions from "../../components/FormActions";
+import FormContainer from "../../components/FormContainer";
 
 const AggiungiCliente = () => {
   const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
   const [telefono, setTelefono] = useState("");
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
 
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -20,11 +25,20 @@ const AggiungiCliente = () => {
 
       try {
         const newCustomer = { email, nome, cognome, telefono };
-        const data = await addCliente(token, newCustomer);
-        console.log("Cliente registrato con successo", data);
+        await addCliente(token, newCustomer);
+        setAlert({
+          open: true,
+          msg: "Cliente registrato con successo",
+          severity: "success",
+        });
         navigate("/clienti");
       } catch (error) {
-        console.error(error.message);
+        console.error(error);
+        setAlert({
+          open: true,
+          msg: "Errore nella registrazione del cliente",
+          severity: "error",
+        });
       }
     },
     [email, nome, cognome, telefono, token, navigate]
@@ -44,63 +58,54 @@ const AggiungiCliente = () => {
         label: "Email",
         type: "email",
         value: email,
-        onChange: setEmail,
+        onChange: (e) => setEmail(e.target.value),
       },
       {
         id: "nome",
         label: "Nome",
         type: "text",
         value: nome,
-        onChange: setNome,
+        onChange: (e) => setNome(e.target.value),
       },
       {
         id: "cognome",
         label: "Cognome",
         type: "text",
         value: cognome,
-        onChange: setCognome,
+        onChange: (e) => setCognome(e.target.value),
       },
       {
         id: "telefono",
         label: "Telefono",
         type: "tel",
         value: telefono,
-        onChange: setTelefono,
+        onChange: (e) => setTelefono(e.target.value),
       },
     ],
     [email, nome, cognome, telefono]
   );
 
   return (
-    <div className="container">
-      <div className="row justify-content-center mt-5">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body">
-              <h2 className="card-title text-center mb-4">Aggiungi Cliente</h2>
-              <form onSubmit={handleAggiungiCliente}>
-                {formFields.map(({ id, label, type, value, onChange }) => (
-                  <FormInput
-                    key={id}
-                    id={id}
-                    label={label}
-                    type={type}
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                    required
-                  />
-                ))}
-                <div className="d-grid gap-2">
-                  <button type="submit" className="btn btn-primary">
-                    Aggiungi
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <FormContainer title="Aggiungi Cliente" maxWidth="sm">
+      <form onSubmit={handleAggiungiCliente}>
+        <Grid container spacing={2}>
+          {formFields.map(({ id, label, type, value, onChange }) => (
+            <Grid item xs={12} key={id}>
+              <FormInput
+                id={id}
+                label={label}
+                type={type}
+                value={value}
+                onChange={onChange}
+                required
+              />
+            </Grid>
+          ))}
+        </Grid>
+        <FormActions onSubmit={handleAggiungiCliente} />
+      </form>
+      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
+    </FormContainer>
   );
 };
 

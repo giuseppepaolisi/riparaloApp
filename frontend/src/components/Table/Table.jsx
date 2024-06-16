@@ -4,10 +4,6 @@ import { TextField, Box } from "@mui/material";
 import { css } from "@emotion/react";
 import PropTypes from "prop-types";
 
-const capitalizeFirstLetter = (string) => {
-  return string.replace(/\b\w/g, (char) => char.toUpperCase());
-};
-
 const Table = ({ columns, rows, actions, searchFields }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredRows, setFilteredRows] = useState(rows);
@@ -17,25 +13,14 @@ const Table = ({ columns, rows, actions, searchFields }) => {
   }, [rows]);
 
   const handleSearch = (event) => {
-    const value = event.target.value.toLowerCase();
+    const value = event.target.value;
     setSearchTerm(value);
     setFilteredRows(
       rows.filter((row) =>
-        searchFields.some((field) =>
-          row[field]
-            ?.toString()
-            .toLowerCase()
-            .includes(value)
-        )
+        searchFields.some((field) => row[field]?.toString().includes(value))
       )
     );
   };
-
-  const enhancedColumns = columns.map((column) => ({
-    ...column,
-    renderCell:
-      column.renderCell || ((params) => capitalizeFirstLetter(params.value)),
-  }));
 
   return (
     <div>
@@ -49,11 +34,12 @@ const Table = ({ columns, rows, actions, searchFields }) => {
           css={css`
             width: 25%;
           `}
+          sx={{ fontFamily: "Montserrat, sans-serif" }} // Applica il font alla TextField
         />
       </Box>
       <DataGrid
         rows={filteredRows}
-        columns={enhancedColumns}
+        columns={columns}
         getRowId={(row) => row._id}
         initialState={{
           pagination: {
@@ -62,6 +48,7 @@ const Table = ({ columns, rows, actions, searchFields }) => {
         }}
         pageSizeOptions={[20, 50]}
         autoHeight
+        sx={{ fontFamily: "Montserrat, sans-serif" }} // Applica il font alla DataGrid
       />
     </div>
   );

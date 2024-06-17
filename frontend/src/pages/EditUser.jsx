@@ -30,7 +30,9 @@ const EditUser = () => {
         });
         const data = await response.json();
         if (!response.ok) {
-          throw new Error(data.error || "Errore nel recuperare i dati dell'utente");
+          throw new Error(
+            data.error || "Errore nel recuperare i dati dell'utente"
+          );
         }
         setUserData({
           email: data.email || "",
@@ -92,7 +94,9 @@ const EditUser = () => {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || "Non è stato possibile aggiornare i dati dell'utente");
+        throw new Error(
+          data.error || "Non è stato possibile aggiornare i dati dell'utente"
+        );
       }
       setAlert({
         open: true,

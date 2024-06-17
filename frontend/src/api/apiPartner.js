@@ -65,7 +65,6 @@ export const deleteCliente = async (token, id) => {
   }
 };
 
-
 // FUNZIONI PER I PARTNER
 export const fetchPartners = async (token) => {
   try {
@@ -136,7 +135,6 @@ export const deletePartner = async (token, id) => {
   }
 };
 
-
 //FUNZIONI PER I TICKETS
 export const fetchTickets = async (token) => {
   try {
@@ -163,9 +161,6 @@ export const fetchTickets = async (token) => {
     throw new Error(error.message);
   }
 };
-
-
-
 
 //FUNZIONI PER SVILUPPO FUTURO (VISUALIZZAZIONE CLIENTI)
 export const fetchClienteById = async (token, id) => {

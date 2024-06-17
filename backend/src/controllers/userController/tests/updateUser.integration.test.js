@@ -25,8 +25,8 @@ describe('updateUser', () => {
         id: '507f1f77bcf86cd799439011',
       },
       body: {
-        data: {}
-      }
+        data: {},
+      },
     };
     mockRes = {
       status: jest.fn().mockReturnThis(),
@@ -66,7 +66,7 @@ describe('updateUser', () => {
       data: mockUser,
     });
   });
-/*
+  /*
   it('SUCCESS - Cambio password', async () => {
     mockReq.body.data = {
       oldPassword: 'longenoughpassword',
@@ -116,7 +116,7 @@ describe('updateUser', () => {
     );
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });*/
-/*
+  /*
   it('ERROR - password non valida', async () => {
     mockReq.body.data = {
       newPassword: '',
@@ -150,7 +150,7 @@ describe('updateUser', () => {
     expect(mockNext.mock.calls[0][0].message).toContain('ID utente non valido');
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
   });
-/*
+  /*
   it('ERROR - Vecchia password non corretta', async () => {
     mockReq.body.data = {
       oldPassword: 'wrongpassword',

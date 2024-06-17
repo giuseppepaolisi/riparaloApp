@@ -1,119 +1,127 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import partnerData from "../../assets/json/partner.json";
-import CustomModal from "../../components/CustomModal";
 import { useEffect, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { fetchPartners, deletePartner } from "../../api/apiPartner";
+import AddButton from "../../components/Action/AddButton";
+import DeleteButton from "../../components/Action/DeleteButton";
+import EditButton from "../../components/Action/EditButton";
+import DetailButton from "../../components/Action/DetailButton";
+import Table from "../../components/Table/Table";
+import Loading from "../../components/Loading";
+import DeleteModal from "../../components/DeleteModal";
+import CustomAlert from "../../components/Alert/CustomAlert";
+import { Typography } from "@mui/material";
 
 const Partner = () => {
-  const [partner, setPartner] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedPartnerIndex, setSelectedPartnerIndex] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchType, setSearchType] = useState("email");
+  const [partners, setPartners] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
+  const navigate = useNavigate();
+
+  const { token } = useSelector((state) => state.auth);
+
+  const loadPartners = useCallback(async () => {
+    if (!token) return;
+    try {
+      const users = await fetchPartners(token);
+      setPartners(users);
+      setLoading(false);
+    } catch (error) {
+      console.error(error.message);
+    }
+  }, [token]);
 
   useEffect(() => {
-    setPartner(partnerData);
+    loadPartners();
+  }, [loadPartners]);
+
+  const handleDeletePartner = useCallback(async (id) => {
+    setDeleteModal({ isOpen: true, item: id });
   }, []);
 
-  const handleDelete = useCallback((index) => {
-    setSelectedPartnerIndex(index);
-    setShowModal(true);
-  }, []);
-
-  const confirmDelete = useCallback(() => {
-    if (selectedPartnerIndex !== null) {
-      setPartner((prevPartner) => {
-        const newPartner = [...prevPartner];
-        newPartner.splice(selectedPartnerIndex, 1);
-        return newPartner;
+  const confirmDelete = useCallback(async () => {
+    try {
+      await deletePartner(token, deleteModal.item);
+      setPartners((prevPartners) =>
+        prevPartners.filter((partner) => partner._id !== deleteModal.item)
+      );
+      setAlert({
+        open: true,
+        msg: "Partner eliminato con successo",
+        severity: "success",
       });
-      setSelectedPartnerIndex(null);
-      setShowModal(false);
+    } catch (error) {
+      console.error(error);
+      setAlert({
+        open: true,
+        msg: "Errore eliminazione partner",
+        severity: "error",
+      });
     }
-  }, [selectedPartnerIndex]);
+    setDeleteModal({ isOpen: false, item: null });
+  }, [token, deleteModal.item]);
 
-  const handleSearchTermChange = useCallback((e) => {
-    setSearchTerm(e.target.value);
-  }, []);
+  const cancelDelete = () => {
+    setDeleteModal({ isOpen: false, item: null });
+  };
 
-  const handleSearchTypeChange = useCallback((e) => {
-    setSearchType(e.target.value);
-  }, []);
+  const handleDetail = async (id) => {
+    navigate(`/partner/${id}`);
+  };
 
-  const filteredPartner = partner.filter((partner) =>
-    partner[searchType].toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleEdit = (id) => {
+    navigate(`/modifica-partner/${id}`);
+  };
+
+  const columns = [
+    { field: "ragioneSociale", headerName: "Rag. Sociale", flex: 1 },
+    { field: "nome", headerName: "Nome", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1 },
+    { field: "provincia", headerName: "Provincia", flex: 1 },
+    {
+      field: "action",
+      headerName: "Azioni",
+      flex: 1,
+      renderCell: (params) => (
+        <div>
+          <DetailButton onClick={() => handleDetail(params.row._id)} />
+          <EditButton onClick={() => handleEdit(params.row._id)} />
+          <DeleteButton onClick={() => handleDeletePartner(params.row._id)} />
+        </div>
+      ),
+    },
+  ];
+
+  const searchFields = ["ragioneSociale", "nome", "email", "provincia"];
 
   return (
     <div className="container mt-3 mb-4">
-      <h2>Partner</h2>
-      <div className="mt-3 mb-5 d-flex justify-content-between">
-        <Link to="/aggiungi-partner" className="btn btn-primary">
-          + Aggiungi partner
-        </Link>
-        <div
-          className="input-group input-group-sm"
-          style={{ maxWidth: "400px" }}
-        >
-          <input
-            type="text"
-            className="form-control"
-            placeholder={`Cerca per ${searchType}`}
-            value={searchTerm}
-            onChange={handleSearchTermChange}
+      <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
+        Partner
+      </Typography>
+      {loading ? (
+        <Loading open={loading} />
+      ) : (
+        <>
+          <Table
+            columns={columns}
+            rows={partners}
+            actions={<AddButton label="Partner" link="/aggiungi-partner" />}
+            searchFields={searchFields}
           />
-          <select
-            className="form-select"
-            value={searchType}
-            onChange={handleSearchTypeChange}
-          >
-            <option value="email">Email</option>
-            <option value="ragioneSociale">Rag. Sociale</option>
-            <option value="rappresentanteLegale">Rapp. Legale</option>
-            <option value="provincia">Provincia</option>
-          </select>
-        </div>
-      </div>
-
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th>Rag. Sociale</th>
-            <th>Rapp. Legale</th>
-            <th>Email</th>
-            <th>Provincia</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredPartner.map((partner, index) => (
-            <tr key={index}>
-              <td>{partner.ragioneSociale}</td>
-              <td>{partner.rappresentanteLegale}</td>
-              <td>{partner.email}</td>
-              <td>{partner.provincia}</td>
-              <td>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDelete(index)}
-                >
-                  Elimina
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <CustomModal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        title="Conferma Eliminazione"
-        body="Sei sicuro di voler eliminare questo partner?"
-        onConfirm={confirmDelete}
-        confirmText="Elimina"
-        cancelText="Annulla"
-      />
+          {deleteModal.isOpen && (
+            <DeleteModal
+              message={`Sei sicuro di voler eliminare questo partner?`}
+              onDelete={confirmDelete}
+              onCancel={cancelDelete}
+            />
+          )}
+          {alert.open && (
+            <CustomAlert msg={alert.msg} severity={alert.severity} />
+          )}
+        </>
+      )}
     </div>
   );
 };

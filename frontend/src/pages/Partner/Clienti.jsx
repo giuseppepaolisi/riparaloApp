@@ -1,124 +1,126 @@
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import DeleteButton from "../../components/Action/DeleteButton";
-import DeleteModal from "../../components/DeleteModal";
 import { fetchClienti, deleteCliente } from "../../api/apiPartner";
+import AddButton from "../../components/Action/AddButton";
+import DeleteButton from "../../components/Action/DeleteButton";
+import EditButton from "../../components/Action/EditButton";
+import DetailButton from "../../components/Action/DetailButton";
+import Table from "../../components/Table/Table";
+import Loading from "../../components/Loading";
+import DeleteModal from "../../components/DeleteModal";
+import CustomAlert from "../../components/Alert/CustomAlert";
+import { Typography } from "@mui/material";
 
 const Clienti = () => {
   const [clienti, setClienti] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchType, setSearchType] = useState("telefono");
-  const [delModal, setDelModal] = useState(false);
-  const [selectedClientId, setSelectedClientId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
+  const navigate = useNavigate();
 
   const { token } = useSelector((state) => state.auth);
 
   const loadClienti = useCallback(async () => {
     if (!token) return;
     try {
-      const customers = await fetchClienti(token);
-      setClienti(customers);
-      setIsLoading(false);
+      const users = await fetchClienti(token);
+      setClienti(users);
+      setLoading(false);
     } catch (error) {
       console.error(error.message);
     }
   }, [token]);
 
-  const handleDeleteCustomer = useCallback(
-    async (id) => {
-      try {
-        await deleteCliente(token, id);
-        setClienti((prevClienti) =>
-          prevClienti.filter((cliente) => cliente._id !== id)
-        );
-        setDelModal(false);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [token]
-  );
-
   useEffect(() => {
     loadClienti();
   }, [loadClienti]);
 
-  const handleSearchTermChange = (e) => setSearchTerm(e.target.value);
-  const handleSearchTypeChange = (e) => setSearchType(e.target.value);
+  const handleDeleteCliente = useCallback(async (id) => {
+    setDeleteModal({ isOpen: true, item: id });
+  }, []);
 
-  const filteredClienti = clienti.filter((cliente) => {
-    return cliente[searchType].toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const confirmDelete = useCallback(async () => {
+    try {
+      await deleteCliente(token, deleteModal.item);
+      setClienti((prevClienti) =>
+        prevClienti.filter((cliente) => cliente._id !== deleteModal.item)
+      );
+      setAlert({
+        open: true,
+        msg: "Cliente eliminato con successo",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error(error);
+      setAlert({
+        open: true,
+        msg: "Errore eliminazione cliente",
+        severity: "error",
+      });
+    }
+    setDeleteModal({ isOpen: false, item: null });
+  }, [token, deleteModal.item]);
 
-  const handleDeleteClick = (id) => {
-    setSelectedClientId(id);
-    setDelModal(true);
+  const cancelDelete = () => {
+    setDeleteModal({ isOpen: false, item: null });
   };
+
+  const handleDetail = async (id) => {
+    navigate(`/cliente/${id}`);
+  };
+
+  const handleEdit = (id) => {
+    navigate(`/modifica-cliente/${id}`);
+  };
+
+  const columns = [
+    { field: "telefono", headerName: "Telefono", flex: 1 },
+    { field: "nome", headerName: "Nome", flex: 1 },
+    { field: "cognome", headerName: "Cognome", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1 },
+    {
+      field: "action",
+      headerName: "Azioni",
+      flex: 1,
+      renderCell: (params) => (
+        <div>
+          <DetailButton onClick={() => handleDetail(params.row._id)} />
+          <EditButton onClick={() => handleEdit(params.row._id)} />
+          <DeleteButton onClick={() => handleDeleteCliente(params.row._id)} />
+        </div>
+      ),
+    },
+  ];
+
+  const searchFields = ["telefono", "nome", "cognome", "email"];
 
   return (
     <div className="container mt-3 mb-4">
-      <h2>Clienti</h2>
-      <div className="mt-3 mb-5 d-flex justify-content-between">
-        <Link to="/aggiungi-cliente" className="btn btn-primary">
-          + Aggiungi cliente
-        </Link>
-        <div
-          className="input-group input-group-sm"
-          style={{ maxWidth: "400px" }}
-        >
-          <input
-            type="text"
-            className="form-control"
-            placeholder={`Cerca per ${searchType}`}
-            value={searchTerm}
-            onChange={handleSearchTermChange}
+      <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
+        Clienti
+      </Typography>
+      {loading ? (
+        <Loading open={loading} />
+      ) : (
+        <>
+          <Table
+            columns={columns}
+            rows={clienti}
+            actions={<AddButton label="Cliente" link="/aggiungi-cliente" />}
+            searchFields={searchFields}
           />
-          <select
-            className="form-select"
-            value={searchType}
-            onChange={handleSearchTypeChange}
-          >
-            <option value="telefono">Telefono</option>
-            <option value="nome">Nome</option>
-            <option value="cognome">Cognome</option>
-          </select>
-        </div>
-      </div>
-      {isLoading && <div>Loading...</div>}
-
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th>Telefono</th>
-            <th>Nome</th>
-            <th>Cognome</th>
-            <th>Elimina</th>
-          </tr>
-        </thead>
-        <tbody>
-          {!isLoading &&
-            filteredClienti.map((cliente) => (
-              <tr key={cliente._id}>
-                <td>{cliente.telefono}</td>
-                <td>{cliente.nome}</td>
-                <td>{cliente.cognome}</td>
-                <td>
-                  <DeleteButton
-                    onClick={() => handleDeleteClick(cliente._id)}
-                  />
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-      {delModal && (
-        <DeleteModal
-          message="Vuoi eliminare il cliente?"
-          onDelete={() => handleDeleteCustomer(selectedClientId)}
-          onCancel={() => setDelModal(false)}
-        />
+          {deleteModal.isOpen && (
+            <DeleteModal
+              message={`Sei sicuro di voler eliminare questo cliente?`}
+              onDelete={confirmDelete}
+              onCancel={cancelDelete}
+            />
+          )}
+          {alert.open && (
+            <CustomAlert msg={alert.msg} severity={alert.severity} />
+          )}
+        </>
       )}
     </div>
   );

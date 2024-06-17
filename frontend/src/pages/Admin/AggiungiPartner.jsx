@@ -1,6 +1,11 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { Grid } from "@mui/material";
+import { addPartner } from "../../api/apiPartner"; // Importa la funzione API
 import FormInput from "../../components/FormInput";
+import FormActions from "../../components/FormActions";
+import FormContainer from "../../components/FormContainer";
+import CustomAlert from "../../components/Alert/CustomAlert";
 
 const AggiungiPartner = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +22,9 @@ const AggiungiPartner = () => {
     user: "",
     password: "",
   });
+  const [error, setError] = useState(null); // Stato per gestire eventuali errori
+  const [success, setSuccess] = useState(null); // Stato per gestire il successo
+  const navigate = useNavigate(); // Per la navigazione
 
   const handleChange = useCallback((e) => {
     const { id, value } = e.target;
@@ -26,9 +34,17 @@ const AggiungiPartner = () => {
     }));
   }, []);
 
-  const handleAggiungiPartner = (event) => {
+  const handleAggiungiPartner = async (event) => {
     event.preventDefault();
-    // Aggiungi logica per aggiungere partner
+    setError(null); // Resetta lo stato dell'errore
+    setSuccess(null); // Resetta lo stato del successo
+    try {
+      await addPartner(formData);
+      setSuccess("Partner aggiunto con successo");
+      setTimeout(() => navigate("/partner"), 2000); // Naviga alla pagina partner dopo 2 secondi
+    } catch (error) {
+      setError(error.message); // Imposta il messaggio di errore
+    }
   };
 
   useEffect(() => {
@@ -39,126 +55,106 @@ const AggiungiPartner = () => {
   }, []);
 
   return (
-    <div className="container">
-      <div className="row justify-content-center mt-5">
-        <div className="col-md-6">
-          <div className="card">
-            <div className="card-body">
-              <h2 className="card-title text-center mb-4">Aggiungi Partner</h2>
-              <form onSubmit={handleAggiungiPartner}>
-                <div className="row">
-                  <div className="col">
-                    <FormInput
-                      label="Ragione Sociale"
-                      type="text"
-                      value={formData.ragioneSociale}
-                      onChange={handleChange}
-                      id="ragioneSociale"
-                      required
-                    />
-                    <FormInput
-                      label="Rappresentante Legale"
-                      type="text"
-                      value={formData.rappresentanteLegale}
-                      onChange={handleChange}
-                      id="rappresentanteLegale"
-                      required
-                    />
-                    <FormInput
-                      label="Codice Univoco"
-                      type="text"
-                      value={formData.codiceUnivoco}
-                      onChange={handleChange}
-                      id="codiceUnivoco"
-                      required
-                    />
-                    <FormInput
-                      label="Partita IVA"
-                      type="text"
-                      value={formData.partitaIVA}
-                      onChange={handleChange}
-                      id="partitaIVA"
-                      required
-                    />
-                    <FormInput
-                      label="PEC"
-                      type="email"
-                      value={formData.PEC}
-                      onChange={handleChange}
-                      id="PEC"
-                      required
-                    />
-                    <FormInput
-                      label="Telefono"
-                      type="tel"
-                      value={formData.telefono}
-                      onChange={handleChange}
-                      id="telefono"
-                      required
-                    />
-                  </div>
-                  <div className="col">
-                    <FormInput
-                      label="Città"
-                      type="text"
-                      value={formData.citta}
-                      onChange={handleChange}
-                      id="citta"
-                      required
-                    />
-                    <FormInput
-                      label="Via"
-                      type="text"
-                      value={formData.via}
-                      onChange={handleChange}
-                      id="via"
-                      required
-                    />
-                    <FormInput
-                      label="CAP"
-                      type="text"
-                      value={formData.cap}
-                      onChange={handleChange}
-                      id="cap"
-                      required
-                    />
-                    <FormInput
-                      label="Provincia"
-                      type="text"
-                      value={formData.provincia}
-                      onChange={handleChange}
-                      id="provincia"
-                      required
-                    />
-                    <FormInput
-                      label="User"
-                      type="text"
-                      value={formData.user}
-                      onChange={handleChange}
-                      id="user"
-                      required
-                    />
-                    <FormInput
-                      label="Password"
-                      type="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      id="password"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="d-grid gap-2">
-                  <button type="submit" className="btn btn-primary">
-                    Aggiungi Partner
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <FormContainer title="Aggiungi Partner">
+      {error && <CustomAlert msg={error} severity="error" />}
+      {success && <CustomAlert msg={success} severity="success" />}
+      <form onSubmit={handleAggiungiPartner} style={{ marginTop: 1 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <FormInput
+              label="Ragione Sociale"
+              id="ragioneSociale"
+              value={formData.ragioneSociale}
+              onChange={handleChange}
+              required
+            />
+            <FormInput
+              label="Rappresentante Legale"
+              id="rappresentanteLegale"
+              value={formData.rappresentanteLegale}
+              onChange={handleChange}
+              required
+            />
+            <FormInput
+              label="Codice Univoco"
+              id="codiceUnivoco"
+              value={formData.codiceUnivoco}
+              onChange={handleChange}
+              required
+            />
+            <FormInput
+              label="Partita IVA"
+              id="partitaIVA"
+              value={formData.partitaIVA}
+              onChange={handleChange}
+              required
+            />
+            <FormInput
+              label="PEC"
+              id="PEC"
+              value={formData.PEC}
+              onChange={handleChange}
+              type="email"
+              required
+            />
+            <FormInput
+              label="Telefono"
+              id="telefono"
+              value={formData.telefono}
+              onChange={handleChange}
+              type="tel"
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormInput
+              label="Città"
+              id="citta"
+              value={formData.citta}
+              onChange={handleChange}
+              required
+            />
+            <FormInput
+              label="Via"
+              id="via"
+              value={formData.via}
+              onChange={handleChange}
+              required
+            />
+            <FormInput
+              label="CAP"
+              id="cap"
+              value={formData.cap}
+              onChange={handleChange}
+              required
+            />
+            <FormInput
+              label="Provincia"
+              id="provincia"
+              value={formData.provincia}
+              onChange={handleChange}
+              required
+            />
+            <FormInput
+              label="User"
+              id="user"
+              value={formData.user}
+              onChange={handleChange}
+              required
+            />
+            <FormInput
+              label="Password"
+              id="password"
+              value={formData.password}
+              onChange={handleChange}
+              type="password"
+              required
+            />
+          </Grid>
+        </Grid>
+        <FormActions onSubmit={handleAggiungiPartner} />
+      </form>
+    </FormContainer>
   );
 };
 

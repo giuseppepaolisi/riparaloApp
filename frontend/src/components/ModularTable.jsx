@@ -1,74 +1,59 @@
 import PropTypes from "prop-types";
+import TableHeader from "./TableHeader";
 import stateColors from "../assets/json/state.json";
 
 const ModularTable = ({
   headers,
   data,
-  onRead,
+  onViewEdit,
   onDelete,
   requestSort,
   sortConfig,
-}) => {
-  const getSortIcon = (key) => {
-    if (sortConfig.key === key) {
-      return sortConfig.direction === "asc" ? " ▲" : " ▼";
-    }
-    return null;
-  };
-
-  return (
-    <table className="table table-striped table-bordered">
-      <thead className="thead-dark">
-        <tr>
+}) => (
+  <table className="table table-striped table-bordered">
+    <TableHeader
+      headers={headers}
+      sortConfig={sortConfig}
+      requestSort={requestSort}
+    />
+    <tbody>
+      {data.map((item) => (
+        <tr key={item._id}>
           {headers.map((header) => (
-            <th
+            <td
               key={header.key}
-              onClick={() => requestSort(header.key)}
-              className="text-center"
+              className="text-center align-middle"
+              style={
+                header.key === "stato"
+                  ? { backgroundColor: stateColors[item[header.key]] }
+                  : {}
+              }
             >
-              {header.label} {getSortIcon(header.key)}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => (
-          <tr key={item.id}>
-            {headers.map((header) => (
-              <td
-                key={header.key}
-                className="text-center align-middle"
-                style={
-                  header.key === "stato"
-                    ? { backgroundColor: stateColors[item[header.key]] }
-                    : {}
-                }
-              >
-                {header.key === "elimina" ? (
+              {header.key === "actions" ? (
+                <>
+                  <button
+                    className="btn btn-primary btn-sm me-2"
+                    onClick={() => onViewEdit(item._id)}
+                  >
+                    Vedi/Modifica
+                  </button>
                   <button
                     className="btn btn-danger btn-sm"
-                    onClick={() => onDelete(item.id)}
+                    onClick={() => onDelete(item._id)}
                   >
                     Elimina
                   </button>
-                ) : header.key === "leggi" ? (
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() => onRead(item)}
-                  >
-                    Leggi
-                  </button>
-                ) : (
-                  item[header.key]
-                )}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
+                </>
+              ) : (
+                item[header.key]
+              )}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+);
 
 ModularTable.propTypes = {
   headers: PropTypes.arrayOf(
@@ -79,10 +64,10 @@ ModularTable.propTypes = {
   ).isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      _id: PropTypes.string.isRequired,
     })
   ).isRequired,
-  onRead: PropTypes.func.isRequired,
+  onViewEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   requestSort: PropTypes.func.isRequired,
   sortConfig: PropTypes.shape({

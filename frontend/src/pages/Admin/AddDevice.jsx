@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Grid, Box, TextField, Button, MenuItem } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import smartphoneBrands from "../../const/brands";
+import FormActions from "../../components/FormActions";
+import FormContainer from "../../components/FormContainer";
 
 // Aggiunge il campo nullo per il primo caricamento
 smartphoneBrands.unshift("");
@@ -15,6 +17,13 @@ const AddDevice = () => {
   const [servizi, setServizi] = useState([{ servizio: "", prezzo: "" }]);
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.style.backgroundColor = "#007bff";
+    return () => {
+      document.body.style.backgroundColor = null;
+    };
+  }, []);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -63,7 +72,7 @@ const AddDevice = () => {
       const data = await response.json();
       if (!response.ok) {
         throw new Error(
-          data.error || "Non è stato possibile aggiungere il cliente"
+          data.error || "Non è stato possibile aggiungere il dispositivo"
         );
       }
       setAlert({
@@ -83,99 +92,110 @@ const AddDevice = () => {
     }
   };
 
+  const isAddServizioDisabled = servizi.some(
+    (servizio) => servizio.servizio === "" || servizio.prezzo === ""
+  );
+
   return (
-    <div className="container mt-3 mb-4">
-      <h2>Aggiungi Dispositivo</h2>
-      <Form onSubmit={handleSubmit}>
-        <Row>
-          <Col>
-            <Form.Group controlId="formMarca">
-              <Form.Label>Marca</Form.Label>
-              <Form.Control
-                as="select"
-                value={marca}
-                onChange={handleChange}
-                required
-              >
-                {smartphoneBrands.map((brand, index) => (
-                  <option
-                    key={index}
-                    value={brand}
-                    disabled={brand === "" && marca !== ""}
-                  >
-                    {brand === "" ? "Seleziona una marca" : brand}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="formModello">
-              <Form.Label>Modello</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Inserisci il modello"
-                value={modello}
-                onChange={(e) => setModello(e.target.value)}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+    <FormContainer title="Aggiungi Dispositivo">
+      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
+      <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
+        <Grid container spacing={2} alignItems="flex-end">
+          <Grid item xs={12} sm={6}>
+            <TextField
+              select
+              label="Marca"
+              value={marca}
+              onChange={handleChange}
+              fullWidth
+              required
+              variant="outlined"
+            >
+              {smartphoneBrands.map((brand, index) => (
+                <MenuItem
+                  key={index}
+                  value={brand}
+                  disabled={brand === "" && marca !== ""}
+                >
+                  {brand === "" ? "Seleziona una marca" : brand}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Modello"
+              type="text"
+              id="modello"
+              value={modello}
+              onChange={(e) => setModello(e.target.value)}
+              fullWidth
+              required
+              variant="outlined"
+            />
+          </Grid>
+        </Grid>
         {servizi.map((servizio, index) => (
-          <div key={index} className="my-3">
-            <Row>
-              <Col>
-                <Form.Group controlId={`formServizio${index}`}>
-                  <Form.Label>Servizio</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Inserisci il servizio"
-                    name="servizio"
-                    value={servizio.servizio}
-                    onChange={(e) => handleServizioChange(index, e)}
-                  />
-                </Form.Group>
-              </Col>
-              <Col xs="auto" className="d-flex align-items-end">
-                <Form.Group controlId={`formPrezzo${index}`}>
-                  <Form.Label>Prezzo</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Inserisci il prezzo"
-                    name="prezzo"
-                    value={servizio.prezzo}
-                    onChange={(e) => handleServizioChange(index, e)}
-                  />
-                </Form.Group>
-              </Col>
-              <Col xs="auto" className="d-flex align-items-end">
+          <Box key={index} sx={{ my: 3 }}>
+            <Grid container spacing={2} alignItems="flex-end">
+              <Grid item xs={12} sm={5}>
+                <TextField
+                  label="Servizio"
+                  type="text"
+                  id={`servizio-${index}`}
+                  name="servizio"
+                  value={servizio.servizio}
+                  onChange={(e) => handleServizioChange(index, e)}
+                  fullWidth
+                  required
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  label="Prezzo"
+                  type="number"
+                  id={`prezzo-${index}`}
+                  name="prezzo"
+                  value={servizio.prezzo}
+                  onChange={(e) => handleServizioChange(index, e)}
+                  fullWidth
+                  required
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={3}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
                 <Button
-                  variant="danger"
+                  variant="contained"
+                  color="secondary"
                   onClick={() => handleRemoveServizio(index)}
                 >
                   - Rimuovi
                 </Button>
-              </Col>
-            </Row>
-          </div>
+              </Grid>
+            </Grid>
+          </Box>
         ))}
-        <Row>
-          <Col xs={6} className="mx-auto">
-            <Button variant="primary" onClick={handleAddServizio}>
+        <Grid container justifyContent="center">
+          <Grid item>
+            <Button
+              variant="contained"
+              onClick={handleAddServizio}
+              disabled={isAddServizioDisabled}
+              sx={{ mb: 3 }}
+            >
               + Aggiungi Servizio
             </Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={6} className="mx-auto">
-            <Button variant="success" type="submit" className="mt-3">
-              Invia
-            </Button>
-          </Col>
-        </Row>
-      </Form>
-      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
-    </div>
+          </Grid>
+        </Grid>
+        <FormActions onSubmit={handleSubmit} />
+      </form>
+    </FormContainer>
   );
 };
 

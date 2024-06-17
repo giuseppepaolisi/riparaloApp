@@ -25,12 +25,18 @@ import DashboardTecnico from "./pages/Tecnico/DashboardTecnico";
 import Error403 from "./pages/error/Error403";
 import Error404 from "./pages/error/Error404";
 import Error500 from "./pages/error/Error500";
+
 import Devices from "./pages/Admin/Devices";
 import AddDevice from "./pages/Admin/AddDevice";
 import EditDevice from "./pages/Admin/EditDevice";
+import ModificaTecnico from "./pages/Admin/ModificaTecnico";
+import ModificaPartner from "./pages/Admin/ModificaPartner";
+import ModificaCliente from "./pages/Partner/ModificaCliente";
+import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
+//import DettaglioCliente from "./pages/Partner/DettaglioCliente";
+//import AccountEdit from "./pages/AccountEdit";  // Importa il nuovo componente
 import EditUser from "./pages/EditUser";
 import UserDetails from "./pages/UserDetails";
-import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -66,11 +72,26 @@ const App = () => {
               <Route path="/admin-dashboard" element={<DashboardAdmin />} />
               <Route path="/partner" element={<Partner />} />
               <Route path="/aggiungi-partner" element={<AggiungiPartner />} />
+
               <Route path="/tecnici" element={<Tecnici />} />
               <Route path="/aggiungi-tecnico" element={<AggiungiTecnico />} />
+
               <Route path="/modelli" element={<Devices />} />
               <Route path="/aggiungi-modello" element={<AddDevice />} />
               <Route path="/modifica-modello/:id" element={<EditDevice />} />
+
+              <Route path="/partner" element={<Partner />} />
+              <Route
+                path="/modifica-partner/:id"
+                element={<ModificaPartner />}
+              />
+              <Route path="/tecnici" element={<Tecnici />} />
+              <Route
+                path="/modifica-tecnico/:id"
+                element={<ModificaTecnico />}
+              />
+
+              {/*<Route path="/account" element={<AccountEdit userType="Admin" userData={{ email: 'admin@example.com' }} />} />*/}
               <Route path="/modifica-utente/:id" element={<EditUser />} />
               <Route path="/utente/:id" element={<UserDetails />} />
             </Route>
@@ -78,10 +99,18 @@ const App = () => {
             {/* Partner Routes */}
             <Route element={<PrivateRoute roles={["partner"]} />}>
               <Route path="/partner-dashboard" element={<DashboardPartner />} />
-              <Route path="/clienti" element={<Clienti />} />
               <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />
+              {/*<Route path="/cliente/:id" element={<DettaglioCliente />} />*/}
               <Route path="/apri-ticket" element={<ApriTicket />} />
               <Route path="/about-us" element={<AboutUs />} />
+
+              <Route path="/clienti" element={<Clienti />} />
+              <Route
+                path="/modifica-cliente/:id"
+                element={<ModificaCliente />}
+              />
+
+              {/*<Route path="/account" element={<AccountEdit userType="Partner" userData={{ ragioneSociale: 'Partner Srl' }} />} />*/}
             </Route>
 
             {/* Tecnico Routes */}

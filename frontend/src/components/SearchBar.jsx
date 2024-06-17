@@ -8,19 +8,22 @@ const SearchBar = memo(
     onSearchFieldChange,
     searchQuery,
     onSearchQueryChange,
+    onSearch,
   }) => {
     const handleSearchFieldChange = useCallback(
       (e) => {
         onSearchFieldChange(e.target.value);
+        onSearch(searchQuery, e.target.value);
       },
-      [onSearchFieldChange]
+      [onSearchFieldChange, onSearch, searchQuery]
     );
 
     const handleSearchQueryChange = useCallback(
       (e) => {
         onSearchQueryChange(e.target.value);
+        onSearch(e.target.value, selectedSearchField);
       },
-      [onSearchQueryChange]
+      [onSearchQueryChange, onSearch, selectedSearchField]
     );
 
     return (
@@ -58,6 +61,7 @@ SearchBar.propTypes = {
   onSearchFieldChange: PropTypes.func.isRequired,
   searchQuery: PropTypes.string.isRequired,
   onSearchQueryChange: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
 };
 
 export default SearchBar;

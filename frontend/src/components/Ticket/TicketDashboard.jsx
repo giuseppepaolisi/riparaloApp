@@ -1,15 +1,21 @@
-import { useEffect, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Typography } from '@mui/material';
-import TicketTable from './TicketTable';
-import DetailButton from '../Action/DetailButton';
-import EditButton from '../Action/EditButton';
-import DeleteButton from '../Action/DeleteButton';
-import AddButton from '../Action/AddButton';
+import { useEffect, useState, useCallback } from "react";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Typography } from "@mui/material";
+import TicketTable from "./TicketTable";
+import AddButton from "../Action/AddButton";
+import DetailButton from "../Action/DetailButton";
+import EditButton from "../Action/EditButton";
+import DeleteButton from "../Action/DeleteButton";
 
-const TicketDashboard = ({ title, fetchTickets, columns, searchFields, addTicketLink }) => {
+const TicketDashboard = ({
+  title,
+  fetchTickets,
+  columns,
+  searchFields,
+  addTicketLink,
+}) => {
   const [tickets, setTickets] = useState([]);
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -29,16 +35,21 @@ const TicketDashboard = ({ title, fetchTickets, columns, searchFields, addTicket
     }
   }, [token, fetchTickets]);
 
-  const handleDetail = useCallback((id) => {
-    navigate(`/ticket/${id}`);
-  }, [navigate]);
+  const handleDetail = useCallback(
+    (id) => {
+      navigate(`/ticket/${id}`);
+    },
+    [navigate]
+  );
 
-  const handleEdit = useCallback((id) => {
-    navigate(`/modifica-ticket/${id}`);
-  }, [navigate]);
+  const handleEdit = useCallback(
+    (id) => {
+      navigate(`/modifica-ticket/${id}`);
+    },
+    [navigate]
+  );
 
   const handleDelete = useCallback((id) => {
-    // Funzione per eliminare il ticket
     console.log(`Elimina ticket con ID: ${id}`);
   }, []);
 

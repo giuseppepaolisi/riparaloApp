@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { DataGrid } from '@mui/x-data-grid';
-import { TextField, Box } from '@mui/material';
-import { css } from '@emotion/react';
+import React from "react";
+import PropTypes from "prop-types";
+import { DataGrid } from "@mui/x-data-grid";
+import { TextField, Box } from "@mui/material";
+import { css } from "@emotion/react";
 
 const TicketTable = ({ columns, rows, actions, searchFields }) => {
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState("");
   const [filteredRows, setFilteredRows] = React.useState(rows);
 
   React.useEffect(() => {
@@ -34,7 +34,7 @@ const TicketTable = ({ columns, rows, actions, searchFields }) => {
           css={css`
             width: 25%;
           `}
-          sx={{ fontFamily: 'Montserrat, sans-serif' }} // Applica il font alla TextField
+          sx={{ fontFamily: "Montserrat, sans-serif" }}
         />
       </Box>
       <DataGrid
@@ -48,7 +48,7 @@ const TicketTable = ({ columns, rows, actions, searchFields }) => {
         }}
         pageSizeOptions={[20, 50]}
         autoHeight
-        sx={{ fontFamily: 'Montserrat, sans-serif' }} // Applica il font alla DataGrid
+        sx={{ fontFamily: "Montserrat, sans-serif" }}
       />
     </div>
   );

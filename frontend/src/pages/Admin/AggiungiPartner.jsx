@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import { addPartner } from "../../api/apiPartner"; // Importa la funzione API
@@ -9,22 +10,25 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 
 const AggiungiPartner = () => {
   const [formData, setFormData] = useState({
-    ragioneSociale: "",
-    rappresentanteLegale: "",
-    codiceUnivoco: "",
-    partitaIVA: "",
-    PEC: "",
-    telefono: "",
-    citta: "",
-    via: "",
-    cap: "",
-    provincia: "",
-    user: "",
+    email: "",
     password: "",
+    nome: "",
+    cognome: "",
+    telefono: "",
+    ragioneSociale: "",
+    partitaIVA: "",
+    codiceUnivoco: "",
+    pec: "",
+    cap: "",
+    via: "",
+    provincia: "",
+    role: "partner", // Imposta il ruolo come partner
   });
   const [error, setError] = useState(null); // Stato per gestire eventuali errori
   const [success, setSuccess] = useState(null); // Stato per gestire il successo
-  const navigate = useNavigate(); // Per la navigazione
+
+  const { token } = useSelector((state) => state.auth); // Ottieni il token dallo stato Redux
+  const navigate = useNavigate(); // Usa il hook useNavigate per la navigazione
 
   const handleChange = useCallback((e) => {
     const { id, value } = e.target;
@@ -39,10 +43,13 @@ const AggiungiPartner = () => {
     setError(null); // Resetta lo stato dell'errore
     setSuccess(null); // Resetta lo stato del successo
     try {
-      await addPartner(formData);
+      console.log("Dati inviati al server:", formData); // Log dei dati inviati
+      const response = await addPartner(token, formData); // Passa il token come primo argomento
+      console.log("Risposta del server:", response); // Log della risposta del server
       setSuccess("Partner aggiunto con successo");
       setTimeout(() => navigate("/partner"), 2000); // Naviga alla pagina partner dopo 2 secondi
     } catch (error) {
+      console.error("Errore durante l'aggiunta del partner:", error); // Log degli errori
       setError(error.message); // Imposta il messaggio di errore
     }
   };
@@ -62,37 +69,25 @@ const AggiungiPartner = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <FormInput
-              label="Ragione Sociale"
-              id="ragioneSociale"
-              value={formData.ragioneSociale}
+              label="Nome"
+              id="nome"
+              value={formData.nome}
               onChange={handleChange}
+              type="text"
               required
             />
             <FormInput
-              label="Rappresentante Legale"
-              id="rappresentanteLegale"
-              value={formData.rappresentanteLegale}
+              label="Cognome"
+              id="cognome"
+              value={formData.cognome}
               onChange={handleChange}
+              type="text"
               required
             />
             <FormInput
-              label="Codice Univoco"
-              id="codiceUnivoco"
-              value={formData.codiceUnivoco}
-              onChange={handleChange}
-              required
-            />
-            <FormInput
-              label="Partita IVA"
-              id="partitaIVA"
-              value={formData.partitaIVA}
-              onChange={handleChange}
-              required
-            />
-            <FormInput
-              label="PEC"
-              id="PEC"
-              value={formData.PEC}
+              label="Email"
+              id="email"
+              value={formData.email}
               onChange={handleChange}
               type="email"
               required
@@ -105,20 +100,38 @@ const AggiungiPartner = () => {
               type="tel"
               required
             />
-          </Grid>
-          <Grid item xs={12} sm={6}>
             <FormInput
-              label="Città"
-              id="citta"
-              value={formData.citta}
+              label="Ragione Sociale"
+              id="ragioneSociale"
+              value={formData.ragioneSociale}
               onChange={handleChange}
+              type="text"
               required
             />
             <FormInput
-              label="Via"
-              id="via"
-              value={formData.via}
+              label="Partita IVA"
+              id="partitaIVA"
+              value={formData.partitaIVA}
               onChange={handleChange}
+              type="text"
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormInput
+              label="Codice Univoco"
+              id="codiceUnivoco"
+              value={formData.codiceUnivoco}
+              onChange={handleChange}
+              type="text"
+              required
+            />
+            <FormInput
+              label="PEC"
+              id="pec"
+              value={formData.pec}
+              onChange={handleChange}
+              type="email"
               required
             />
             <FormInput
@@ -126,6 +139,15 @@ const AggiungiPartner = () => {
               id="cap"
               value={formData.cap}
               onChange={handleChange}
+              type="text"
+              required
+            />
+            <FormInput
+              label="Via"
+              id="via"
+              value={formData.via}
+              onChange={handleChange}
+              type="text"
               required
             />
             <FormInput
@@ -133,13 +155,7 @@ const AggiungiPartner = () => {
               id="provincia"
               value={formData.provincia}
               onChange={handleChange}
-              required
-            />
-            <FormInput
-              label="User"
-              id="user"
-              value={formData.user}
-              onChange={handleChange}
+              type="text"
               required
             />
             <FormInput

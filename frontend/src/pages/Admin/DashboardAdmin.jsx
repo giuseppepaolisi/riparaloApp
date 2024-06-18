@@ -1,38 +1,30 @@
-import ticketsData from "../../assets/json/tickets.json";
-import Dashboard from "../../components/Dashboard";
+import { fetchTickets } from '../../api/apiPartner';
+import TicketDashboard from '../../components/Ticket/TicketDashboard';
+import stateColors from '../../assets/json/state.json';
 
-const tableHeaders = [
-  { key: "id", label: "ID Ticket" },
-  { key: "id partner", label: "ID Partner" },
-  { key: "dataApertura", label: "Data apertura" },
-  { key: "stato", label: "Stato" },
-  { key: "leggi", label: "Leggi" },
-  { key: "elimina", label: "Elimina" },
+const columns = [
+  { field: "_id", headerName: "ID", flex: 1 },
+  { field: "id_partner", headerName: "ID Partner", flex: 1 },
+  { field: "stato", headerName: "Stato", flex: 1, renderCell: (params) => {
+    const color = stateColors[params.value] || '#FFFFFF';
+    return (
+      <div style={{ backgroundColor: color, padding: '8px', borderRadius: '4px' }}>
+        {params.value}
+      </div>
+    );
+  }},
 ];
 
-const buttonLabels = {
-  ALL: "TUTTI",
-  Accettato: "ACCETTATO",
-  "Attesa conferma preventivo": "ATTESA CONFERMA PREVENTIVO",
-  Annullato: "ANNULLATO",
-};
-
-const searchFields = {
-  id: "ID Ticket",
-  "id partner": "ID Partner",
-  dataApertura: "Data Apertura",
-};
-
-function DashboardAdmin() {
+const DashboardAdmin = () => {
   return (
-    <Dashboard
-      ticketsData={ticketsData}
-      tableHeaders={tableHeaders}
-      buttonLabels={buttonLabels}
-      searchFields={searchFields}
-      showOpenTicketButton={false}
+    <TicketDashboard
+      title="Dashboard Admin"
+      fetchTickets={fetchTickets}
+      columns={columns}
+      searchFields={["_id", "id_partner", "stato"]}
+      addTicketLink="/apri-ticket"
     />
   );
-}
+};
 
 export default DashboardAdmin;

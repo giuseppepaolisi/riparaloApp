@@ -9,7 +9,6 @@ import { useSelector, useDispatch } from "react-redux";
 import SidebarFactory from "./components/Sidebar/SidebarFactory";
 import DashboardPartner from "./pages/Partner/DashboardPartner";
 import AggiungiCliente from "./pages/Partner/AggiungiCliente";
-import ApriTicket from "./pages/Partner/ApriTicket";
 import Clienti from "./pages/Partner/Clienti";
 import Partner from "./pages/Admin/Partner";
 import Tecnici from "./pages/Admin/Tecnici";
@@ -25,6 +24,8 @@ import DashboardTecnico from "./pages/Tecnico/DashboardTecnico";
 import Error403 from "./pages/error/Error403";
 import Error404 from "./pages/error/Error404";
 import Error500 from "./pages/error/Error500";
+import TicketDetails from "./pages/Ticket/TicketDetails";
+import CreateTicket from "./pages/Ticket/CreateTicket";
 
 import Devices from "./pages/Admin/Devices";
 import AddDevice from "./pages/Admin/AddDevice";
@@ -33,8 +34,6 @@ import ModificaTecnico from "./pages/Admin/ModificaTecnico";
 import ModificaPartner from "./pages/Admin/ModificaPartner";
 import ModificaCliente from "./pages/Partner/ModificaCliente";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
-//import DettaglioCliente from "./pages/Partner/DettaglioCliente";
-//import AccountEdit from "./pages/AccountEdit";  // Importa il nuovo componente
 import EditUser from "./pages/EditUser";
 import UserDetails from "./pages/UserDetails";
 
@@ -72,14 +71,11 @@ const App = () => {
               <Route path="/admin-dashboard" element={<DashboardAdmin />} />
               <Route path="/partner" element={<Partner />} />
               <Route path="/aggiungi-partner" element={<AggiungiPartner />} />
-
               <Route path="/tecnici" element={<Tecnici />} />
               <Route path="/aggiungi-tecnico" element={<AggiungiTecnico />} />
-
               <Route path="/modelli" element={<Devices />} />
               <Route path="/aggiungi-modello" element={<AddDevice />} />
               <Route path="/modifica-modello/:id" element={<EditDevice />} />
-
               <Route path="/partner" element={<Partner />} />
               <Route
                 path="/modifica-partner/:id"
@@ -90,8 +86,6 @@ const App = () => {
                 path="/modifica-tecnico/:id"
                 element={<ModificaTecnico />}
               />
-
-              {/*<Route path="/account" element={<AccountEdit userType="Admin" userData={{ email: 'admin@example.com' }} />} />*/}
               <Route path="/modifica-utente/:id" element={<EditUser />} />
               <Route path="/utente/:id" element={<UserDetails />} />
             </Route>
@@ -100,22 +94,23 @@ const App = () => {
             <Route element={<PrivateRoute roles={["partner"]} />}>
               <Route path="/partner-dashboard" element={<DashboardPartner />} />
               <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />
-              {/*<Route path="/cliente/:id" element={<DettaglioCliente />} />*/}
-              <Route path="/apri-ticket" element={<ApriTicket />} />
+              <Route path="/apri-ticket" element={<CreateTicket />} />
               <Route path="/about-us" element={<AboutUs />} />
-
               <Route path="/clienti" element={<Clienti />} />
               <Route
                 path="/modifica-cliente/:id"
                 element={<ModificaCliente />}
               />
-
-              {/*<Route path="/account" element={<AccountEdit userType="Partner" userData={{ ragioneSociale: 'Partner Srl' }} />} />*/}
             </Route>
 
             {/* Tecnico Routes */}
             <Route element={<PrivateRoute roles={["tecnico", "admin"]} />}>
               <Route path="/tecnico-dashboard" element={<DashboardTecnico />} />
+            </Route>
+
+            {/* Shared Routes */}
+            <Route element={<PrivateRoute roles={["admin", "partner", "tecnico"]} />}>
+              <Route path="/ticket/:id" element={<TicketDetails />} />
             </Route>
 
             {/* Error Routes */}

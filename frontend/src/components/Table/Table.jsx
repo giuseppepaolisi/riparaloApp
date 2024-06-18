@@ -13,11 +13,13 @@ const Table = ({ columns, rows, actions, searchFields }) => {
   }, [rows]);
 
   const handleSearch = (event) => {
-    const value = event.target.value;
+    const value = event.target.value.toLowerCase();
     setSearchTerm(value);
     setFilteredRows(
       rows.filter((row) =>
-        searchFields.some((field) => row[field]?.toString().includes(value))
+        searchFields.some((field) =>
+          row[field]?.toString().toLowerCase().includes(value)
+        )
       )
     );
   };
@@ -34,7 +36,7 @@ const Table = ({ columns, rows, actions, searchFields }) => {
           css={css`
             width: 25%;
           `}
-          sx={{ fontFamily: "Montserrat, sans-serif" }} // Applica il font alla TextField
+          sx={{ fontFamily: "Montserrat, sans-serif" }}
         />
       </Box>
       <DataGrid
@@ -48,7 +50,7 @@ const Table = ({ columns, rows, actions, searchFields }) => {
         }}
         pageSizeOptions={[20, 50]}
         autoHeight
-        sx={{ fontFamily: "Montserrat, sans-serif" }} // Applica il font alla DataGrid
+        sx={{ fontFamily: "Montserrat, sans-serif" }}
       />
     </div>
   );

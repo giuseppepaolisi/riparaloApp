@@ -7,8 +7,7 @@ import { useEffect } from "react";
 import Title from "../components/Title";
 
 const HomePage = () => {
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const { isAuthenticated } = useSelector((state) => state.auth);
 

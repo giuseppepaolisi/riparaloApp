@@ -1,15 +1,15 @@
 {
-  "APERTO": "#FFFFFF",
-  "ACCETTATO": "#8CED58",
-  "RITIRATO": "#58C0ED",
-  "IN_LAVORAZIONE": "#EF690C",
-  "ATTESA_CONFERMA_PREVENTIVO": "#EAF108",
-  "PREVENTIVO_ACCETTATO": "#8CED58",
-  "PREVENTIVO_RIFIUTATO": "#EC2C2C",
-  "COMPLETATO": "#34B302",
-  "ANNULLATO": "#B40000",
-  "ATTESA_RICAMBIO": "#EAF108",
-  "IN_CONSEGNA_COMPLETATO": "#003DB4",
-  "IN_CONSEGNA_ANNULLATO": "#003DB4",
-  "IN_CONSEGNA_RIFIUTATO": "#003DB4"
+  "Aperto": "#FFFFFF",
+  "Accettato": "#8CED58",
+  "Ritirato": "#58C0ED",
+  "In lavorazione": "#EF690C",
+  "Attesa conferma preventivo": "#EAF108",
+  "Preventivo accettato": "#8CED58",
+  "Preventivo rifiutato": "#EC2C2C",
+  "Completato": "#34B302",
+  "Annullato": "#B40000",
+  "Attesa ricambio": "#EAF108",
+  "In consegna completato": "#003DB4",
+  "In consegna annullato": "#003DB4",
+  "In consegna rifiutato": "#003DB4"
 }

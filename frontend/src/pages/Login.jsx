@@ -2,6 +2,7 @@ import { login } from "../redux/auth/slice";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import FormInput from "../components/FormInput";
+import Title from "../components/Title";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -56,6 +57,7 @@ const LoginPage = () => {
           <div className="card">
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Login</h2>
+              <Title title="Login" />
               <form onSubmit={handleLogin}>
                 <FormInput
                   label="E-mail"

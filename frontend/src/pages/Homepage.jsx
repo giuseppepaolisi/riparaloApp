@@ -3,12 +3,18 @@ import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import logo from "../assets/img/logo-riparalo.png";
+import { useEffect } from "react";
+import Title from "../components/Title";
 
 const HomePage = () => {
+  useEffect(() => {
+  }, []);
+
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
     <div style={{ fontFamily: "Open Sans", color: "#009be3" }}>
+      <Title title="Home" />
       <Benvenuto isAuthenticated={isAuthenticated} />
     </div>
   );

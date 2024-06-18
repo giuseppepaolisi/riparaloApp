@@ -7,6 +7,7 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
+import Title from "../../components/Title";
 
 const AggiungiCliente = () => {
   const [email, setEmail] = useState("");
@@ -87,6 +88,7 @@ const AggiungiCliente = () => {
 
   return (
     <FormContainer title="Aggiungi Cliente" maxWidth="sm">
+      <Title title="Aggiungi Cliente" />
       <form onSubmit={handleAggiungiCliente}>
         <Grid container spacing={2}>
           {formFields.map(({ id, label, type, value, onChange }) => (

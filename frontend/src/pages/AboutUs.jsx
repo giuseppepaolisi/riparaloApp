@@ -1,9 +1,11 @@
 import { Container, Row, Col, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Title from "../components/Title";
 
 const AboutUs = () => {
   return (
     <Container className="mt-5">
+      <Title title="Sedi e contatti" />
       <Row className="text-center">
         <Col>
           <h3 className="text-primary">Sedi e contatti</h3>

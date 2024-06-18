@@ -11,6 +11,7 @@ import Loading from "../../components/Loading";
 import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import { Typography } from "@mui/material";
+import Title from "../../components/Title";
 
 const Clienti = () => {
   const [clienti, setClienti] = useState([]);
@@ -97,6 +98,7 @@ const Clienti = () => {
 
   return (
     <div className="container mt-3 mb-4">
+      <Title title="Clienti" />
       <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
         Clienti
       </Typography>

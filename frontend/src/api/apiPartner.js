@@ -152,7 +152,6 @@ export const fetchTickets = async (token) => {
 
     const json = await response.json();
     if (Array.isArray(json.tickets)) {
-      console.log(json);
       return json.tickets;
     } else {
       throw new Error("La risposta del server non è un array");
@@ -161,6 +160,57 @@ export const fetchTickets = async (token) => {
     throw new Error(error.message);
   }
 };
+
+// Nuova funzione per recuperare un ticket specifico
+export const fetchTicketById = async (token, id) => {
+  try {
+    const response = await fetch(`/api/ticket/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore nel recupero del ticket");
+    }
+
+    const data = await response.json();
+    return data.ticket;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const createTicket = async (token, ticketData) => {
+  try {
+    console.log('Token:', token);
+    console.log('Ticket Data:', JSON.stringify(ticketData, null, 2));
+
+    const response = await fetch("/api/ticket", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ticketData),
+    });
+
+    const text = await response.text();
+    console.log("Server response:", text);
+
+    if (!response.ok) {
+      throw new Error("Errore nella creazione del ticket");
+    }
+
+    const data = JSON.parse(text);
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 
 //FUNZIONI PER SVILUPPO FUTURO (VISUALIZZAZIONE CLIENTI)
 export const fetchClienteById = async (token, id) => {

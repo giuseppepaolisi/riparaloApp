@@ -36,6 +36,8 @@ import ModificaCliente from "./pages/Partner/ModificaCliente";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
 import EditUser from "./pages/EditUser";
 import UserDetails from "./pages/UserDetails";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from './theme';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -47,82 +49,84 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <Router>
-      <div className="d-flex">
-        {isAuthenticated && <SidebarFactory />}
-        <div
-          className="flex-grow-1"
-          style={{
-            marginLeft: isAuthenticated ? "200px" : "0",
-            padding: "20px",
-          }}
-        >
-          <Routes>
-            {/* Senza autenticazione */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route
-              path="/login"
-              element={isAuthenticated ? <Navigate to="/" /> : <Login />}
-            />
-
-            {/* Admin Routes */}
-            <Route element={<PrivateRoute roles={["admin"]} />}>
-              <Route path="/admin-dashboard" element={<DashboardAdmin />} />
-              <Route path="/partner" element={<Partner />} />
-              <Route path="/aggiungi-partner" element={<AggiungiPartner />} />
-              <Route path="/tecnici" element={<Tecnici />} />
-              <Route path="/aggiungi-tecnico" element={<AggiungiTecnico />} />
-              <Route path="/modelli" element={<Devices />} />
-              <Route path="/aggiungi-modello" element={<AddDevice />} />
-              <Route path="/modifica-modello/:id" element={<EditDevice />} />
-              <Route path="/partner" element={<Partner />} />
+    <ThemeProvider theme={theme}> {/* Applica il tema personalizzato */}
+      <Router>
+        <div className="d-flex">
+          {isAuthenticated && <SidebarFactory />}
+          <div
+            className="flex-grow-1"
+            style={{
+              marginLeft: isAuthenticated ? "200px" : "0",
+              padding: "20px",
+            }}
+          >
+            <Routes>
+              {/* Senza autenticazione */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/logout" element={<Logout />} />
               <Route
-                path="/modifica-partner/:id"
-                element={<ModificaPartner />}
+                path="/login"
+                element={isAuthenticated ? <Navigate to="/" /> : <Login />}
               />
-              <Route path="/tecnici" element={<Tecnici />} />
+
+              {/* Admin Routes */}
+              <Route element={<PrivateRoute roles={["admin"]} />}>
+                <Route path="/admin-dashboard" element={<DashboardAdmin />} />
+                <Route path="/partner" element={<Partner />} />
+                <Route path="/aggiungi-partner" element={<AggiungiPartner />} />
+                <Route path="/tecnici" element={<Tecnici />} />
+                <Route path="/aggiungi-tecnico" element={<AggiungiTecnico />} />
+                <Route path="/modelli" element={<Devices />} />
+                <Route path="/aggiungi-modello" element={<AddDevice />} />
+                <Route path="/modifica-modello/:id" element={<EditDevice />} />
+                <Route path="/partner" element={<Partner />} />
+                <Route
+                  path="/modifica-partner/:id"
+                  element={<ModificaPartner />}
+                />
+                <Route path="/tecnici" element={<Tecnici />} />
+                <Route
+                  path="/modifica-tecnico/:id"
+                  element={<ModificaTecnico />}
+                />
+                <Route path="/modifica-utente/:id" element={<EditUser />} />
+                <Route path="/utente/:id" element={<UserDetails />} />
+              </Route>
+
+              {/* Partner Routes */}
+              <Route element={<PrivateRoute roles={["partner"]} />}>
+                <Route path="/partner-dashboard" element={<DashboardPartner />} />
+                <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />
+                <Route path="/apri-ticket" element={<CreateTicket />} />
+                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/clienti" element={<Clienti />} />
+                <Route
+                  path="/modifica-cliente/:id"
+                  element={<ModificaCliente />}
+                />
+              </Route>
+
+              {/* Tecnico Routes */}
+              <Route element={<PrivateRoute roles={["tecnico", "admin"]} />}>
+                <Route path="/tecnico-dashboard" element={<DashboardTecnico />} />
+              </Route>
+
+              {/* Shared Routes */}
               <Route
-                path="/modifica-tecnico/:id"
-                element={<ModificaTecnico />}
-              />
-              <Route path="/modifica-utente/:id" element={<EditUser />} />
-              <Route path="/utente/:id" element={<UserDetails />} />
-            </Route>
+                element={<PrivateRoute roles={["admin", "partner", "tecnico"]} />}
+              >
+                <Route path="/ticket/:id" element={<TicketDetails />} />
+              </Route>
 
-            {/* Partner Routes */}
-            <Route element={<PrivateRoute roles={["partner"]} />}>
-              <Route path="/partner-dashboard" element={<DashboardPartner />} />
-              <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />
-              <Route path="/apri-ticket" element={<CreateTicket />} />
-              <Route path="/about-us" element={<AboutUs />} />
-              <Route path="/clienti" element={<Clienti />} />
-              <Route
-                path="/modifica-cliente/:id"
-                element={<ModificaCliente />}
-              />
-            </Route>
-
-            {/* Tecnico Routes */}
-            <Route element={<PrivateRoute roles={["tecnico", "admin"]} />}>
-              <Route path="/tecnico-dashboard" element={<DashboardTecnico />} />
-            </Route>
-
-            {/* Shared Routes */}
-            <Route
-              element={<PrivateRoute roles={["admin", "partner", "tecnico"]} />}
-            >
-              <Route path="/ticket/:id" element={<TicketDetails />} />
-            </Route>
-
-            {/* Error Routes */}
-            <Route path="/403" element={<Error403 />} />
-            <Route path="/500" element={<Error500 />} />
-            <Route path="*" element={<Error404 />} />
-          </Routes>
+              {/* Error Routes */}
+              <Route path="/403" element={<Error403 />} />
+              <Route path="/500" element={<Error500 />} />
+              <Route path="*" element={<Error404 />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </ThemeProvider>
   );
 };
 

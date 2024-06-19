@@ -36,6 +36,7 @@ import ModificaCliente from "./pages/Partner/ModificaCliente";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
 import EditUser from "./pages/EditUser";
 import UserDetails from "./pages/UserDetails";
+import ClienteDetails from "./pages/Partner/ClienteDetails";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from './theme';
 
@@ -104,6 +105,7 @@ const App = () => {
                   path="/modifica-cliente/:id"
                   element={<ModificaCliente />}
                 />
+                <Route path="/cliente/:id" element={<ClienteDetails />} /> {/* Nuova rotta per i dettagli del cliente */}
               </Route>
 
               {/* Tecnico Routes */}

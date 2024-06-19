@@ -27,7 +27,7 @@ const FormActions = ({
         </Button>
       </Grid>
       <Grid item>
-        <Button variant="outlined" color="secondary" onClick={handleCancel}>
+        <Button variant="contained" color="inherit" onClick={handleCancel}>
           Annulla
         </Button>
       </Grid>

@@ -105,6 +105,8 @@ const AddDevice = () => {
             <TextField
               select
               label="Marca"
+              id="marca" // Assicurati che l'id sia "marca"
+              name="marca"
               value={marca}
               onChange={handleChange}
               fullWidth
@@ -126,7 +128,8 @@ const AddDevice = () => {
             <TextField
               label="Modello"
               type="text"
-              id="modello"
+              id="modello" // Assicurati che l'id sia "modello"
+              name="modello"
               value={modello}
               onChange={(e) => setModello(e.target.value)}
               fullWidth
@@ -142,8 +145,8 @@ const AddDevice = () => {
                 <TextField
                   label="Servizio"
                   type="text"
-                  id={`servizio-${index}`}
-                  name="servizio"
+                  id={`servizio-${index}`} // Assicurati che l'id sia unico
+                  name={`servizio-${index}`}
                   value={servizio.servizio}
                   onChange={(e) => handleServizioChange(index, e)}
                   fullWidth
@@ -155,8 +158,8 @@ const AddDevice = () => {
                 <TextField
                   label="Prezzo"
                   type="number"
-                  id={`prezzo-${index}`}
-                  name="prezzo"
+                  id={`prezzo-${index}`} // Assicurati che l'id sia unico
+                  name={`prezzo-${index}`}
                   value={servizio.prezzo}
                   onChange={(e) => handleServizioChange(index, e)}
                   fullWidth
@@ -172,7 +175,7 @@ const AddDevice = () => {
               >
                 <Button
                   variant="contained"
-                  color="secondary"
+                  color="error"
                   onClick={() => handleRemoveServizio(index)}
                 >
                   - Rimuovi

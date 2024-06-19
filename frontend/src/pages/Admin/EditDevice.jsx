@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { Grid, Box, TextField, Button } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import smartphoneBrands from "../../const/brands";
+import FormContainer from "../../components/FormContainer";
 
 const EditDevice = () => {
   const { id } = useParams();
@@ -40,11 +40,6 @@ const EditDevice = () => {
     };
     fetchDevice();
   }, [id, token]);
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setMarca(value);
-  };
 
   const handleServizioChange = (index, event) => {
     const values = [...servizi];
@@ -106,98 +101,122 @@ const EditDevice = () => {
     }
   };
 
+  const handleCancel = () => {
+    navigate("/modelli"); // Reindirizza alla pagina dei dispositivi
+  };
+
   return (
-    <div className="container mt-3 mb-4">
-      <h2>Modifica Dispositivo</h2>
-      <Form onSubmit={handleSubmit}>
-        <Row>
-          <Col>
-            <Form.Group controlId="formMarca">
-              <Form.Label>Marca</Form.Label>
-              <Form.Control
-                as="select"
-                value={marca}
-                onChange={handleChange}
-                required
-              >
-                {smartphoneBrands.map((brand, index) => (
-                  <option key={index} value={brand}>
-                    {brand === "" ? "Seleziona una marca" : brand}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="formModello">
-              <Form.Label>Modello</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Inserisci il modello"
-                value={modello}
-                onChange={(e) => setModello(e.target.value)}
-                required
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+    <FormContainer title="Modifica Dispositivo">
+      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
+      <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
+        <Grid container spacing={2} alignItems="flex-end">
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Marca"
+              id="marca"
+              name="marca"
+              value={marca}
+              onChange={(e) => setMarca(e.target.value)}
+              fullWidth
+              required
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Modello"
+              type="text"
+              id="modello"
+              name="modello"
+              value={modello}
+              onChange={(e) => setModello(e.target.value)}
+              fullWidth
+              required
+              variant="outlined"
+            />
+          </Grid>
+        </Grid>
         {servizi.map((servizio, index) => (
-          <div key={index} className="my-3">
-            <Row>
-              <Col>
-                <Form.Group controlId={`formServizio${index}`}>
-                  <Form.Label>Servizio</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Inserisci il servizio"
-                    name="servizio"
-                    value={servizio.servizio}
-                    onChange={(e) => handleServizioChange(index, e)}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col xs="auto" className="d-flex align-items-end">
-                <Form.Group controlId={`formPrezzo${index}`}>
-                  <Form.Label>Prezzo</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Inserisci il prezzo"
-                    name="prezzo"
-                    value={servizio.prezzo}
-                    onChange={(e) => handleServizioChange(index, e)}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col xs="auto" className="d-flex align-items-end">
+          <Box key={index} sx={{ my: 3 }}>
+            <Grid container spacing={2} alignItems="flex-end">
+              <Grid item xs={12} sm={5}>
+                <TextField
+                  label="Servizio"
+                  type="text"
+                  id={`servizio-${index}`}
+                  name="servizio"
+                  value={servizio.servizio}
+                  onChange={(e) => handleServizioChange(index, e)}
+                  fullWidth
+                  required
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  label="Prezzo"
+                  type="number"
+                  id={`prezzo-${index}`}
+                  name="prezzo"
+                  value={servizio.prezzo}
+                  onChange={(e) => handleServizioChange(index, e)}
+                  fullWidth
+                  required
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={3}
+                sx={{ display: "flex", alignItems: "center" }}
+              >
                 <Button
-                  variant="danger"
+                  variant="contained"
+                  color="error"
                   onClick={() => handleRemoveServizio(index)}
                 >
                   - Rimuovi
                 </Button>
-              </Col>
-            </Row>
-          </div>
+              </Grid>
+            </Grid>
+          </Box>
         ))}
-        <Row>
-          <Col xs={6} className="mx-auto">
-            <Button variant="primary" onClick={handleAddServizio}>
+        <Grid container justifyContent="center">
+          <Grid item>
+            <Button
+              variant="contained"
+              onClick={handleAddServizio}
+              sx={{ mb: 3 }}
+            >
               + Aggiungi Servizio
             </Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={6} className="mx-auto">
-            <Button variant="success" type="submit" className="mt-3">
+          </Grid>
+        </Grid>
+        <Grid container justifyContent="center" spacing={2}>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="success"
+              type="submit"
+              sx={{ mb: 3 }}
+            >
               Invia
             </Button>
-          </Col>
-        </Row>
-      </Form>
-      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
-    </div>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="inherit"
+              onClick={handleCancel}
+              sx={{ mb: 3 }}
+            >
+              Annulla
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </FormContainer>
   );
 };
 

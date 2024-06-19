@@ -26,7 +26,11 @@ const columns = [
       );
     },
   },
-  { field: "descrizione_problema", headerName: "Descrizione Problema", flex: 1 }
+  {
+    field: "descrizione_problema",
+    headerName: "Descrizione Problema",
+    flex: 1,
+  },
 ];
 
 const DashboardTecnico = () => {
@@ -35,7 +39,14 @@ const DashboardTecnico = () => {
       title="Dashboard Tecnico"
       fetchTickets={fetchTickets}
       columns={columns}
-      searchFields={["_id", "id_partner", "marca", "modello", "stato", "descrizione_problema"]}
+      searchFields={[
+        "_id",
+        "id_partner",
+        "marca",
+        "modello",
+        "stato",
+        "descrizione_problema",
+      ]}
       addTicketLink="/apri-ticket"
     />
   );

@@ -109,7 +109,9 @@ const App = () => {
             </Route>
 
             {/* Shared Routes */}
-            <Route element={<PrivateRoute roles={["admin", "partner", "tecnico"]} />}>
+            <Route
+              element={<PrivateRoute roles={["admin", "partner", "tecnico"]} />}
+            >
               <Route path="/ticket/:id" element={<TicketDetails />} />
             </Route>
 

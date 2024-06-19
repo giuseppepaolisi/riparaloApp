@@ -27,7 +27,11 @@ const columns = [
       );
     },
   },
-  { field: "descrizione_problema", headerName: "Descrizione Problema", flex: 1 },
+  {
+    field: "descrizione_problema",
+    headerName: "Descrizione Problema",
+    flex: 1,
+  },
 ];
 
 const DashboardPartner = () => {
@@ -36,7 +40,15 @@ const DashboardPartner = () => {
       title="Dashboard Partner"
       fetchTickets={fetchTickets}
       columns={columns}
-      searchFields={["_id", "nome_cliente", "cognome_cliente", "marca", "modello", "stato", "descrizione_problema"]}
+      searchFields={[
+        "_id",
+        "nome_cliente",
+        "cognome_cliente",
+        "marca",
+        "modello",
+        "stato",
+        "descrizione_problema",
+      ]}
       addTicketLink="/apri-ticket"
     />
   );

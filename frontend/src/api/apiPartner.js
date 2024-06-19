@@ -185,8 +185,8 @@ export const fetchTicketById = async (token, id) => {
 
 export const createTicket = async (token, ticketData) => {
   try {
-    console.log('Token:', token);
-    console.log('Ticket Data:', JSON.stringify(ticketData, null, 2));
+    console.log("Token:", token);
+    console.log("Ticket Data:", JSON.stringify(ticketData, null, 2));
 
     const response = await fetch("/api/ticket", {
       method: "POST",
@@ -210,7 +210,6 @@ export const createTicket = async (token, ticketData) => {
     throw new Error(error.message);
   }
 };
-
 
 //FUNZIONI PER SVILUPPO FUTURO (VISUALIZZAZIONE CLIENTI)
 export const fetchClienteById = async (token, id) => {

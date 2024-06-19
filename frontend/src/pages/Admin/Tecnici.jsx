@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchTecnici, deleteTecnico } from "../../api/apiTecnico";
+import { fetchTecnici, deleteTecnico, fetchTecnicoById } from "../../api/apiTecnico";
 import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
 import EditButton from "../../components/Action/EditButton";
@@ -10,12 +10,14 @@ import Table from "../../components/Table/Table";
 import Loading from "../../components/Loading";
 import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
+import TecnicoDetailModal from "../../components/Modal/TecnicoDetailModal";
 import { Typography } from "@mui/material";
 
 const Tecnici = () => {
   const [tecnici, setTecnici] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
+  const [detailModal, setDetailModal] = useState({ isOpen: false, tecnico: null });
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const navigate = useNavigate();
 
@@ -67,7 +69,13 @@ const Tecnici = () => {
   };
 
   const handleDetail = async (id) => {
-    navigate(`/tecnico/${id}`);
+    if (!token) return;
+    try {
+      const tecnico = await fetchTecnicoById(token, id);
+      setDetailModal({ isOpen: true, tecnico });
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   const handleEdit = (id) => {
@@ -114,6 +122,13 @@ const Tecnici = () => {
               message={`Sei sicuro di voler eliminare questo tecnico?`}
               onDelete={confirmDelete}
               onCancel={cancelDelete}
+            />
+          )}
+          {detailModal.isOpen && (
+            <TecnicoDetailModal
+              open={detailModal.isOpen}
+              onClose={() => setDetailModal({ isOpen: false, tecnico: null })}
+              tecnico={detailModal.tecnico}
             />
           )}
           {alert.open && (

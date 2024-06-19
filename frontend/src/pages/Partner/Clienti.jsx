@@ -67,7 +67,7 @@ const Clienti = () => {
     setDeleteModal({ isOpen: false, item: null });
   };
 
-  const handleDetail = async (id) => {
+  const handleDetail = (id) => {
     navigate(`/cliente/${id}`);
   };
 

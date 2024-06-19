@@ -24,8 +24,6 @@ const headerStyle = css`
 `;
 
 const PartnerDetailModal = ({ open, onClose, partner }) => {
-  if (!partner) return null;
-
   return (
     <Modal open={open} onClose={onClose}>
       <Box css={modalStyle}>
@@ -37,27 +35,21 @@ const PartnerDetailModal = ({ open, onClose, partner }) => {
             <CloseIcon />
           </IconButton>
         </div>
-        <Typography sx={{ mt: 2 }}>
-          <strong>Ragione Sociale:</strong> {partner.ragioneSociale}
-        </Typography>
-        <Typography sx={{ mt: 1 }}>
-          <strong>Nome:</strong> {partner.nome}
-        </Typography>
-        <Typography sx={{ mt: 1 }}>
-          <strong>Email:</strong> {partner.email}
-        </Typography>
-        <Typography sx={{ mt: 1 }}>
-          <strong>Provincia:</strong> {partner.provincia}
-        </Typography>
-        <Typography sx={{ mt: 1 }}>
-          <strong>Telefono:</strong> {partner.telefono}
-        </Typography>
-        <Typography sx={{ mt: 1 }}>
-          <strong>Pec:</strong> {partner.pec}
-        </Typography>
-        <Typography sx={{ mt: 1 }}>
-          <strong>Partita IVA:</strong> {partner.partitaIVA}
-        </Typography>
+        {partner && (
+          <Box mt={2}>
+            <Typography variant="body1"><strong>Nome:</strong> {partner.nome}</Typography>
+            <Typography variant="body1"><strong>Cognome:</strong> {partner.cognome}</Typography>
+            <Typography variant="body1"><strong>Email:</strong> {partner.email}</Typography>
+            <Typography variant="body1"><strong>Telefono:</strong> {partner.telefono}</Typography>
+            <Typography variant="body1"><strong>Ragione Sociale:</strong> {partner.ragioneSociale}</Typography>
+            <Typography variant="body1"><strong>Partita IVA:</strong> {partner.partitaIVA}</Typography>
+            <Typography variant="body1"><strong>Codice Univoco:</strong> {partner.codiceUnivoco}</Typography>
+            <Typography variant="body1"><strong>PEC:</strong> {partner.pec}</Typography>
+            <Typography variant="body1"><strong>CAP:</strong> {partner.cap}</Typography>
+            <Typography variant="body1"><strong>Via:</strong> {partner.via}</Typography>
+            <Typography variant="body1"><strong>Provincia:</strong> {partner.provincia}</Typography>
+          </Box>
+        )}
       </Box>
     </Modal>
   );
@@ -66,15 +58,7 @@ const PartnerDetailModal = ({ open, onClose, partner }) => {
 PartnerDetailModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  partner: PropTypes.shape({
-    ragioneSociale: PropTypes.string.isRequired,
-    nome: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    provincia: PropTypes.string.isRequired,
-    telefono: PropTypes.string.isRequired,
-    pec: PropTypes.string.isRequired,
-    partitaIVA: PropTypes.string.isRequired,
-  }),
+  partner: PropTypes.object,
 };
 
 export default PartnerDetailModal;

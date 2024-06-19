@@ -1,28 +1,28 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import FormContainer from '../../components/FormContainer';
-import FormInput from '../../components/FormInput';
-import FormActions from '../../components/FormActions';
-import CustomAlert from '../../components/Alert/CustomAlert';
-import { createTicket } from '../../api/apiPartner';
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import FormContainer from "../../components/FormContainer";
+import FormInput from "../../components/FormInput";
+import FormActions from "../../components/FormActions";
+import CustomAlert from "../../components/Alert/CustomAlert";
+import { createTicket } from "../../api/apiPartner";
 
 const CreateTicket = () => {
   const [formData, setFormData] = useState({
-    nome_cliente: '',
-    cognome_cliente: '',
-    telefono_cliente: '',
-    descrizione_problema: '',
-    marca: '',
-    modello: '',
-    servizi: [{ servizio: '', prezzo: '' }],
-    acconto: '',
-    imei: '',
-    pin: '',
-    seriale: '',
+    nome_cliente: "",
+    cognome_cliente: "",
+    telefono_cliente: "",
+    descrizione_problema: "",
+    marca: "",
+    modello: "",
+    servizi: [{ servizio: "", prezzo: "" }],
+    acconto: "",
+    imei: "",
+    pin: "",
+    seriale: "",
   });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -42,24 +42,26 @@ const CreateTicket = () => {
   const addService = () => {
     setFormData({
       ...formData,
-      servizi: [...formData.servizi, { servizio: '', prezzo: '' }],
+      servizi: [...formData.servizi, { servizio: "", prezzo: "" }],
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
-    
+    setError("");
+    setSuccess("");
+
     // Filtra i servizi vuoti
-    const filteredServices = formData.servizi.filter(service => service.servizio && service.prezzo);
-    
+    const filteredServices = formData.servizi.filter(
+      (service) => service.servizio && service.prezzo
+    );
+
     try {
       await createTicket(token, { ...formData, servizi: filteredServices });
-      setSuccess('Ticket creato con successo');
-      setTimeout(() => navigate('/partner-dashboard'), 2000);
+      setSuccess("Ticket creato con successo");
+      setTimeout(() => navigate("/partner-dashboard"), 2000);
     } catch (err) {
-      setError('Errore nella creazione del ticket');
+      setError("Errore nella creazione del ticket");
     }
   };
 
@@ -134,7 +136,9 @@ const CreateTicket = () => {
             />
           </div>
         ))}
-        <button type="button" onClick={addService}>Aggiungi Servizio</button>
+        <button type="button" onClick={addService}>
+          Aggiungi Servizio
+        </button>
         <FormInput
           id="acconto"
           label="Acconto"
@@ -169,8 +173,20 @@ const CreateTicket = () => {
         />
         <FormActions onSubmit={handleSubmit} />
       </form>
-      {error && <CustomAlert msg={error} severity="error" onClose={() => setError('')} />}
-      {success && <CustomAlert msg={success} severity="success" onClose={() => setSuccess('')} />}
+      {error && (
+        <CustomAlert
+          msg={error}
+          severity="error"
+          onClose={() => setError("")}
+        />
+      )}
+      {success && (
+        <CustomAlert
+          msg={success}
+          severity="success"
+          onClose={() => setSuccess("")}
+        />
+      )}
     </FormContainer>
   );
 };

@@ -18,7 +18,10 @@ const Table = ({ columns, rows, actions, searchFields }) => {
     setFilteredRows(
       rows.filter((row) =>
         searchFields.some((field) =>
-          row[field]?.toString().toLowerCase().includes(value)
+          row[field]
+            ?.toString()
+            .toLowerCase()
+            .includes(value)
         )
       )
     );

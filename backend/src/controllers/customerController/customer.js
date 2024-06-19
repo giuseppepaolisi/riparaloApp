@@ -78,21 +78,25 @@ const deleteCustomer = async (req, res, next) => {
 };
 
 // Ritorna i dati di un singolo cliente
-// !!ATTENZIONE chiunque passando l'id può prendere questi dati
-/*
 const getCustomer = async (req, res, next) => {
   const { id } = req.params;
+  const partner = req.user._id;  // Assicurati di avere il partner id nel token
   try {
-    const customer = await Customer.findOne({ _id: id });
+    const customer = await Customer.findOne({ _id: id, partner });
+
+    if (!customer) {
+      return next(new ErrorResponse('Cliente non trovato', 404));
+    }
 
     res.status(200).json({ customer });
   } catch (error) {
     next(error);
   }
-};*/
+};
 
 module.exports = {
   createCustomer,
   getCustomers,
   deleteCustomer,
+  getCustomer,
 };

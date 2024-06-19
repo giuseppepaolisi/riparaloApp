@@ -233,6 +233,10 @@ export const fetchClienteById = async (token, id) => {
   }
 };
 
+
+
+
+
 //FUNZIONI PER SVILUPPO FUTURO (VISUALIZZAZIONE PARTNER)
 export const fetchPartnerById = async (token, id) => {
   try {

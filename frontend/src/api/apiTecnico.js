@@ -96,7 +96,6 @@ export const updateTecnico = async (token, id, updatedData) => {
 
 export const fetchTecnicoById = async (token, id) => {
   try {
-    console.log(`Fetching tecnico with ID: ${id}`); // Log ID tecnico
     const response = await fetch(`/api/user/${id}`, {
       method: "GET",
       headers: {
@@ -110,8 +109,9 @@ export const fetchTecnicoById = async (token, id) => {
     }
 
     const data = await response.json();
-    return data.user; // Assicurati di ritornare l'oggetto utente
+    return data.user;
   } catch (error) {
     throw new Error(error.message);
   }
 };
+

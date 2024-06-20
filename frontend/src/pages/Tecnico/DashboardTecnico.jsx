@@ -33,6 +33,13 @@ const columns = [
   },
 ];
 
+const filterStatuses = [
+  { label: "Aperto", color: stateColors["Aperto"], filterValue: "aperto" },
+  { label: "In attesa", color: stateColors["Attesa conferma preventivo"], filterValue: "attesa" },
+  { label: "Annullato", color: stateColors["Annullato"], filterValue: "annullato" },
+  { label: "Completato", color: stateColors["Completato"], filterValue: "completato" },
+];
+
 const DashboardTecnico = () => {
   return (
     <TicketDashboard
@@ -48,6 +55,8 @@ const DashboardTecnico = () => {
         "descrizione_problema",
       ]}
       addTicketLink="/apri-ticket"
+      filterStatuses={filterStatuses}
+      alignSearchWithFilters={true} // Pass this prop
     />
   );
 };

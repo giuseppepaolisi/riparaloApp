@@ -9,6 +9,7 @@ import DetailButton from "../Action/DetailButton";
 import EditButton from "../Action/EditButton";
 import DeleteButton from "../Action/DeleteButton";
 import StatusFilterButtons from "../../components/StatusFilterButtons";
+import { fetchTicketsByState, deleteTicket } from "../../api/apiPartner";
 
 const TicketDashboard = ({
   title,
@@ -26,20 +27,25 @@ const TicketDashboard = ({
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchTicketsData = async () => {
-      try {
-        const data = await fetchTickets(token);
-        setTickets(data);
-      } catch (error) {
-        console.error("Error fetching tickets:", error);
+  const fetchTicketsData = useCallback(async () => {
+    try {
+      let data;
+      if (statusFilter) {
+        data = await fetchTicketsByState(token, statusFilter);
+      } else {
+        data = await fetchTickets(token);
       }
-    };
+      setTickets(data);
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+    }
+  }, [token, statusFilter, fetchTickets]);
 
+  useEffect(() => {
     if (token) {
       fetchTicketsData();
     }
-  }, [token, fetchTickets]);
+  }, [token, statusFilter, fetchTicketsData]);
 
   const handleDetail = useCallback(
     (id) => {
@@ -55,9 +61,17 @@ const TicketDashboard = ({
     [navigate]
   );
 
-  const handleDelete = useCallback((id) => {
-    console.log(`Elimina ticket con ID: ${id}`);
-  }, []);
+  const handleDelete = useCallback(
+    async (id) => {
+      try {
+        await deleteTicket(token, id);
+        setTickets((prevTickets) => prevTickets.filter((ticket) => ticket._id !== id));
+      } catch (error) {
+        console.error("Error deleting ticket:", error);
+      }
+    },
+    [token]
+  );
 
   const actionColumns = [
     ...columns,
@@ -105,11 +119,11 @@ const TicketDashboard = ({
         rows={tickets}
         actions={!alignSearchWithFilters && showAddButton && <AddButton label="Apri Ticket" link={addTicketLink} />}
         searchFields={searchFields}
-        customStyles={!alignSearchWithFilters && { marginLeft: "auto" }} // Apply styles only when alignSearchWithFilters is false
+        customStyles={!alignSearchWithFilters ? { marginLeft: "auto" } : {}}
         statusFilter={statusFilter}
-        searchTerm={searchTerm} // Always pass searchTerm
-        showSearchBar={!alignSearchWithFilters} // Pass prop to show or hide search bar in TicketTable
-        setSearchTerm={setSearchTerm} // Pass setSearchTerm as a prop
+        searchTerm={searchTerm}
+        showSearchBar={!alignSearchWithFilters}
+        setSearchTerm={setSearchTerm}
       />
     </div>
   );
@@ -136,12 +150,12 @@ TicketDashboard.propTypes = {
       filterValue: PropTypes.string.isRequired,
     })
   ).isRequired,
-  alignSearchWithFilters: PropTypes.bool, // Add this prop
+  alignSearchWithFilters: PropTypes.bool,
 };
 
 TicketDashboard.defaultProps = {
   showAddButton: false,
-  alignSearchWithFilters: false, // Default to false
+  alignSearchWithFilters: false,
 };
 
 export default TicketDashboard;

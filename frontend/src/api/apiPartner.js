@@ -161,6 +161,51 @@ export const fetchTickets = async (token) => {
   }
 };
 
+export const fetchTicketsByState = async (token, stato) => {
+  try {
+    const response = await fetch(`/api/tickets/${stato}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Errore nel recupero dei ticket per stato: ${stato}`);
+    }
+
+    const json = await response.json();
+    if (Array.isArray(json.tickets)) {
+      return json.tickets;
+    } else {
+      throw new Error("La risposta del server non è un array");
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const deleteTicket = async (token, id) => {
+  try {
+    const response = await fetch(`/api/ticket/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Errore nell'eliminazione del ticket");
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+
 // Nuova funzione per recuperare un ticket specifico
 export const fetchTicketById = async (token, id) => {
   try {

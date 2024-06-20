@@ -1,46 +1,52 @@
-import React from "react";
+import { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { DataGrid } from "@mui/x-data-grid";
 import { TextField, Box } from "@mui/material";
 import { css } from "@emotion/react";
 
-const TicketTable = ({ columns, rows, actions, searchFields }) => {
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [filteredRows, setFilteredRows] = React.useState(rows);
+const TicketTable = ({ columns, rows, actions, searchFields, customStyles, statusFilter, searchTerm, showSearchBar, setSearchTerm }) => {
+  const [filteredRows, setFilteredRows] = useState([]);
 
-  React.useEffect(() => {
-    setFilteredRows(rows);
-  }, [rows]);
+  const filterRows = useCallback(() => {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
+    const regexSearch = new RegExp(lowerCaseSearchTerm.replace(/\s+/g, ".*"), "i");
+    const filtered = rows.filter((row) => {
+      const matchesSearch = searchFields.some((field) =>
+        regexSearch.test(row[field]?.toString().toLowerCase())
+      );
+      const matchesStatus = statusFilter
+        ? row.stato.toLowerCase().includes(statusFilter.toLowerCase())
+        : true;
+      return matchesSearch && matchesStatus;
+    });
+    setFilteredRows(filtered);
+  }, [rows, searchTerm, searchFields, statusFilter]);
 
-  const handleSearch = (event) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-    setFilteredRows(
-      rows.filter((row) =>
-        searchFields.some((field) => row[field]?.toString().includes(value))
-      )
-    );
-  };
+  useEffect(() => {
+    filterRows();
+  }, [rows, searchTerm, statusFilter, filterRows]);
 
   return (
     <div>
       <Box display="flex" justifyContent="space-between" mb={3}>
         {actions}
-        <TextField
-          label="Cerca"
-          variant="outlined"
-          value={searchTerm}
-          onChange={handleSearch}
-          css={css`
-            width: 25%;
-          `}
-          sx={{ fontFamily: "Montserrat, sans-serif" }}
-        />
+        {showSearchBar && (
+          <TextField
+            label="Cerca"
+            variant="outlined"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)} // Usa setSearchTerm passato come prop
+            css={css`
+              width: 25%;
+            `}
+            sx={{ ...customStyles }}
+          />
+        )}
       </Box>
       <DataGrid
         rows={filteredRows}
         columns={columns}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row._id || row.id} // Specifica un id unico
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 20 },
@@ -66,6 +72,19 @@ TicketTable.propTypes = {
   rows: PropTypes.arrayOf(PropTypes.object).isRequired,
   actions: PropTypes.node,
   searchFields: PropTypes.arrayOf(PropTypes.string).isRequired,
+  customStyles: PropTypes.object,
+  statusFilter: PropTypes.string, // Add statusFilter prop
+  searchTerm: PropTypes.string, // Add searchTerm prop
+  showSearchBar: PropTypes.bool, // Add showSearchBar prop
+  setSearchTerm: PropTypes.func, // Add setSearchTerm prop
+};
+
+TicketTable.defaultProps = {
+  customStyles: {},
+  statusFilter: "", // Default statusFilter to an empty string
+  searchTerm: "", // Default searchTerm to an empty string
+  showSearchBar: true, // Default to true
+  setSearchTerm: () => {}, // Default to an empty function
 };
 
 export default TicketTable;

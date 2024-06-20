@@ -1,27 +1,25 @@
 import PropTypes from "prop-types";
-import { Button, Box } from "@mui/material";
+import { Button } from "@mui/material";
 
 const StatusFilterButtons = ({ statuses, onFilterChange }) => {
   return (
-    <Box mb={3} display="flex" gap={2}>
+    <div>
       <Button
-        variant="contained"
-        onClick={() => onFilterChange("")}
-        style={{ backgroundColor: "#007bff", color: "#fff" }} // ensure contrast and visibility
+        style={{ backgroundColor: '#007bff', color: '#000', border: '1px solid #000', margin: '0 5px' }}
+        onClick={() => onFilterChange('')}
       >
         TUTTI
       </Button>
       {statuses.map((status) => (
         <Button
-          key={status.label}
-          variant="contained"
-          style={{ backgroundColor: status.color, color: "#000", minWidth: "100px" }} // ensure visibility and spacing
+          key={status.filterValue}
+          style={{ backgroundColor: status.color, color: '#000', border: '1px solid #000', margin: '0 5px' }}
           onClick={() => onFilterChange(status.filterValue)}
         >
           {status.label}
         </Button>
       ))}
-    </Box>
+    </div>
   );
 };
 
@@ -30,7 +28,7 @@ StatusFilterButtons.propTypes = {
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       color: PropTypes.string.isRequired,
-      filterValue: PropTypes.string.isRequired, // Add filterValue prop
+      filterValue: PropTypes.string.isRequired,
     })
   ).isRequired,
   onFilterChange: PropTypes.func.isRequired,

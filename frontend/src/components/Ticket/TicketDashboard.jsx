@@ -65,7 +65,9 @@ const TicketDashboard = ({
     async (id) => {
       try {
         await deleteTicket(token, id);
-        setTickets((prevTickets) => prevTickets.filter((ticket) => ticket._id !== id));
+        setTickets((prevTickets) =>
+          prevTickets.filter((ticket) => ticket._id !== id)
+        );
       } catch (error) {
         console.error("Error deleting ticket:", error);
       }
@@ -102,8 +104,16 @@ const TicketDashboard = ({
       <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
         {title}
       </Typography>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <StatusFilterButtons statuses={filterStatuses} onFilterChange={handleFilterChange} />
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
+        <StatusFilterButtons
+          statuses={filterStatuses}
+          onFilterChange={handleFilterChange}
+        />
         {alignSearchWithFilters && (
           <TextField
             label="Cerca"
@@ -117,7 +127,12 @@ const TicketDashboard = ({
       <TicketTable
         columns={actionColumns}
         rows={tickets}
-        actions={!alignSearchWithFilters && showAddButton && <AddButton label="Apri Ticket" link={addTicketLink} />}
+        actions={
+          !alignSearchWithFilters &&
+          showAddButton && (
+            <AddButton label="Apri Ticket" link={addTicketLink} />
+          )
+        }
         searchFields={searchFields}
         customStyles={!alignSearchWithFilters ? { marginLeft: "auto" } : {}}
         statusFilter={statusFilter}

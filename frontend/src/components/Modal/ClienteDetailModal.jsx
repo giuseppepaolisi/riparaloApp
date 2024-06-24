@@ -37,11 +37,21 @@ const ClienteDetailModal = ({ open, onClose, cliente }) => {
         </div>
         {cliente && (
           <Box mt={2}>
-            <Typography variant="body1"><strong>Nome:</strong> {cliente.nome}</Typography>
-            <Typography variant="body1"><strong>Cognome:</strong> {cliente.cognome}</Typography>
-            <Typography variant="body1"><strong>Email:</strong> {cliente.email}</Typography>
-            <Typography variant="body1"><strong>Telefono:</strong> {cliente.telefono}</Typography>
-            <Typography variant="body1"><strong>Indirizzo:</strong> {cliente.indirizzo}</Typography>
+            <Typography variant="body1">
+              <strong>Nome:</strong> {cliente.nome}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Cognome:</strong> {cliente.cognome}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Email:</strong> {cliente.email}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Telefono:</strong> {cliente.telefono}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Indirizzo:</strong> {cliente.indirizzo}
+            </Typography>
             {/* Aggiungi altri campi come necessario */}
           </Box>
         )}

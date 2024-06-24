@@ -35,9 +35,21 @@ const columns = [
 ];
 
 const filterStatuses = [
-  { label: "Accettato", color: stateColors["Accettato"], filterValue: "accettato" },
-  { label: "In attesa", color: stateColors["Attesa conferma preventivo"], filterValue: "attesa" },
-  { label: "Annullato", color: stateColors["Annullato"], filterValue: "annullato" },
+  {
+    label: "Accettato",
+    color: stateColors["Accettato"],
+    filterValue: "accettato",
+  },
+  {
+    label: "In attesa",
+    color: stateColors["Attesa conferma preventivo"],
+    filterValue: "attesa",
+  },
+  {
+    label: "Annullato",
+    color: stateColors["Annullato"],
+    filterValue: "annullato",
+  },
 ];
 
 const DashboardPartner = () => {

@@ -27,11 +27,31 @@ const columns = [
 ];
 
 const filterStatuses = [
-  { label: "Accettato", color: stateColors["Accettato"], filterValue: "accettato" },
-  { label: "In attesa", color: stateColors["Attesa conferma preventivo"], filterValue: "attesa" },
-  { label: "Annullato", color: stateColors["Annullato"], filterValue: "annullato" },
-  { label: "Completato", color: stateColors["Completato"], filterValue: "completato" },
-  { label: "Rifiutato", color: stateColors["Preventivo rifiutato"], filterValue: "rifiutato" },
+  {
+    label: "Accettato",
+    color: stateColors["Accettato"],
+    filterValue: "accettato",
+  },
+  {
+    label: "In attesa",
+    color: stateColors["Attesa conferma preventivo"],
+    filterValue: "attesa",
+  },
+  {
+    label: "Annullato",
+    color: stateColors["Annullato"],
+    filterValue: "annullato",
+  },
+  {
+    label: "Completato",
+    color: stateColors["Completato"],
+    filterValue: "completato",
+  },
+  {
+    label: "Rifiutato",
+    color: stateColors["Preventivo rifiutato"],
+    filterValue: "rifiutato",
+  },
 ];
 
 const DashboardAdmin = () => {

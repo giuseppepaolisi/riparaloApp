@@ -38,7 +38,7 @@ import EditUser from "./pages/EditUser";
 import UserDetails from "./pages/UserDetails";
 import ClienteDetails from "./pages/Partner/ClienteDetails";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from './theme';
+import theme from "./theme";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -50,7 +50,9 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <ThemeProvider theme={theme}> {/* Applica il tema personalizzato */}
+    <ThemeProvider theme={theme}>
+      {" "}
+      {/* Applica il tema personalizzato */}
       <Router>
         <div className="d-flex">
           {isAuthenticated && <SidebarFactory />}
@@ -96,7 +98,10 @@ const App = () => {
 
               {/* Partner Routes */}
               <Route element={<PrivateRoute roles={["partner"]} />}>
-                <Route path="/partner-dashboard" element={<DashboardPartner />} />
+                <Route
+                  path="/partner-dashboard"
+                  element={<DashboardPartner />}
+                />
                 <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />
                 <Route path="/apri-ticket" element={<CreateTicket />} />
                 <Route path="/about-us" element={<AboutUs />} />
@@ -105,17 +110,23 @@ const App = () => {
                   path="/modifica-cliente/:id"
                   element={<ModificaCliente />}
                 />
-                <Route path="/cliente/:id" element={<ClienteDetails />} /> {/* Nuova rotta per i dettagli del cliente */}
+                <Route path="/cliente/:id" element={<ClienteDetails />} />{" "}
+                {/* Nuova rotta per i dettagli del cliente */}
               </Route>
 
               {/* Tecnico Routes */}
               <Route element={<PrivateRoute roles={["tecnico", "admin"]} />}>
-                <Route path="/tecnico-dashboard" element={<DashboardTecnico />} />
+                <Route
+                  path="/tecnico-dashboard"
+                  element={<DashboardTecnico />}
+                />
               </Route>
 
               {/* Shared Routes */}
               <Route
-                element={<PrivateRoute roles={["admin", "partner", "tecnico"]} />}
+                element={
+                  <PrivateRoute roles={["admin", "partner", "tecnico"]} />
+                }
               >
                 <Route path="/ticket/:id" element={<TicketDetails />} />
               </Route>

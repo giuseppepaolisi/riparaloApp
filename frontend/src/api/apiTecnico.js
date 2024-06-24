@@ -114,4 +114,3 @@ export const fetchTecnicoById = async (token, id) => {
     throw new Error(error.message);
   }
 };
-

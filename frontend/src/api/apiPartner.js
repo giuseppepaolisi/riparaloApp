@@ -205,7 +205,6 @@ export const deleteTicket = async (token, id) => {
   }
 };
 
-
 // Nuova funzione per recuperare un ticket specifico
 export const fetchTicketById = async (token, id) => {
   try {
@@ -277,10 +276,6 @@ export const fetchClienteById = async (token, id) => {
     throw new Error(error.message);
   }
 };
-
-
-
-
 
 //FUNZIONI PER SVILUPPO FUTURO (VISUALIZZAZIONE PARTNER)
 export const fetchPartnerById = async (token, id) => {

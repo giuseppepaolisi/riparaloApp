@@ -41,11 +41,21 @@ const TecnicoDetailModal = ({ open, onClose, tecnico }) => {
         </div>
         {tecnico && (
           <Box mt={2}>
-            <Typography variant="body1"><strong>Nome:</strong> {capitalizeFirstLetter(tecnico.nome)}</Typography>
-            <Typography variant="body1"><strong>Cognome:</strong> {capitalizeFirstLetter(tecnico.cognome)}</Typography>
-            <Typography variant="body1"><strong>Email:</strong> {tecnico.email}</Typography>
-            <Typography variant="body1"><strong>Telefono:</strong> {tecnico.telefono}</Typography>
-            <Typography variant="body1"><strong>Specializzazione:</strong> {tecnico.specializzazione}</Typography>
+            <Typography variant="body1">
+              <strong>Nome:</strong> {capitalizeFirstLetter(tecnico.nome)}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Cognome:</strong> {capitalizeFirstLetter(tecnico.cognome)}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Email:</strong> {tecnico.email}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Telefono:</strong> {tecnico.telefono}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Specializzazione:</strong> {tecnico.specializzazione}
+            </Typography>
             {/* Aggiungi altri campi come necessario */}
           </Box>
         )}

@@ -1,7 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchPartners, deletePartner, fetchPartnerById } from "../../api/apiPartner";
+import {
+  fetchPartners,
+  deletePartner,
+  fetchPartnerById,
+} from "../../api/apiPartner";
 import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
 import EditButton from "../../components/Action/EditButton";
@@ -17,7 +21,10 @@ const Partner = () => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
-  const [detailModal, setDetailModal] = useState({ isOpen: false, partner: null });
+  const [detailModal, setDetailModal] = useState({
+    isOpen: false,
+    partner: null,
+  });
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const navigate = useNavigate();
 

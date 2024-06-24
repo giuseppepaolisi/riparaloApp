@@ -4,12 +4,25 @@ import { DataGrid } from "@mui/x-data-grid";
 import { TextField, Box } from "@mui/material";
 import { css } from "@emotion/react";
 
-const TicketTable = ({ columns, rows, actions, searchFields, customStyles, statusFilter, searchTerm, showSearchBar, setSearchTerm }) => {
+const TicketTable = ({
+  columns,
+  rows,
+  actions,
+  searchFields,
+  customStyles,
+  statusFilter,
+  searchTerm,
+  showSearchBar,
+  setSearchTerm,
+}) => {
   const [filteredRows, setFilteredRows] = useState([]);
 
   const filterRows = useCallback(() => {
     const lowerCaseSearchTerm = searchTerm.toLowerCase();
-    const regexSearch = new RegExp(lowerCaseSearchTerm.replace(/\s+/g, ".*"), "i");
+    const regexSearch = new RegExp(
+      lowerCaseSearchTerm.replace(/\s+/g, ".*"),
+      "i"
+    );
     const filtered = rows.filter((row) => {
       const matchesSearch = searchFields.some((field) =>
         regexSearch.test(row[field]?.toString().toLowerCase())

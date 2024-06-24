@@ -68,9 +68,6 @@ const deleteCustomer = async (req, res, next) => {
 
     const customer = await Customer.findOneAndDelete({ _id: id });
 
-    if (!customer) {
-      return next(new ErrorResponse('Nessun cliente trovato', 400));
-    }
     res.status(200).json({ customer });
   } catch (error) {
     next(error);
@@ -80,7 +77,7 @@ const deleteCustomer = async (req, res, next) => {
 // Ritorna i dati di un singolo cliente
 const getCustomer = async (req, res, next) => {
   const { id } = req.params;
-  const partner = req.user._id;  // Assicurati di avere il partner id nel token
+  const partner = req.user._id;
   try {
     const customer = await Customer.findOne({ _id: id, partner });
 

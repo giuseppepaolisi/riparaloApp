@@ -3,7 +3,7 @@ const express = require('express');
 const {
   createCustomer,
   getCustomers,
-  getCustomer,  // Assicurati di includere questa linea
+  getCustomer,
   deleteCustomer,
 } = require('../controllers/customerController/customer');
 const { requirePartner, requireAuth } = require('../middleware/requireAuth');
@@ -21,7 +21,7 @@ router.delete('/customer/:id', requirePartner, deleteCustomer);
 
 router.get('/customers', requirePartner, getCustomers);
 
-router.get('/customer/:id', requirePartner, getCustomer);  // Rimuovi il commento qui
+router.get('/customer/:id', requirePartner, getCustomer);
 
 router.use(errorHandler);
 

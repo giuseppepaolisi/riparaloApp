@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { TextField, Box } from "@mui/material";
+import { TextField, Box, Typography } from "@mui/material";
 import { css } from "@emotion/react";
 import PropTypes from "prop-types";
 
@@ -18,10 +18,7 @@ const Table = ({ columns, rows, actions, searchFields }) => {
     setFilteredRows(
       rows.filter((row) =>
         searchFields.some((field) =>
-          row[field]
-            ?.toString()
-            .toLowerCase()
-            .includes(value)
+          row[field]?.toString().toLowerCase().includes(value)
         )
       )
     );
@@ -42,6 +39,9 @@ const Table = ({ columns, rows, actions, searchFields }) => {
           sx={{ fontFamily: "Montserrat, sans-serif" }}
         />
       </Box>
+      <Typography variant="subtitle1" gutterBottom>
+        {filteredRows.length} risultati
+      </Typography>
       <DataGrid
         rows={filteredRows}
         columns={columns}

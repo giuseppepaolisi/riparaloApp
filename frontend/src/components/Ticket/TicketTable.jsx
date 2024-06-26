@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { DataGrid } from "@mui/x-data-grid";
-import { TextField, Box } from "@mui/material";
+import { TextField, Box, Typography } from "@mui/material";
 import { css } from "@emotion/react";
 
 const TicketTable = ({
@@ -48,7 +48,7 @@ const TicketTable = ({
             label="Cerca"
             variant="outlined"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => setSearchTerm(e.target.value)} // Usa setSearchTerm passato come prop
             css={css`
               width: 25%;
             `}
@@ -56,10 +56,13 @@ const TicketTable = ({
           />
         )}
       </Box>
+      <Typography variant="subtitle1" gutterBottom>
+        {filteredRows.length} risultati
+      </Typography>
       <DataGrid
         rows={filteredRows}
         columns={columns}
-        getRowId={(row) => row._id || row.id}
+        getRowId={(row) => row._id || row.id} // Specifica un id unico
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 20 },
@@ -94,18 +97,18 @@ TicketTable.propTypes = {
   actions: PropTypes.node,
   searchFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   customStyles: PropTypes.object,
-  statusFilter: PropTypes.string,
-  searchTerm: PropTypes.string,
-  showSearchBar: PropTypes.bool,
-  setSearchTerm: PropTypes.func,
+  statusFilter: PropTypes.string, // Add statusFilter prop
+  searchTerm: PropTypes.string, // Add searchTerm prop
+  showSearchBar: PropTypes.bool, // Add showSearchBar prop
+  setSearchTerm: PropTypes.func, // Add setSearchTerm prop
 };
 
 TicketTable.defaultProps = {
   customStyles: {},
-  statusFilter: "",
-  searchTerm: "",
-  showSearchBar: true,
-  setSearchTerm: () => {},
+  statusFilter: "", // Default statusFilter to an empty string
+  searchTerm: "", // Default searchTerm to an empty string
+  showSearchBar: true, // Default to true
+  setSearchTerm: () => {}, // Default to an empty function
 };
 
 export default TicketTable;

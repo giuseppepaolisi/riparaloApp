@@ -48,7 +48,7 @@ const TicketTable = ({
             label="Cerca"
             variant="outlined"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Usa setSearchTerm passato come prop
+            onChange={(e) => setSearchTerm(e.target.value)}
             css={css`
               width: 25%;
             `}
@@ -59,7 +59,7 @@ const TicketTable = ({
       <DataGrid
         rows={filteredRows}
         columns={columns}
-        getRowId={(row) => row._id || row.id} // Specifica un id unico
+        getRowId={(row) => row._id || row.id}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 20 },
@@ -67,7 +67,15 @@ const TicketTable = ({
         }}
         pageSizeOptions={[20, 50]}
         autoHeight
-        sx={{ fontFamily: "Montserrat, sans-serif" }}
+        sx={{
+          fontFamily: "Montserrat, sans-serif",
+          "& .MuiDataGrid-columnHeaders": {
+            fontWeight: 'bold',
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontWeight: 'bold',
+          },
+        }}
       />
     </div>
   );
@@ -86,18 +94,18 @@ TicketTable.propTypes = {
   actions: PropTypes.node,
   searchFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   customStyles: PropTypes.object,
-  statusFilter: PropTypes.string, // Add statusFilter prop
-  searchTerm: PropTypes.string, // Add searchTerm prop
-  showSearchBar: PropTypes.bool, // Add showSearchBar prop
-  setSearchTerm: PropTypes.func, // Add setSearchTerm prop
+  statusFilter: PropTypes.string,
+  searchTerm: PropTypes.string,
+  showSearchBar: PropTypes.bool,
+  setSearchTerm: PropTypes.func,
 };
 
 TicketTable.defaultProps = {
   customStyles: {},
-  statusFilter: "", // Default statusFilter to an empty string
-  searchTerm: "", // Default searchTerm to an empty string
-  showSearchBar: true, // Default to true
-  setSearchTerm: () => {}, // Default to an empty function
+  statusFilter: "",
+  searchTerm: "",
+  showSearchBar: true,
+  setSearchTerm: () => {},
 };
 
 export default TicketTable;

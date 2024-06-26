@@ -53,7 +53,15 @@ const Table = ({ columns, rows, actions, searchFields }) => {
         }}
         pageSizeOptions={[20, 50]}
         autoHeight
-        sx={{ fontFamily: "Montserrat, sans-serif" }}
+        sx={{
+          fontFamily: "Montserrat, sans-serif",
+          "& .MuiDataGrid-columnHeaders": {
+            fontWeight: 'bold',
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontWeight: 'bold',
+          },
+        }}
       />
     </div>
   );

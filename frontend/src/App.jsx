@@ -8,36 +8,34 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import SidebarFactory from "./components/Sidebar/SidebarFactory";
 import DashboardPartner from "./pages/Partner/DashboardPartner";
-import AggiungiCliente from "./pages/Partner/AggiungiCliente";
-import Clienti from "./pages/Partner/Clienti";
+import AddCustomer from "./pages/Partner/AddCustomer";
+import Customers from "./pages/Partner/Customers";
 import Partners from "./pages/Admin/Partners";
 import Technicians from "./pages/Admin/Technicians";
 import AddTechnician from "./pages/Admin/AddTechnician";
 import AddPartner from "./pages/Admin/AddPartner";
-import AboutUs from "./pages/AboutUs";
-import Login from "./pages/Login";
-import Logout from "./pages/Logout";
+import AboutUs from "./pages/Generic/AboutUs";
+import Login from "./pages/Authentication/Login";
+import Logout from "./pages/Authentication/Logout";
 import PrivateRoute from "./redux/auth/PrivateRoute";
 import DashboardAdmin from "./pages/Admin/DashboardAdmin";
-import HomePage from "./pages/Homepage";
+import HomePage from "./pages/Generic/Homepage";
 import DashboardTecnico from "./pages/Tecnico/DashboardTecnico";
 import Error403 from "./pages/error/Error403";
 import Error404 from "./pages/error/Error404";
 import Error500 from "./pages/error/Error500";
-import TicketDetails from "./pages/Ticket/TicketDetails";
+import DetailsTicket from "./pages/Ticket/DetailsTicket";
 import CreateTicket from "./pages/Ticket/CreateTicket";
 import Devices from "./pages/Admin/Devices";
 import AddDevice from "./pages/Admin/AddDevice";
 import EditDevice from "./pages/Admin/EditDevice";
 import EditTechnician from "./pages/Admin/EditTechnician";
 import EditPartner from "./pages/Admin/EditPartner";
-import ModificaCliente from "./pages/Partner/ModificaCliente";
+import EditCustomer from "./pages/Partner/EditCustomer";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
-import EditUser from "./pages/EditUser";
-import UserDetails from "./pages/UserDetails";
-import ClienteDetails from "./pages/Partner/ClienteDetails";
+import DetailsCustomer from "./pages/Partner/DetailsCustomer";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
+import theme from "./assets/js/theme";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -91,8 +89,6 @@ const App = () => {
                   path="/modifica-tecnico/:id"
                   element={<EditTechnician />}
                 />
-                <Route path="/modifica-utente/:id" element={<EditUser />} />
-                <Route path="/utente/:id" element={<UserDetails />} />
               </Route>
 
               {/* Partner Routes */}
@@ -101,15 +97,15 @@ const App = () => {
                   path="/partner-dashboard"
                   element={<DashboardPartner />}
                 />
-                <Route path="/aggiungi-cliente" element={<AggiungiCliente />} />
+                <Route path="/aggiungi-cliente" element={<AddCustomer />} />
                 <Route path="/apri-ticket" element={<CreateTicket />} />
                 <Route path="/about-us" element={<AboutUs />} />
-                <Route path="/clienti" element={<Clienti />} />
+                <Route path="/clienti" element={<Customers />} />
                 <Route
                   path="/modifica-cliente/:id"
-                  element={<ModificaCliente />}
+                  element={<EditCustomer />}
                 />
-                <Route path="/cliente/:id" element={<ClienteDetails />} />{" "}
+                <Route path="/cliente/:id" element={<DetailsCustomer />} />{" "}
                 {/* Nuova rotta per i dettagli del cliente */}
               </Route>
 
@@ -127,7 +123,7 @@ const App = () => {
                   <PrivateRoute roles={["admin", "partner", "tecnico"]} />
                 }
               >
-                <Route path="/ticket/:id" element={<TicketDetails />} />
+                <Route path="/ticket/:id" element={<DetailsTicket />} />
               </Route>
 
               {/* Error Routes */}

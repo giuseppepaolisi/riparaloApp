@@ -1,4 +1,11 @@
-import { Container, Box, Typography, Card, CardContent, Link } from "@mui/material";
+import {
+  Container,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Link,
+} from "@mui/material";
 import Title from "../../components/Title";
 
 const AboutUs = () => {
@@ -12,7 +19,13 @@ const AboutUs = () => {
       </Box>
       <Box display="flex" justifyContent="space-between" flexWrap="wrap">
         <Box width={{ xs: "100%", md: "48%" }} mb={4}>
-          <Card sx={{ backgroundColor: "#e9ecef", borderRadius: "15px", boxShadow: 3 }}>
+          <Card
+            sx={{
+              backgroundColor: "#e9ecef",
+              borderRadius: "15px",
+              boxShadow: 3,
+            }}
+          >
             <CardContent>
               <Typography variant="h5" color="primary" gutterBottom>
                 Crotone
@@ -22,7 +35,10 @@ const AboutUs = () => {
                 <br />
                 Cellulare: 329 3033166
                 <br />
-                Email: <Link href="mailto:crotone@riparalokr.it">crotone@riparalokr.it</Link>
+                Email:{" "}
+                <Link href="mailto:crotone@riparalokr.it">
+                  crotone@riparalokr.it
+                </Link>
               </Typography>
               <Box
                 component="iframe"
@@ -38,7 +54,13 @@ const AboutUs = () => {
           </Card>
         </Box>
         <Box width={{ xs: "100%", md: "48%" }} mb={4}>
-          <Card sx={{ backgroundColor: "#e9ecef", borderRadius: "15px", boxShadow: 3 }}>
+          <Card
+            sx={{
+              backgroundColor: "#e9ecef",
+              borderRadius: "15px",
+              boxShadow: 3,
+            }}
+          >
             <CardContent>
               <Typography variant="h5" color="primary" gutterBottom>
                 Isola di Capo Rizzuto
@@ -48,7 +70,10 @@ const AboutUs = () => {
                 <br />
                 Cellulare: 327 7808684
                 <br />
-                Email: <Link href="mailto:isola@riparalokr.it">isola@riparalokr.it</Link>
+                Email:{" "}
+                <Link href="mailto:isola@riparalokr.it">
+                  isola@riparalokr.it
+                </Link>
               </Typography>
               <Box
                 component="iframe"

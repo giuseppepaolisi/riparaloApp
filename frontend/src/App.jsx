@@ -10,10 +10,10 @@ import SidebarFactory from "./components/Sidebar/SidebarFactory";
 import DashboardPartner from "./pages/Partner/DashboardPartner";
 import AggiungiCliente from "./pages/Partner/AggiungiCliente";
 import Clienti from "./pages/Partner/Clienti";
-import Partner from "./pages/Admin/Partner";
-import Tecnici from "./pages/Admin/Tecnici";
-import AggiungiTecnico from "./pages/Admin/AggiungiTecnico";
-import AggiungiPartner from "./pages/Admin/AggiungiPartner";
+import Partners from "./pages/Admin/Partners";
+import Technicians from "./pages/Admin/Technicians";
+import AddTechnician from "./pages/Admin/AddTechnician";
+import AddPartner from "./pages/Admin/AddPartner";
 import AboutUs from "./pages/AboutUs";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
@@ -26,12 +26,11 @@ import Error404 from "./pages/error/Error404";
 import Error500 from "./pages/error/Error500";
 import TicketDetails from "./pages/Ticket/TicketDetails";
 import CreateTicket from "./pages/Ticket/CreateTicket";
-
 import Devices from "./pages/Admin/Devices";
 import AddDevice from "./pages/Admin/AddDevice";
 import EditDevice from "./pages/Admin/EditDevice";
-import ModificaTecnico from "./pages/Admin/ModificaTecnico";
-import ModificaPartner from "./pages/Admin/ModificaPartner";
+import EditTechnician from "./pages/Admin/EditTechnician";
+import EditPartner from "./pages/Admin/EditPartner";
 import ModificaCliente from "./pages/Partner/ModificaCliente";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
 import EditUser from "./pages/EditUser";
@@ -75,22 +74,22 @@ const App = () => {
               {/* Admin Routes */}
               <Route element={<PrivateRoute roles={["admin"]} />}>
                 <Route path="/admin-dashboard" element={<DashboardAdmin />} />
-                <Route path="/partner" element={<Partner />} />
-                <Route path="/aggiungi-partner" element={<AggiungiPartner />} />
-                <Route path="/tecnici" element={<Tecnici />} />
-                <Route path="/aggiungi-tecnico" element={<AggiungiTecnico />} />
+                <Route path="/partner" element={<Partners />} />
+                <Route path="/aggiungi-partner" element={<AddPartner />} />
+                <Route path="/tecnici" element={<Technicians />} />
+                <Route path="/aggiungi-tecnico" element={<AddTechnician />} />
                 <Route path="/modelli" element={<Devices />} />
                 <Route path="/aggiungi-modello" element={<AddDevice />} />
                 <Route path="/modifica-modello/:id" element={<EditDevice />} />
-                <Route path="/partner" element={<Partner />} />
+                <Route path="/partner" element={<Partners />} />
                 <Route
                   path="/modifica-partner/:id"
-                  element={<ModificaPartner />}
+                  element={<EditPartner />}
                 />
-                <Route path="/tecnici" element={<Tecnici />} />
+                <Route path="/tecnici" element={<Technicians />} />
                 <Route
                   path="/modifica-tecnico/:id"
-                  element={<ModificaTecnico />}
+                  element={<EditTechnician />}
                 />
                 <Route path="/modifica-utente/:id" element={<EditUser />} />
                 <Route path="/utente/:id" element={<UserDetails />} />

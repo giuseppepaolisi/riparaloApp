@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { fetchTicketById } from "../../api/apiPartner";
 import { Typography, Box, Paper } from "@mui/material";
 
-const TicketDetails = () => {
+const DetailsTicket = () => {
   const { id } = useParams();
   const { token } = useSelector((state) => state.auth);
   const [ticket, setTicket] = useState(null);
@@ -53,4 +53,4 @@ const TicketDetails = () => {
   );
 };
 
-export default TicketDetails;
+export default DetailsTicket;

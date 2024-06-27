@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid, Box, TextField, Button, MenuItem } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import smartphoneBrands from "../../const/brands";
+import smartphoneBrands from "../../assets/js/brands";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 

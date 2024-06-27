@@ -13,7 +13,7 @@ import {
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 
-const ModificaCliente = () => {
+const EditCustomer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
@@ -150,4 +150,4 @@ const ModificaCliente = () => {
   );
 };
 
-export default ModificaCliente;
+export default EditCustomer;

@@ -1,15 +1,19 @@
 import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Typography, Button } from "@mui/material";
 
 const Error500 = () => {
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-      <h1 className="display-1 text-danger">500</h1>
-      <p className="lead">Internal Server Error.</p>
-      <Link to="/" className="btn btn-primary mt-3">
+    <Container sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Typography variant="h1" color="error">
+        500
+      </Typography>
+      <Typography variant="h5" gutterBottom>
+        Internal Server Error.
+      </Typography>
+      <Button component={Link} to="/" variant="contained" color="primary" sx={{ mt: 3 }}>
         Go Home
-      </Link>
-    </div>
+      </Button>
+    </Container>
   );
 };
 

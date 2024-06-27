@@ -1,15 +1,19 @@
 import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Typography, Button } from "@mui/material";
 
 const Error403 = () => {
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-      <h1 className="display-1 text-warning">403</h1>
-      <p className="lead">Access Denied.</p>
-      <Link to="/" className="btn btn-primary mt-3">
+    <Container sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Typography variant="h1" color="warning.main">
+        403
+      </Typography>
+      <Typography variant="h5" gutterBottom>
+        Access Denied.
+      </Typography>
+      <Button component={Link} to="/" variant="contained" color="primary" sx={{ mt: 3 }}>
         Go Home
-      </Link>
-    </div>
+      </Button>
+    </Container>
   );
 };
 

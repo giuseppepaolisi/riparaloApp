@@ -13,7 +13,7 @@ import {
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 
-const ModificaTecnico = () => {
+const EditTechnician = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
@@ -150,4 +150,4 @@ const ModificaTecnico = () => {
   );
 };
 
-export default ModificaTecnico;
+export default EditTechnician;

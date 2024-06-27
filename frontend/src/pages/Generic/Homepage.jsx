@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Container, Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import logo from "../../assets/img/logo-riparalo.png";
 import { useEffect } from "react";
@@ -12,33 +12,32 @@ const HomePage = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
-    <div style={{ fontFamily: "Open Sans", color: "#009be3" }}>
+    <Container style={{ fontFamily: "Open Sans", color: "#009be3" }}>
       <Title title="Home" />
       <Benvenuto isAuthenticated={isAuthenticated} />
-    </div>
+    </Container>
   );
 };
 
 const Benvenuto = ({ isAuthenticated }) => (
-  <div className="text-center">
-    <div className="d-flex justify-content-center mt-5">
+  <Box textAlign="center" mt={5}>
+    <Box display="flex" justifyContent="center" mt={5}>
       <img
         src={logo}
-        className="img-fluid"
         style={{ width: "40%" }}
         alt="Logo"
       />
-    </div>
+    </Box>
     {!isAuthenticated && (
-      <div className="d-flex justify-content-center mt-3">
-        <Link to="/login">
-          <Button variant="outline-primary" size="lg">
+      <Box display="flex" justifyContent="center" mt={3}>
+        <Link to="/login" style={{ textDecoration: 'none' }}>
+          <Button variant="outlined" size="large" color="primary">
             Login
           </Button>
         </Link>
-      </div>
+      </Box>
     )}
-  </div>
+  </Box>
 );
 
 Benvenuto.propTypes = {

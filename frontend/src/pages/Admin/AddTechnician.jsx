@@ -7,7 +7,7 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import CustomAlert from "../../components/Alert/CustomAlert";
 
-const AggiungiTecnico = () => {
+const AddTechnician = () => {
   const [cognome, setCognome] = useState("");
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -98,4 +98,4 @@ const AggiungiTecnico = () => {
   );
 };
 
-export default AggiungiTecnico;
+export default AddTechnician;

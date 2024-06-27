@@ -17,7 +17,7 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import PartnerDetailModal from "../../components/Modal/PartnerDetailModal";
 import { Typography } from "@mui/material";
 
-const Partner = () => {
+const Partners = () => {
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
@@ -148,4 +148,4 @@ const Partner = () => {
   );
 };
 
-export default Partner;
+export default Partners;

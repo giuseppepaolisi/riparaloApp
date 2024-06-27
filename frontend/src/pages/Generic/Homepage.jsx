@@ -2,9 +2,9 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import logo from "../assets/img/logo-riparalo.png";
+import logo from "../../assets/img/logo-riparalo.png";
 import { useEffect } from "react";
-import Title from "../components/Title";
+import Title from "../../components/Title";
 
 const HomePage = () => {
   useEffect(() => {}, []);

@@ -6,7 +6,7 @@ import { fetchClienteById } from "../../api/apiPartner";
 import Loading from "../../components/Loading";
 import { Typography, Box } from "@mui/material";
 
-const ClienteDetails = () => {
+const DetailsCustomer = () => {
   const { id } = useParams();
   const { token } = useSelector((state) => state.auth);
   const [cliente, setCliente] = useState(null);
@@ -77,4 +77,4 @@ const ClienteDetails = () => {
   );
 };
 
-export default ClienteDetails;
+export default DetailsCustomer;

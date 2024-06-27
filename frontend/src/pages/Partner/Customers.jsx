@@ -13,7 +13,7 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import { Typography } from "@mui/material";
 import Title from "../../components/Title";
 
-const Clienti = () => {
+const Customers = () => {
   const [clienti, setClienti] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
@@ -128,4 +128,4 @@ const Clienti = () => {
   );
 };
 
-export default Clienti;
+export default Customers;

@@ -1,5 +1,5 @@
 import { Container, Box, Typography, Card, CardContent, Link } from "@mui/material";
-import Title from "../components/Title";
+import Title from "../../components/Title";
 
 const AboutUs = () => {
   return (

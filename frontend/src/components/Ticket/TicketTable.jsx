@@ -73,10 +73,10 @@ const TicketTable = ({
         sx={{
           fontFamily: "Montserrat, sans-serif",
           "& .MuiDataGrid-columnHeaders": {
-            fontWeight: 'bold',
+            fontWeight: "bold",
           },
           "& .MuiDataGrid-columnHeaderTitle": {
-            fontWeight: 'bold',
+            fontWeight: "bold",
           },
         }}
       />

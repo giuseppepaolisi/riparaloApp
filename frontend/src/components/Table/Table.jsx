@@ -18,7 +18,10 @@ const Table = ({ columns, rows, actions, searchFields }) => {
     setFilteredRows(
       rows.filter((row) =>
         searchFields.some((field) =>
-          row[field]?.toString().toLowerCase().includes(value)
+          row[field]
+            ?.toString()
+            .toLowerCase()
+            .includes(value)
         )
       )
     );
@@ -56,10 +59,10 @@ const Table = ({ columns, rows, actions, searchFields }) => {
         sx={{
           fontFamily: "Montserrat, sans-serif",
           "& .MuiDataGrid-columnHeaders": {
-            fontWeight: 'bold',
+            fontWeight: "bold",
           },
           "& .MuiDataGrid-columnHeaderTitle": {
-            fontWeight: 'bold',
+            fontWeight: "bold",
           },
         }}
       />

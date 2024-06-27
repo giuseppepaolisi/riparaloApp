@@ -9,7 +9,7 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import Title from "../../components/Title";
 
-const AggiungiCliente = () => {
+const AddCustomer = () => {
   const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
@@ -111,4 +111,4 @@ const AggiungiCliente = () => {
   );
 };
 
-export default AggiungiCliente;
+export default AddCustomer;

@@ -8,7 +8,7 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import CustomAlert from "../../components/Alert/CustomAlert";
 
-const AggiungiPartner = () => {
+const AddPartner = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -174,4 +174,4 @@ const AggiungiPartner = () => {
   );
 };
 
-export default AggiungiPartner;
+export default AddPartner;

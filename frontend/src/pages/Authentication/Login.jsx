@@ -1,8 +1,8 @@
-import { login } from "../redux/auth/slice";
+import { login } from "../../redux/auth/slice";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import FormInput from "../components/FormInput";
-import Title from "../components/Title";
+import FormInput from "../../components/FormInput";
+import Title from "../../components/Title";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");

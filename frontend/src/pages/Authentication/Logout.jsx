@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../redux/auth/slice";
+import { logout } from "../../redux/auth/slice";
 import { useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 

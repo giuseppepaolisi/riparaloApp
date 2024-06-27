@@ -17,7 +17,7 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import TecnicoDetailModal from "../../components/Modal/TecnicoDetailModal";
 import { Typography } from "@mui/material";
 
-const Tecnici = () => {
+const Technicians = () => {
   const [tecnici, setTecnici] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
@@ -147,4 +147,4 @@ const Tecnici = () => {
   );
 };
 
-export default Tecnici;
+export default Technicians;

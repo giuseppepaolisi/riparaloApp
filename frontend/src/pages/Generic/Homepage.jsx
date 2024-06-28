@@ -22,15 +22,11 @@ const HomePage = () => {
 const Benvenuto = ({ isAuthenticated }) => (
   <Box textAlign="center" mt={5}>
     <Box display="flex" justifyContent="center" mt={5}>
-      <img
-        src={logo}
-        style={{ width: "40%" }}
-        alt="Logo"
-      />
+      <img src={logo} style={{ width: "40%" }} alt="Logo" />
     </Box>
     {!isAuthenticated && (
       <Box display="flex" justifyContent="center" mt={3}>
-        <Link to="/login" style={{ textDecoration: 'none' }}>
+        <Link to="/login" style={{ textDecoration: "none" }}>
           <Button variant="outlined" size="large" color="primary">
             Login
           </Button>

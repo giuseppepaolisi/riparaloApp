@@ -1,7 +1,18 @@
 import { login } from "../../redux/auth/slice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { TextField, Button, Checkbox, FormControlLabel, Container, Box, Typography, Card, CardContent, Alert } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Container,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Alert,
+} from "@mui/material";
 import Title from "../../components/Title";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
@@ -36,7 +47,9 @@ const LoginPage = () => {
         }
       } else {
         setError(data.error);
-        throw new Error(data.error || "Non è stato possibile effettuare il login");
+        throw new Error(
+          data.error || "Non è stato possibile effettuare il login"
+        );
       }
     } catch (error) {
       console.error(error);
@@ -82,7 +95,12 @@ const LoginPage = () => {
                 label="Rimani connesso"
               />
               <Box mt={2} mb={2}>
-                <Button type="submit" fullWidth variant="contained" color="primary">
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                >
                   Accedi
                 </Button>
               </Box>

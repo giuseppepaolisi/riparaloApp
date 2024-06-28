@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { fetchClienti, deleteCliente } from "../../api/apiPartner";
@@ -11,9 +11,11 @@ import Loading from "../../components/Loading";
 import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import { Typography } from "@mui/material";
-import Title from "../../components/Title";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const Customers = () => {
+  usePageTitle("Clienti");
+
   const [clienti, setClienti] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
@@ -97,8 +99,7 @@ const Customers = () => {
   const searchFields = ["telefono", "nome", "cognome", "email"];
 
   return (
-    <div className="container mt-3 mb-4">
-      <Title title="Clienti" />
+    <React.Fragment>
       <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
         Clienti
       </Typography>
@@ -124,7 +125,7 @@ const Customers = () => {
           )}
         </>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

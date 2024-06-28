@@ -6,12 +6,15 @@ import {
   CardContent,
   Link,
 } from "@mui/material";
-import Title from "../../components/Title";
+import usePageTitle from "../../CustomHooks/usePageTItle";
+import React from "react";
 
 const AboutUs = () => {
+  usePageTitle("Sedi e Contatti");
+
   return (
+    <React.Fragment>
     <Container sx={{ mt: 5 }}>
-      <Title title="Sedi e contatti" />
       <Box textAlign="center" mb={4}>
         <Typography variant="h3" color="primary">
           Sedi e contatti
@@ -90,6 +93,7 @@ const AboutUs = () => {
         </Box>
       </Box>
     </Container>
+  </React.Fragment>
   );
 };
 

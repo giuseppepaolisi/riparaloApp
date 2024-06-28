@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
@@ -7,9 +7,10 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
-import Title from "../../components/Title";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const AddCustomer = () => {
+  usePageTitle("Aggiungi Cliente");
   const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
@@ -87,8 +88,8 @@ const AddCustomer = () => {
   );
 
   return (
+    <React.Fragment>
     <FormContainer title="Aggiungi Cliente" maxWidth="sm">
-      <Title title="Aggiungi Cliente" />
       <form onSubmit={handleAggiungiCliente}>
         <Grid container spacing={2}>
           {formFields.map(({ id, label, type, value, onChange }) => (
@@ -108,6 +109,7 @@ const AddCustomer = () => {
       </form>
       {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
     </FormContainer>
+  </React.Fragment>
   );
 };
 

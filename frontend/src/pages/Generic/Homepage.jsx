@@ -3,23 +3,24 @@ import { Link } from "react-router-dom";
 import { Button, Container, Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import logo from "../../assets/img/logo-riparalo.png";
-import { useEffect } from "react";
-import Title from "../../components/Title";
+import React, { useEffect } from "react";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const HomePage = () => {
   useEffect(() => {}, []);
+  usePageTitle("Homepage");
 
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
     <Container style={{ fontFamily: "Open Sans", color: "#009be3" }}>
-      <Title title="Home" />
       <Benvenuto isAuthenticated={isAuthenticated} />
     </Container>
   );
 };
 
 const Benvenuto = ({ isAuthenticated }) => (
+  <React.Fragment>
   <Box textAlign="center" mt={5}>
     <Box display="flex" justifyContent="center" mt={5}>
       <img src={logo} style={{ width: "40%" }} alt="Logo" />
@@ -34,6 +35,7 @@ const Benvenuto = ({ isAuthenticated }) => (
       </Box>
     )}
   </Box>
+  </React.Fragment>
 );
 
 Benvenuto.propTypes = {

@@ -1,12 +1,14 @@
-// frontend/src/pages/Partner/ClienteDetails.jsx
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { fetchClienteById } from "../../api/apiPartner";
 import Loading from "../../components/Loading";
 import { Typography, Box } from "@mui/material";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const DetailsCustomer = () => {
+  usePageTitle("Dettagli Cliente");
+
   const { id } = useParams();
   const { token } = useSelector((state) => state.auth);
   const [cliente, setCliente] = useState(null);
@@ -37,6 +39,7 @@ const DetailsCustomer = () => {
   }
 
   return (
+    <React.Fragment>
     <Box>
       <Typography variant="h4">Dettagli del Cliente</Typography>
       <Typography variant="body1">
@@ -72,8 +75,8 @@ const DetailsCustomer = () => {
       <Typography variant="body1">
         <strong>Provincia:</strong> {cliente.provincia}
       </Typography>
-      {/* Aggiungi altri campi come necessario */}
     </Box>
+    </React.Fragment>
   );
 };
 

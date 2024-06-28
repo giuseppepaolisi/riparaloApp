@@ -1,6 +1,6 @@
 import { login } from "../../redux/auth/slice";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -13,10 +13,11 @@ import {
   CardContent,
   Alert,
 } from "@mui/material";
-import Title from "../../components/Title";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
-const LoginPage = () => {
+const Login = () => {
+  usePageTitle("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -57,6 +58,7 @@ const LoginPage = () => {
   };
 
   return (
+    <React.Fragment>
     <Container maxWidth="sm">
       <Box mt={5}>
         <Card>
@@ -64,7 +66,6 @@ const LoginPage = () => {
             <Typography variant="h4" align="center" gutterBottom>
               Login
             </Typography>
-            <Title title="Login" />
             <form onSubmit={handleLogin}>
               <TextField
                 fullWidth
@@ -114,7 +115,8 @@ const LoginPage = () => {
         </Card>
       </Box>
     </Container>
+  </React.Fragment>
   );
 };
 
-export default LoginPage;
+export default Login;

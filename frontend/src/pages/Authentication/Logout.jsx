@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../redux/auth/slice";
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import {
   Container,
   Box,
@@ -11,8 +11,10 @@ import {
   Button,
 } from "@mui/material";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
-
+import usePageTitle from "../../CustomHooks/usePageTItle";
 const Logout = () => {
+  usePageTitle("Logout");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,6 +30,7 @@ const Logout = () => {
   }, [navigate]);
 
   return (
+    <React.Fragment>
     <Container
       maxWidth="sm"
       sx={{
@@ -62,6 +65,7 @@ const Logout = () => {
         </CardContent>
       </Card>
     </Container>
+    </React.Fragment>
   );
 };
 

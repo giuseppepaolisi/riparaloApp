@@ -1,14 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
-import { addPartner } from "../../api/apiPartner"; // Importa la funzione API
+import { addPartner } from "../../api/apiPartner";
 import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import CustomAlert from "../../components/Alert/CustomAlert";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const AddPartner = () => {
+  usePageTitle("Aggiungi Partner");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,13 +24,13 @@ const AddPartner = () => {
     cap: "",
     via: "",
     provincia: "",
-    role: "partner", // Imposta il ruolo come partner
+    role: "partner",
   });
-  const [error, setError] = useState(null); // Stato per gestire eventuali errori
-  const [success, setSuccess] = useState(null); // Stato per gestire il successo
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
-  const { token } = useSelector((state) => state.auth); // Ottieni il token dallo stato Redux
-  const navigate = useNavigate(); // Usa il hook useNavigate per la navigazione
+  const { token } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const handleChange = useCallback((e) => {
     const { id, value } = e.target;
@@ -40,17 +42,17 @@ const AddPartner = () => {
 
   const handleAggiungiPartner = async (event) => {
     event.preventDefault();
-    setError(null); // Resetta lo stato dell'errore
-    setSuccess(null); // Resetta lo stato del successo
+    setError(null);
+    setSuccess(null);
     try {
-      console.log("Dati inviati al server:", formData); // Log dei dati inviati
-      const response = await addPartner(token, formData); // Passa il token come primo argomento
-      console.log("Risposta del server:", response); // Log della risposta del server
+      console.log("Dati inviati al server:", formData);
+      const response = await addPartner(token, formData);
+      console.log("Risposta del server:", response);
       setSuccess("Partner aggiunto con successo");
-      setTimeout(() => navigate("/partner"), 2000); // Naviga alla pagina partner dopo 2 secondi
+      setTimeout(() => navigate("/partner"), 2000);
     } catch (error) {
-      console.error("Errore durante l'aggiunta del partner:", error); // Log degli errori
-      setError(error.message); // Imposta il messaggio di errore
+      console.error("Errore durante l'aggiunta del partner:", error);
+      setError(error.message);
     }
   };
 
@@ -62,6 +64,7 @@ const AddPartner = () => {
   }, []);
 
   return (
+    <React.Fragment>
     <FormContainer title="Aggiungi Partner">
       {error && <CustomAlert msg={error} severity="error" />}
       {success && <CustomAlert msg={success} severity="success" />}
@@ -171,6 +174,7 @@ const AddPartner = () => {
         <FormActions onSubmit={handleAggiungiPartner} />
       </form>
     </FormContainer>
+    </React.Fragment>
   );
 };
 

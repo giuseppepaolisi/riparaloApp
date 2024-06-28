@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import FormContainer from "../../components/FormContainer";
@@ -6,8 +6,11 @@ import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import { createTicket } from "../../api/apiPartner";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const CreateTicket = () => {
+  usePageTitle("Apri Ticket");
+
   const [formData, setFormData] = useState({
     nome_cliente: "",
     cognome_cliente: "",
@@ -51,7 +54,6 @@ const CreateTicket = () => {
     setError("");
     setSuccess("");
 
-    // Filtra i servizi vuoti
     const filteredServices = formData.servizi.filter(
       (service) => service.servizio && service.prezzo
     );
@@ -66,6 +68,7 @@ const CreateTicket = () => {
   };
 
   return (
+    <React.Fragment>
     <FormContainer title="Apri Ticket">
       <form onSubmit={handleSubmit}>
         <FormInput
@@ -188,6 +191,7 @@ const CreateTicket = () => {
         />
       )}
     </FormContainer>
+  </React.Fragment>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { Grid } from "@mui/material";
 import { addTecnico } from "../../api/apiTecnico";
@@ -6,14 +6,16 @@ import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import CustomAlert from "../../components/Alert/CustomAlert";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const AddTechnician = () => {
+  usePageTitle("Aggiungi Tecnico");
   const [cognome, setCognome] = useState("");
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); // Aggiunto il campo password
-  const [error, setError] = useState(null); // Stato per gestire gli errori
-  const [success, setSuccess] = useState(null); // Stato per gestire il successo
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const { token } = useSelector((state) => state.auth);
 
@@ -48,6 +50,7 @@ const AddTechnician = () => {
   }, []);
 
   return (
+    <React.Fragment>
     <FormContainer title="Aggiungi Tecnico">
       {error && <CustomAlert msg={error} severity="error" />}
       {success && <CustomAlert msg={success} severity="success" />}
@@ -95,6 +98,7 @@ const AddTechnician = () => {
         <FormActions onSubmit={handleAggiungiTecnico} />
       </form>
     </FormContainer>
+  </React.Fragment>
   );
 };
 

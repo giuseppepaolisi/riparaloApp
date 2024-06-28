@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 import { Container, Typography, Button } from "@mui/material";
+import usePageTitle from "../../CustomHooks/usePageTItle";
+import React from "react";
 
 const Error403 = () => {
+  usePageTitle("403 Accesso Negato");
   return (
+    <React.Fragment>
     <Container
       sx={{
         display: "flex",
@@ -28,6 +32,7 @@ const Error403 = () => {
         Go Home
       </Button>
     </Container>
+    </React.Fragment>
   );
 };
 

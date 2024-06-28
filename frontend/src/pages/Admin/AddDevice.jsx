@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid, Box, TextField, Button, MenuItem } from "@mui/material";
@@ -6,11 +6,12 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import smartphoneBrands from "../../assets/js/brands";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
-// Aggiunge il campo nullo per il primo caricamento
 smartphoneBrands.unshift("");
 
 const AddDevice = () => {
+  usePageTitle("Aggiungi Dispositivo");
   const { token } = useSelector((state) => state.auth);
   const [modello, setModello] = useState("");
   const [marca, setMarca] = useState("");
@@ -59,7 +60,6 @@ const AddDevice = () => {
     console.log(token);
     console.log(formData);
     try {
-      // Invia i dati tramite POST
       const response = await fetch("/api/device", {
         method: "POST",
         headers: {
@@ -80,7 +80,6 @@ const AddDevice = () => {
         msg: "Dispositivo aggiunto con successo",
         severity: "success",
       });
-      // Redirect alla pagina modelli se la richiesta è stata eseguita con successo
       navigate("/modelli");
     } catch (error) {
       console.error(error);
@@ -97,6 +96,7 @@ const AddDevice = () => {
   );
 
   return (
+    <React.Fragment>
     <FormContainer title="Aggiungi Dispositivo">
       {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
       <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
@@ -105,7 +105,7 @@ const AddDevice = () => {
             <TextField
               select
               label="Marca"
-              id="marca" // Assicurati che l'id sia "marca"
+              id="marca"
               name="marca"
               value={marca}
               onChange={handleChange}
@@ -128,7 +128,7 @@ const AddDevice = () => {
             <TextField
               label="Modello"
               type="text"
-              id="modello" // Assicurati che l'id sia "modello"
+              id="modello"
               name="modello"
               value={modello}
               onChange={(e) => setModello(e.target.value)}
@@ -145,7 +145,7 @@ const AddDevice = () => {
                 <TextField
                   label="Servizio"
                   type="text"
-                  id={`servizio-${index}`} // Assicurati che l'id sia unico
+                  id={`servizio-${index}`}
                   name={`servizio-${index}`}
                   value={servizio.servizio}
                   onChange={(e) => handleServizioChange(index, e)}
@@ -158,7 +158,7 @@ const AddDevice = () => {
                 <TextField
                   label="Prezzo"
                   type="number"
-                  id={`prezzo-${index}`} // Assicurati che l'id sia unico
+                  id={`prezzo-${index}`}
                   name={`prezzo-${index}`}
                   value={servizio.prezzo}
                   onChange={(e) => handleServizioChange(index, e)}
@@ -199,6 +199,7 @@ const AddDevice = () => {
         <FormActions onSubmit={handleSubmit} />
       </form>
     </FormContainer>
+    </React.Fragment>
   );
 };
 

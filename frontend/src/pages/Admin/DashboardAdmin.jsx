@@ -1,6 +1,8 @@
 import { fetchTickets } from "../../api/apiPartner";
 import TicketDashboard from "../../components/Ticket/TicketDashboard";
 import stateColors from "../../assets/json/state.json";
+import React from "react";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const columns = [
   { field: "_id", headerName: "ID", flex: 1 },
@@ -55,16 +57,18 @@ const filterStatuses = [
 ];
 
 const DashboardAdmin = () => {
+  usePageTitle("Dashboard Admin");
   return (
+    <React.Fragment>
     <TicketDashboard
-      title="Dashboard Admin"
       fetchTickets={fetchTickets}
       columns={columns}
       searchFields={["_id", "id_partner", "stato"]}
       addTicketLink="/apri-ticket"
       filterStatuses={filterStatuses}
-      alignSearchWithFilters={true} // Pass this prop
+      alignSearchWithFilters={true}
     />
+    </React.Fragment>
   );
 };
 

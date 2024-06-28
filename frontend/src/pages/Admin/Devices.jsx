@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
@@ -12,8 +12,10 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import { useNavigate } from "react-router-dom";
 import DeviceDetailModal from "../../components/Modal/DeviceDetailModal";
 import { Typography } from "@mui/material";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const Devices = () => {
+  usePageTitle("Dispositivi");
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
@@ -24,10 +26,8 @@ const Devices = () => {
   });
   const navigate = useNavigate();
 
-  // Ottieni il token
   const { token } = useSelector((state) => state.auth);
 
-  // Chiamata API per la lista dispositivi
   const fetchDevices = useCallback(async () => {
     if (!token) {
       return;
@@ -46,7 +46,7 @@ const Devices = () => {
         throw new Error("Errore nella lista dispositivi");
       }
       setDevices(data.devices);
-      setLoading(false); // Imposta loading su false dopo aver caricato i dati
+      setLoading(false);
     } catch (error) {
       console.error(error);
       setAlert({
@@ -156,6 +156,7 @@ const Devices = () => {
   const searchFields = ["marca", "modello"];
 
   return (
+    <React.Fragment>
     <div className="container mt-3 mb-4">
       <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
         Dispositivi
@@ -190,6 +191,7 @@ const Devices = () => {
         </>
       )}
     </div>
+    </React.Fragment>
   );
 };
 

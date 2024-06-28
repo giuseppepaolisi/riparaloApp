@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Box, TextField, Button } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import FormContainer from "../../components/FormContainer";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const EditDevice = () => {
+  usePageTitle("Modifica Dispositivo");
   const { id } = useParams();
   const { token } = useSelector((state) => state.auth);
   const [modello, setModello] = useState("");
@@ -89,7 +91,6 @@ const EditDevice = () => {
         msg: "Dispositivo modificato con successo",
         severity: "success",
       });
-      // Redirect alla pagina modelli se la richiesta è stata eseguita con successo
       navigate("/modelli");
     } catch (error) {
       console.error(error);
@@ -102,10 +103,11 @@ const EditDevice = () => {
   };
 
   const handleCancel = () => {
-    navigate("/modelli"); // Reindirizza alla pagina dei dispositivi
+    navigate("/modelli");
   };
 
   return (
+    <React.Fragment>
     <FormContainer title="Modifica Dispositivo">
       {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
       <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
@@ -217,6 +219,7 @@ const EditDevice = () => {
         </Grid>
       </form>
     </FormContainer>
+    </React.Fragment>
   );
 };
 

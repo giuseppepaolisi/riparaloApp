@@ -1,6 +1,8 @@
+import React from "react";
 import { fetchTickets } from "../../api/apiPartner";
 import TicketDashboard from "../../components/Ticket/TicketDashboard";
 import stateColors from "../../assets/json/state.json";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const columns = [
   { field: "_id", headerName: "ID", flex: 1 },
@@ -53,25 +55,28 @@ const filterStatuses = [
 ];
 
 const DashboardPartner = () => {
+  usePageTitle("Dashboard Partner");
+
   return (
-    <TicketDashboard
-      title="Dashboard Partner"
-      fetchTickets={fetchTickets}
-      columns={columns}
-      searchFields={[
-        "_id",
-        "nome_cliente",
-        "cognome_cliente",
-        "marca",
-        "modello",
-        "stato",
-        "descrizione_problema",
-      ]}
-      addTicketLink="/apri-ticket"
-      showAddButton={true}
-      filterStatuses={filterStatuses}
-      alignSearchWithFilters={false} // Pass this prop
-    />
+    <React.Fragment>
+      <TicketDashboard
+        fetchTickets={fetchTickets}
+        columns={columns}
+        searchFields={[
+          "_id",
+          "nome_cliente",
+          "cognome_cliente",
+          "marca",
+          "modello",
+          "stato",
+          "descrizione_problema",
+        ]}
+        addTicketLink="/apri-ticket"
+        showAddButton={true}
+        filterStatuses={filterStatuses}
+        alignSearchWithFilters={false}
+      />
+    </React.Fragment>
   );
 };
 

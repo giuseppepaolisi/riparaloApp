@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -16,8 +16,11 @@ import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import PartnerDetailModal from "../../components/Modal/PartnerDetailModal";
 import { Typography } from "@mui/material";
+import usePageTitle from "../../CustomHooks/usePageTItle";
+
 
 const Partners = () => {
+  usePageTitle("Partners");
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
@@ -111,6 +114,7 @@ const Partners = () => {
   const searchFields = ["ragioneSociale", "nome", "email", "provincia"];
 
   return (
+    <React.Fragment>
     <div className="container mt-3 mb-4">
       <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
         Partner
@@ -145,6 +149,7 @@ const Partners = () => {
         </>
       )}
     </div>
+    </React.Fragment>
   );
 };
 

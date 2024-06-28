@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { Container, Typography, Button } from "@mui/material";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const Error500 = () => {
+  usePageTitle("500 Errore Interno");
   return (
     <Container
       sx={{

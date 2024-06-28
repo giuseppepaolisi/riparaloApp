@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { fetchTicketById } from "../../api/apiPartner";
 import { Typography, Box, Paper } from "@mui/material";
-
+import usePageTitle from "../../CustomHooks/usePageTItle";
 const DetailsTicket = () => {
+  usePageTitle("Dettagli Ticket");
+
   const { id } = useParams();
   const { token } = useSelector((state) => state.auth);
   const [ticket, setTicket] = useState(null);
@@ -29,6 +31,7 @@ const DetailsTicket = () => {
   }
 
   return (
+    <React.Fragment>
     <Box p={3}>
       <Typography variant="h4" gutterBottom>
         Dettagli del Ticket
@@ -50,6 +53,7 @@ const DetailsTicket = () => {
         </Typography>
       </Paper>
     </Box>
+    </React.Fragment>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -16,8 +16,10 @@ import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import TecnicoDetailModal from "../../components/Modal/TecnicoDetailModal";
 import { Typography } from "@mui/material";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const Technicians = () => {
+  usePageTitle("Tecnici");
   const [tecnici, setTecnici] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
@@ -110,6 +112,7 @@ const Technicians = () => {
   const searchFields = ["cognome", "nome", "email"];
 
   return (
+    <React.Fragment>
     <div className="container mt-3 mb-4">
       <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
         Tecnici
@@ -144,6 +147,7 @@ const Technicians = () => {
         </>
       )}
     </div>
+    </React.Fragment>
   );
 };
 

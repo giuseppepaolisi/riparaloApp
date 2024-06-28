@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { fetchTecnicoById, updateTecnico } from "../../api/apiTecnico";
@@ -12,8 +12,10 @@ import {
 } from "@mui/material";
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const EditTechnician = () => {
+  usePageTitle("Modifica Tecnico");
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
@@ -76,6 +78,7 @@ const EditTechnician = () => {
   if (loading) return <Loading open={loading} />;
 
   return (
+    <React.Fragment>
     <Container component="main" maxWidth="xs">
       <Box mt={8} display="flex" flexDirection="column" alignItems="center">
         <Typography component="h1" variant="h5">
@@ -147,6 +150,7 @@ const EditTechnician = () => {
         )}
       </Box>
     </Container>
+    </React.Fragment>
   );
 };
 

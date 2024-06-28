@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { Container, Typography, Button } from "@mui/material";
+import usePageTitle from "../../CustomHooks/usePageTItle";
 
 const Error404 = () => {
+  usePageTitle("404 Pagina non trovata");
   return (
     <Container
       sx={{

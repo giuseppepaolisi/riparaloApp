@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Typography, Box, TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import TicketTable from "./TicketTable";
 import AddButton from "../Action/AddButton";
 import DetailButton from "../Action/DetailButton";
@@ -12,7 +12,6 @@ import StatusFilterButtons from "../../components/StatusFilterButtons";
 import { fetchTicketsByState, deleteTicket } from "../../api/apiPartner";
 
 const TicketDashboard = ({
-  title,
   fetchTickets,
   columns,
   searchFields,
@@ -101,9 +100,6 @@ const TicketDashboard = ({
 
   return (
     <div className="container mt-3 mb-4">
-      <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
-        {title}
-      </Typography>
       <Box
         display="flex"
         justifyContent="space-between"
@@ -145,7 +141,6 @@ const TicketDashboard = ({
 };
 
 TicketDashboard.propTypes = {
-  title: PropTypes.string.isRequired,
   fetchTickets: PropTypes.func.isRequired,
   columns: PropTypes.arrayOf(
     PropTypes.shape({

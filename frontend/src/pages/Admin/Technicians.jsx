@@ -5,7 +5,7 @@ import {
   fetchTecnici,
   deleteTecnico,
   fetchTecnicoById,
-} from "../../api/apiTecnico";
+} from "../../api/apiAdmin";
 import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
 import EditButton from "../../components/Action/EditButton";

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchPartnerById, updatePartner } from "../../api/apiPartner";
+import { fetchPartnerById} from "../../api/apiAdmin";
+import { updatePartner } from "../../api/apiAdmin";
 import {
   TextField,
   Button,
@@ -13,10 +14,12 @@ import {
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTItle";
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 
 const EditPartner = () => {
   usePageTitle("Modifica Partner");
+  useBodyBackgroundColor("white");
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);

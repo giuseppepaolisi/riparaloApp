@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { Grid } from "@mui/material";
-import { addTecnico } from "../../api/apiTecnico";
+import { addTecnico } from "../../api/apiAdmin";
 import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
@@ -51,54 +51,54 @@ const AddTechnician = () => {
 
   return (
     <React.Fragment>
-    <FormContainer title="Aggiungi Tecnico">
-      {error && <CustomAlert msg={error} severity="error" />}
-      {success && <CustomAlert msg={success} severity="success" />}
-      <form onSubmit={handleAggiungiTecnico} style={{ marginTop: 1 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <FormInput
-              label="Cognome"
-              id="cognome"
-              value={cognome}
-              onChange={(e) => setCognome(e.target.value)}
-              required
-            />
+      <FormContainer title="Aggiungi Tecnico">
+        {error && <CustomAlert msg={error} severity="error" />}
+        {success && <CustomAlert msg={success} severity="success" />}
+        <form onSubmit={handleAggiungiTecnico} style={{ marginTop: 1 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <FormInput
+                label="Cognome"
+                id="cognome"
+                value={cognome}
+                onChange={(e) => setCognome(e.target.value)}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormInput
+                label="Nome"
+                id="nome"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormInput
+                label="Email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormInput
+                label="Password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                required
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormInput
-              label="Nome"
-              id="nome"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              required
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormInput
-              label="Email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              required
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormInput
-              label="Password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              required
-            />
-          </Grid>
-        </Grid>
-        <FormActions onSubmit={handleAggiungiTecnico} />
-      </form>
-    </FormContainer>
-  </React.Fragment>
+          <FormActions onSubmit={handleAggiungiTecnico} />
+        </form>
+      </FormContainer>
+    </React.Fragment>
   );
 };
 

@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import DeviceDetailModal from "../../components/Modal/DeviceDetailModal";
 import { Typography } from "@mui/material";
 import usePageTitle from "../../CustomHooks/usePageTItle";
+import { fetchDevices, deleteDevice, fetchDeviceDetails } from "../../api/apiAdmin";
 
 const Devices = () => {
   usePageTitle("Dispositivi");
@@ -28,38 +29,25 @@ const Devices = () => {
 
   const { token } = useSelector((state) => state.auth);
 
-  const fetchDevices = useCallback(async () => {
-    if (!token) {
-      return;
-    }
+  const loadDevices = useCallback(async () => {
+    if (!token) return;
     try {
-      const response = await fetch("/api/devices", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      let data = await response.json();
-      if (!response.ok) {
-        throw new Error("Errore nella lista dispositivi");
-      }
+      const data = await fetchDevices(token);
       setDevices(data.devices);
       setLoading(false);
     } catch (error) {
       console.error(error);
       setAlert({
         open: true,
-        msg: error,
+        msg: error.message,
         severity: "error",
       });
     }
   }, [token]);
 
   useEffect(() => {
-    fetchDevices().catch(console.error);
-  }, [fetchDevices]);
+    loadDevices();
+  }, [loadDevices]);
 
   const handleDelete = (item) => {
     setDeleteModal({ isOpen: true, item });
@@ -67,23 +55,9 @@ const Devices = () => {
 
   const confirmDelete = useCallback(async () => {
     try {
-      if (!token) {
-        return;
-      }
-      const response = await fetch(`/api/device/${deleteModal.item._id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Errore eliminazione dispositivo");
-      }
-      setDevices((devices) =>
-        devices.filter((device) => device._id !== deleteModal.item._id)
-      );
+      if (!token) return;
+      await deleteDevice(token, deleteModal.item._id);
+      setDevices((devices) => devices.filter((device) => device._id !== deleteModal.item._id));
       setAlert({
         open: true,
         msg: "Dispositivo eliminato con successo",
@@ -93,12 +67,12 @@ const Devices = () => {
       console.error(error);
       setAlert({
         open: true,
-        msg: "Errore eliminazione dispositivo",
+        msg: error.message,
         severity: "error",
       });
     }
     setDeleteModal({ isOpen: false, item: null });
-  }, [token, deleteModal]);
+  }, [token, deleteModal.item]);
 
   const cancelDelete = () => {
     setDeleteModal({ isOpen: false, item: null });
@@ -106,27 +80,14 @@ const Devices = () => {
 
   const handleDetail = async (item) => {
     try {
-      if (!token) {
-        return;
-      }
-      const response = await fetch(`/api/device/${item._id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Errore nel recupero dei dettagli del dispositivo");
-      }
-      let data = await response.json();
+      if (!token) return;
+      const data = await fetchDeviceDetails(token, item._id);
       setDetailModal({ isOpen: true, device: data.device });
     } catch (error) {
       console.error(error);
       setAlert({
         open: true,
-        msg: "Errore nel recupero dei dettagli del dispositivo",
+        msg: error.message,
         severity: "error",
       });
     }
@@ -157,40 +118,38 @@ const Devices = () => {
 
   return (
     <React.Fragment>
-    <div className="container mt-3 mb-4">
-      <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
-        Dispositivi
-      </Typography>
-      {loading ? (
-        <Loading open={loading} />
-      ) : (
-        <>
-          <Table
-            columns={columns}
-            rows={devices}
-            actions={<AddButton label="Dispositivo" link="/aggiungi-modello" />}
-            searchFields={searchFields}
-          />
-          {deleteModal.isOpen && (
-            <DeleteModal
-              message={`Sei sicuro di voler eliminare ${deleteModal.item.marca} ${deleteModal.item.modello}?`}
-              onDelete={confirmDelete}
-              onCancel={cancelDelete}
+      <div className="container mt-3 mb-4">
+        <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
+          Dispositivi
+        </Typography>
+        {loading ? (
+          <Loading open={loading} />
+        ) : (
+          <>
+            <Table
+              columns={columns}
+              rows={devices}
+              actions={<AddButton label="Dispositivo" link="/aggiungi-modello" />}
+              searchFields={searchFields}
             />
-          )}
-          {alert.open && (
-            <CustomAlert msg={alert.msg} severity={alert.severity} />
-          )}
-          {detailModal.isOpen && (
-            <DeviceDetailModal
-              open={detailModal.isOpen}
-              onClose={() => setDetailModal({ isOpen: false, device: null })}
-              device={detailModal.device}
-            />
-          )}
-        </>
-      )}
-    </div>
+            {deleteModal.isOpen && (
+              <DeleteModal
+                message={`Sei sicuro di voler eliminare ${deleteModal.item.marca} ${deleteModal.item.modello}?`}
+                onDelete={confirmDelete}
+                onCancel={cancelDelete}
+              />
+            )}
+            {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
+            {detailModal.isOpen && (
+              <DeviceDetailModal
+                open={detailModal.isOpen}
+                onClose={() => setDetailModal({ isOpen: false, device: null })}
+                device={detailModal.device}
+              />
+            )}
+          </>
+        )}
+      </div>
     </React.Fragment>
   );
 };

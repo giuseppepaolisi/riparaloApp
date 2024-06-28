@@ -5,7 +5,7 @@ import {
   fetchPartners,
   deletePartner,
   fetchPartnerById,
-} from "../../api/apiPartner";
+} from "../../api/apiAdmin";
 import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
 import EditButton from "../../components/Action/EditButton";

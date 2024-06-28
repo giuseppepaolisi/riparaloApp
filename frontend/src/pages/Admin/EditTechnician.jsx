@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchTecnicoById, updateTecnico } from "../../api/apiTecnico";
+import { fetchTecnicoById, updateTecnico } from "../../api/apiAdmin";
 import {
   TextField,
   Button,

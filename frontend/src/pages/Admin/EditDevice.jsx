@@ -5,6 +5,7 @@ import { Grid, Box, TextField, Button } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTItle";
+import { fetchDevice, updateDevice } from "../../api/apiAdmin";
 
 const EditDevice = () => {
   usePageTitle("Modifica Dispositivo");
@@ -17,22 +18,14 @@ const EditDevice = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchDevice = async () => {
-      const response = await fetch(`/api/device/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      if (response.ok) {
-        console.log(data.device);
+    const loadDevice = async () => {
+      try {
+        const data = await fetchDevice(token, id);
         setModello(data.device.modello);
         setMarca(data.device.marca);
         setServizi(data.device.servizi);
-      } else {
-        console.error("Errore nel caricamento del dispositivo");
+      } catch (error) {
+        console.error(error.message);
         setAlert({
           open: true,
           msg: "Errore nel caricamento del dispositivo",
@@ -40,7 +33,7 @@ const EditDevice = () => {
         });
       }
     };
-    fetchDevice();
+    loadDevice();
   }, [id, token]);
 
   const handleServizioChange = (index, event) => {
@@ -71,21 +64,7 @@ const EditDevice = () => {
     };
 
     try {
-      const response = await fetch(`/api/device/${id}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          data.error || "Non è stato possibile modificare il dispositivo"
-        );
-      }
+      await updateDevice(token, id, formData);
       setAlert({
         open: true,
         msg: "Dispositivo modificato con successo",
@@ -93,7 +72,7 @@ const EditDevice = () => {
       });
       navigate("/modelli");
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
       setAlert({
         open: true,
         msg: error.message,
@@ -108,117 +87,117 @@ const EditDevice = () => {
 
   return (
     <React.Fragment>
-    <FormContainer title="Modifica Dispositivo">
-      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
-      <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
-        <Grid container spacing={2} alignItems="flex-end">
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Marca"
-              id="marca"
-              name="marca"
-              value={marca}
-              onChange={(e) => setMarca(e.target.value)}
-              fullWidth
-              required
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Modello"
-              type="text"
-              id="modello"
-              name="modello"
-              value={modello}
-              onChange={(e) => setModello(e.target.value)}
-              fullWidth
-              required
-              variant="outlined"
-            />
-          </Grid>
-        </Grid>
-        {servizi.map((servizio, index) => (
-          <Box key={index} sx={{ my: 3 }}>
-            <Grid container spacing={2} alignItems="flex-end">
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  label="Servizio"
-                  type="text"
-                  id={`servizio-${index}`}
-                  name="servizio"
-                  value={servizio.servizio}
-                  onChange={(e) => handleServizioChange(index, e)}
-                  fullWidth
-                  required
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  label="Prezzo"
-                  type="number"
-                  id={`prezzo-${index}`}
-                  name="prezzo"
-                  value={servizio.prezzo}
-                  onChange={(e) => handleServizioChange(index, e)}
-                  fullWidth
-                  required
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={3}
-                sx={{ display: "flex", alignItems: "center" }}
-              >
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => handleRemoveServizio(index)}
-                >
-                  - Rimuovi
-                </Button>
-              </Grid>
+      <FormContainer title="Modifica Dispositivo">
+        {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
+        <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
+          <Grid container spacing={2} alignItems="flex-end">
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Marca"
+                id="marca"
+                name="marca"
+                value={marca}
+                onChange={(e) => setMarca(e.target.value)}
+                fullWidth
+                required
+                variant="outlined"
+              />
             </Grid>
-          </Box>
-        ))}
-        <Grid container justifyContent="center">
-          <Grid item>
-            <Button
-              variant="contained"
-              onClick={handleAddServizio}
-              sx={{ mb: 3 }}
-            >
-              + Aggiungi Servizio
-            </Button>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Modello"
+                type="text"
+                id="modello"
+                name="modello"
+                value={modello}
+                onChange={(e) => setModello(e.target.value)}
+                fullWidth
+                required
+                variant="outlined"
+              />
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid container justifyContent="center" spacing={2}>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="success"
-              type="submit"
-              sx={{ mb: 3 }}
-            >
-              Invia
-            </Button>
+          {servizi.map((servizio, index) => (
+            <Box key={index} sx={{ my: 3 }}>
+              <Grid container spacing={2} alignItems="flex-end">
+                <Grid item xs={12} sm={5}>
+                  <TextField
+                    label="Servizio"
+                    type="text"
+                    id={`servizio-${index}`}
+                    name="servizio"
+                    value={servizio.servizio}
+                    onChange={(e) => handleServizioChange(index, e)}
+                    fullWidth
+                    required
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    label="Prezzo"
+                    type="number"
+                    id={`prezzo-${index}`}
+                    name="prezzo"
+                    value={servizio.prezzo}
+                    onChange={(e) => handleServizioChange(index, e)}
+                    fullWidth
+                    required
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={3}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleRemoveServizio(index)}
+                  >
+                    - Rimuovi
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          ))}
+          <Grid container justifyContent="center">
+            <Grid item>
+              <Button
+                variant="contained"
+                onClick={handleAddServizio}
+                sx={{ mb: 3 }}
+              >
+                + Aggiungi Servizio
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Button
-              variant="contained"
-              color="inherit"
-              onClick={handleCancel}
-              sx={{ mb: 3 }}
-            >
-              Annulla
-            </Button>
+          <Grid container justifyContent="center" spacing={2}>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="success"
+                type="submit"
+                sx={{ mb: 3 }}
+              >
+                Invia
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="inherit"
+                onClick={handleCancel}
+                sx={{ mb: 3 }}
+              >
+                Annulla
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
-    </FormContainer>
+        </form>
+      </FormContainer>
     </React.Fragment>
   );
 };

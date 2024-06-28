@@ -7,6 +7,7 @@ import smartphoneBrands from "../../assets/js/brands";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTItle";
+import { addDevice } from "../../api/apiAdmin";
 
 smartphoneBrands.unshift("");
 
@@ -57,24 +58,9 @@ const AddDevice = () => {
         prezzo: Number(servizio.prezzo),
       })),
     };
-    console.log(token);
-    console.log(formData);
-    try {
-      const response = await fetch("/api/device", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          data.error || "Non è stato possibile aggiungere il dispositivo"
-        );
-      }
+    try {
+      await addDevice(token, formData); // usa la funzione addDevice
       setAlert({
         open: true,
         msg: "Dispositivo aggiunto con successo",
@@ -97,108 +83,108 @@ const AddDevice = () => {
 
   return (
     <React.Fragment>
-    <FormContainer title="Aggiungi Dispositivo">
-      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
-      <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
-        <Grid container spacing={2} alignItems="flex-end">
-          <Grid item xs={12} sm={6}>
-            <TextField
-              select
-              label="Marca"
-              id="marca"
-              name="marca"
-              value={marca}
-              onChange={handleChange}
-              fullWidth
-              required
-              variant="outlined"
-            >
-              {smartphoneBrands.map((brand, index) => (
-                <MenuItem
-                  key={index}
-                  value={brand}
-                  disabled={brand === "" && marca !== ""}
-                >
-                  {brand === "" ? "Seleziona una marca" : brand}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Modello"
-              type="text"
-              id="modello"
-              name="modello"
-              value={modello}
-              onChange={(e) => setModello(e.target.value)}
-              fullWidth
-              required
-              variant="outlined"
-            />
-          </Grid>
-        </Grid>
-        {servizi.map((servizio, index) => (
-          <Box key={index} sx={{ my: 3 }}>
-            <Grid container spacing={2} alignItems="flex-end">
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  label="Servizio"
-                  type="text"
-                  id={`servizio-${index}`}
-                  name={`servizio-${index}`}
-                  value={servizio.servizio}
-                  onChange={(e) => handleServizioChange(index, e)}
-                  fullWidth
-                  required
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  label="Prezzo"
-                  type="number"
-                  id={`prezzo-${index}`}
-                  name={`prezzo-${index}`}
-                  value={servizio.prezzo}
-                  onChange={(e) => handleServizioChange(index, e)}
-                  fullWidth
-                  required
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={3}
-                sx={{ display: "flex", alignItems: "center" }}
+      <FormContainer title="Aggiungi Dispositivo">
+        {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
+        <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
+          <Grid container spacing={2} alignItems="flex-end">
+            <Grid item xs={12} sm={6}>
+              <TextField
+                select
+                label="Marca"
+                id="marca"
+                name="marca"
+                value={marca}
+                onChange={handleChange}
+                fullWidth
+                required
+                variant="outlined"
               >
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => handleRemoveServizio(index)}
-                >
-                  - Rimuovi
-                </Button>
-              </Grid>
+                {smartphoneBrands.map((brand, index) => (
+                  <MenuItem
+                    key={index}
+                    value={brand}
+                    disabled={brand === "" && marca !== ""}
+                  >
+                    {brand === "" ? "Seleziona una marca" : brand}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
-          </Box>
-        ))}
-        <Grid container justifyContent="center">
-          <Grid item>
-            <Button
-              variant="contained"
-              onClick={handleAddServizio}
-              disabled={isAddServizioDisabled}
-              sx={{ mb: 3 }}
-            >
-              + Aggiungi Servizio
-            </Button>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Modello"
+                type="text"
+                id="modello"
+                name="modello"
+                value={modello}
+                onChange={(e) => setModello(e.target.value)}
+                fullWidth
+                required
+                variant="outlined"
+              />
+            </Grid>
           </Grid>
-        </Grid>
-        <FormActions onSubmit={handleSubmit} />
-      </form>
-    </FormContainer>
+          {servizi.map((servizio, index) => (
+            <Box key={index} sx={{ my: 3 }}>
+              <Grid container spacing={2} alignItems="flex-end">
+                <Grid item xs={12} sm={5}>
+                  <TextField
+                    label="Servizio"
+                    type="text"
+                    id={`servizio-${index}`}
+                    name={`servizio-${index}`}
+                    value={servizio.servizio}
+                    onChange={(e) => handleServizioChange(index, e)}
+                    fullWidth
+                    required
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    label="Prezzo"
+                    type="number"
+                    id={`prezzo-${index}`}
+                    name={`prezzo-${index}`}
+                    value={servizio.prezzo}
+                    onChange={(e) => handleServizioChange(index, e)}
+                    fullWidth
+                    required
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={3}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleRemoveServizio(index)}
+                  >
+                    - Rimuovi
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          ))}
+          <Grid container justifyContent="center">
+            <Grid item>
+              <Button
+                variant="contained"
+                onClick={handleAddServizio}
+                disabled={isAddServizioDisabled}
+                sx={{ mb: 3 }}
+              >
+                + Aggiungi Servizio
+              </Button>
+            </Grid>
+          </Grid>
+          <FormActions onSubmit={handleSubmit} />
+        </form>
+      </FormContainer>
     </React.Fragment>
   );
 };

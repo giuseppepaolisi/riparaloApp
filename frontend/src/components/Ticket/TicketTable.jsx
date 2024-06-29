@@ -101,6 +101,7 @@ TicketTable.propTypes = {
   searchTerm: PropTypes.string, // Add searchTerm prop
   showSearchBar: PropTypes.bool, // Add showSearchBar prop
   setSearchTerm: PropTypes.func, // Add setSearchTerm prop
+  onDetail: PropTypes.func, // Add onDetail prop
 };
 
 TicketTable.defaultProps = {
@@ -109,6 +110,7 @@ TicketTable.defaultProps = {
   searchTerm: "", // Default searchTerm to an empty string
   showSearchBar: true, // Default to true
   setSearchTerm: () => {}, // Default to an empty function
+  onDetail: () => {}, // Default to an empty function
 };
 
 export default TicketTable;

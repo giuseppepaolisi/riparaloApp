@@ -21,6 +21,7 @@ const TicketDashboard = ({
   alignSearchWithFilters,
   showEditButton,
   showDeleteButton,
+  onDetail, // Add onDetail prop
 }) => {
   const [tickets, setTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -50,9 +51,9 @@ const TicketDashboard = ({
 
   const handleDetail = useCallback(
     (id) => {
-      navigate(`/ticket/${id}`);
+      onDetail(id); // Call onDetail when the detail button is clicked
     },
-    [navigate]
+    [onDetail]
   );
 
   const handleEdit = useCallback(
@@ -137,6 +138,7 @@ const TicketDashboard = ({
         searchTerm={searchTerm}
         showSearchBar={!alignSearchWithFilters}
         setSearchTerm={setSearchTerm}
+        onDetail={handleDetail} // Pass the detail handler to TicketTable
       />
     </div>
   );
@@ -163,15 +165,17 @@ TicketDashboard.propTypes = {
     })
   ).isRequired,
   alignSearchWithFilters: PropTypes.bool,
-  showEditButton: PropTypes.bool,
-  showDeleteButton: PropTypes.bool,
+  showEditButton: PropTypes.bool, // New prop for showing/hiding the edit button
+  showDeleteButton: PropTypes.bool, // New prop for showing/hiding the delete button
+  onDetail: PropTypes.func, // New prop for detail handler
 };
 
 TicketDashboard.defaultProps = {
   showAddButton: false,
   alignSearchWithFilters: false,
-  showEditButton: true,
-  showDeleteButton: true,
+  showEditButton: true, // Default to showing the edit button
+  showDeleteButton: true, // Default to showing the delete button
+  onDetail: () => {}, // Default to an empty function
 };
 
 export default TicketDashboard;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import { addTecnico } from "../../api/apiAdmin";
 import FormInput from "../../components/FormInput";
@@ -18,14 +19,18 @@ const AddTechnician = () => {
   const [success, setSuccess] = useState(null);
 
   const { token } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const handleAggiungiTecnico = useCallback(
     async (event) => {
       event.preventDefault();
+      setError(null);
+      setSuccess(null);
 
       const nuovoTecnico = { cognome, nome, email, password };
 
       try {
+        console.log("Dati inviati al server:", nuovoTecnico);
         const response = await addTecnico(token, nuovoTecnico);
         console.log("Nuovo tecnico aggiunto:", response.user);
 
@@ -34,12 +39,13 @@ const AddTechnician = () => {
         setEmail("");
         setPassword("");
         setSuccess("Tecnico aggiunto con successo");
+        navigate("/tecnici");
       } catch (error) {
         console.error("Errore durante l'aggiunta del tecnico:", error);
         setError(error.message);
       }
     },
-    [cognome, nome, email, password, token]
+    [cognome, nome, email, password, token, navigate]
   );
 
   useEffect(() => {

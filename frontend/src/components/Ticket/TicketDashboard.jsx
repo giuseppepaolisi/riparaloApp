@@ -19,6 +19,8 @@ const TicketDashboard = ({
   showAddButton,
   filterStatuses,
   alignSearchWithFilters,
+  showEditButton,
+  showDeleteButton,
 }) => {
   const [tickets, setTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -83,8 +85,8 @@ const TicketDashboard = ({
       renderCell: (params) => (
         <div>
           <DetailButton onClick={() => handleDetail(params.row._id)} />
-          <EditButton onClick={() => handleEdit(params.row._id)} />
-          <DeleteButton onClick={() => handleDelete(params.row._id)} />
+          {showEditButton && <EditButton onClick={() => handleEdit(params.row._id)} />}
+          {showDeleteButton && <DeleteButton onClick={() => handleDelete(params.row._id)} />}
         </div>
       ),
     },
@@ -161,11 +163,15 @@ TicketDashboard.propTypes = {
     })
   ).isRequired,
   alignSearchWithFilters: PropTypes.bool,
+  showEditButton: PropTypes.bool,
+  showDeleteButton: PropTypes.bool,
 };
 
 TicketDashboard.defaultProps = {
   showAddButton: false,
   alignSearchWithFilters: false,
+  showEditButton: true,
+  showDeleteButton: true,
 };
 
 export default TicketDashboard;

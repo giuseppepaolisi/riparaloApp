@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   fetchTecnici,
@@ -8,7 +7,6 @@ import {
 } from "../../api/apiAdmin";
 import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
-import EditButton from "../../components/Action/EditButton";
 import DetailButton from "../../components/Action/DetailButton";
 import Table from "../../components/Table/Table";
 import Loading from "../../components/Loading";
@@ -28,8 +26,6 @@ const Technicians = () => {
     tecnico: null,
   });
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
-  const navigate = useNavigate();
-
   const { token } = useSelector((state) => state.auth);
 
   const loadTecnici = useCallback(async () => {
@@ -87,10 +83,6 @@ const Technicians = () => {
     }
   };
 
-  const handleEdit = (id) => {
-    navigate(`/modifica-tecnico/${id}`);
-  };
-
   const columns = [
     { field: "cognome", headerName: "Cognome", flex: 1 },
     { field: "nome", headerName: "Nome", flex: 1 },
@@ -102,7 +94,6 @@ const Technicians = () => {
       renderCell: (params) => (
         <div>
           <DetailButton onClick={() => handleDetail(params.row._id)} />
-          <EditButton onClick={() => handleEdit(params.row._id)} />
           <DeleteButton onClick={() => handleDeleteTecnico(params.row._id)} />
         </div>
       ),

@@ -60,14 +60,15 @@ const DashboardAdmin = () => {
   usePageTitle("Dashboard Admin");
   return (
     <React.Fragment>
-    <TicketDashboard
-      fetchTickets={fetchTickets}
-      columns={columns}
-      searchFields={["_id", "id_partner", "stato"]}
-      addTicketLink="/apri-ticket"
-      filterStatuses={filterStatuses}
-      alignSearchWithFilters={true}
-    />
+      <TicketDashboard
+        fetchTickets={fetchTickets}
+        columns={columns}
+        searchFields={["_id", "id_partner", "stato"]}
+        addTicketLink="/apri-ticket"
+        filterStatuses={filterStatuses}
+        alignSearchWithFilters={true}
+        showEditButton={false}
+      />
     </React.Fragment>
   );
 };

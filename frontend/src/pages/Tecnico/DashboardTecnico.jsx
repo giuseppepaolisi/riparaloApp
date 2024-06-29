@@ -58,22 +58,23 @@ const DashboardTecnico = () => {
   usePageTitle("Dashboard Tecnico");
   return (
     <React.Fragment>
-    <TicketDashboard
-      fetchTickets={fetchTickets}
-      columns={columns}
-      searchFields={[
-        "_id",
-        "id_partner",
-        "marca",
-        "modello",
-        "stato",
-        "descrizione_problema",
-      ]}
-      addTicketLink="/apri-ticket"
-      filterStatuses={filterStatuses}
-      alignSearchWithFilters={true}
-    />
-  </React.Fragment>
+      <TicketDashboard
+        fetchTickets={fetchTickets}
+        columns={columns}
+        searchFields={[
+          "_id",
+          "id_partner",
+          "marca",
+          "modello",
+          "stato",
+          "descrizione_problema",
+        ]}
+        addTicketLink="/apri-ticket"
+        filterStatuses={filterStatuses}
+        alignSearchWithFilters={true}
+        showDeleteButton={false}
+      />
+    </React.Fragment>
   );
 };
 

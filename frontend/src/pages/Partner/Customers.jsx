@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchClienti, deleteCliente } from "../../api/apiPartner";
+import { fetchClienti, deleteCliente, fetchClienteById } from "../../api/apiPartner";
 import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
 import EditButton from "../../components/Action/EditButton";
@@ -10,6 +10,7 @@ import Table from "../../components/Table/Table";
 import Loading from "../../components/Loading";
 import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
+import CustomerDetailModal from "../../components/Modal/CustomerDetailModal";
 import { Typography } from "@mui/material";
 import usePageTitle from "../../CustomHooks/usePageTItle";
 
@@ -20,6 +21,7 @@ const Customers = () => {
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
+  const [detailModal, setDetailModal] = useState({ isOpen: false, customer: null });
   const navigate = useNavigate();
 
   const { token } = useSelector((state) => state.auth);
@@ -69,8 +71,19 @@ const Customers = () => {
     setDeleteModal({ isOpen: false, item: null });
   };
 
-  const handleDetail = (id) => {
-    navigate(`/cliente/${id}`);
+  const handleDetail = async (id) => {
+    try {
+      if (!token) return;
+      const data = await fetchClienteById(token, id);
+      setDetailModal({ isOpen: true, customer: data });
+    } catch (error) {
+      console.error(error);
+      setAlert({
+        open: true,
+        msg: "Errore nel recupero del cliente",
+        severity: "error",
+      });
+    }
   };
 
   const handleEdit = (id) => {
@@ -122,6 +135,13 @@ const Customers = () => {
           )}
           {alert.open && (
             <CustomAlert msg={alert.msg} severity={alert.severity} />
+          )}
+          {detailModal.isOpen && (
+            <CustomerDetailModal
+              open={detailModal.isOpen}
+              onClose={() => setDetailModal({ isOpen: false, customer: null })}
+              customer={detailModal.customer}
+            />
           )}
         </>
       )}

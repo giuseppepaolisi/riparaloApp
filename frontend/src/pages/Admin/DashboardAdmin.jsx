@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { fetchTickets, fetchTicketById } from "../../api/apiPartner";
 import TicketDashboard from "../../components/Ticket/TicketDashboard";

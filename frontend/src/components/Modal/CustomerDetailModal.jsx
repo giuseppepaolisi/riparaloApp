@@ -23,43 +23,31 @@ const headerStyle = css`
   align-items: center;
 `;
 
-const TicketDetailModal = ({ open, onClose, ticket }) => {
+const CustomerDetailModal = ({ open, onClose, customer }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Box css={modalStyle}>
         <div css={headerStyle}>
           <Typography variant="h6" component="h2">
-            Dettagli del Ticket
+            Dettagli del Cliente
           </Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </div>
-        {ticket ? (
+        {customer ? (
           <>
             <Typography sx={{ mt: 2 }}>
-              <strong>ID:</strong> {ticket._id}
+              <strong>Nome:</strong> {customer.nome}
             </Typography>
             <Typography sx={{ mt: 1 }}>
-              <strong>ID Partner:</strong> {ticket.id_partner}
+              <strong>Cognome:</strong> {customer.cognome}
             </Typography>
             <Typography sx={{ mt: 1 }}>
-              <strong>Nome Cliente:</strong> {ticket.nome_cliente}
+              <strong>Email:</strong> {customer.email}
             </Typography>
             <Typography sx={{ mt: 1 }}>
-              <strong>Cognome Cliente:</strong> {ticket.cognome_cliente}
-            </Typography>
-            <Typography sx={{ mt: 1 }}>
-              <strong>Marca:</strong> {ticket.marca}
-            </Typography>
-            <Typography sx={{ mt: 1 }}>
-              <strong>Modello:</strong> {ticket.modello}
-            </Typography>
-            <Typography sx={{ mt: 1 }}>
-              <strong>Stato:</strong> {ticket.stato}
-            </Typography>
-            <Typography sx={{ mt: 1 }}>
-              <strong>Descrizione Problema:</strong> {ticket.descrizione_problema}
+              <strong>Telefono:</strong> {customer.telefono}
             </Typography>
           </>
         ) : (
@@ -70,19 +58,15 @@ const TicketDetailModal = ({ open, onClose, ticket }) => {
   );
 };
 
-TicketDetailModal.propTypes = {
+CustomerDetailModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  ticket: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    id_partner: PropTypes.string.isRequired,
-    nome_cliente: PropTypes.string.isRequired,
-    cognome_cliente: PropTypes.string.isRequired,
-    marca: PropTypes.string.isRequired,
-    modello: PropTypes.string.isRequired,
-    stato: PropTypes.string.isRequired,
-    descrizione_problema: PropTypes.string.isRequired,
+  customer: PropTypes.shape({
+    nome: PropTypes.string.isRequired,
+    cognome: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    telefono: PropTypes.string.isRequired,
   }), // Non più required
 };
 
-export default TicketDetailModal;
+export default CustomerDetailModal;

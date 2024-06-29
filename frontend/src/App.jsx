@@ -24,7 +24,6 @@ import DashboardTecnico from "./pages/Tecnico/DashboardTecnico";
 import Error403 from "./pages/error/Error403";
 import Error404 from "./pages/error/Error404";
 import Error500 from "./pages/error/Error500";
-import DetailsTicket from "./pages/Ticket/DetailsTicket";
 import CreateTicket from "./pages/Ticket/CreateTicket";
 import Devices from "./pages/Admin/Devices";
 import AddDevice from "./pages/Admin/AddDevice";
@@ -33,7 +32,6 @@ import EditTechnician from "./pages/Admin/EditTechnician";
 import EditPartner from "./pages/Admin/EditPartner";
 import EditCustomer from "./pages/Partner/EditCustomer";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
-import DetailsCustomer from "./pages/Partner/DetailsCustomer";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./assets/js/theme";
 
@@ -102,8 +100,6 @@ const App = () => {
                   path="/modifica-cliente/:id"
                   element={<EditCustomer />}
                 />
-                <Route path="/cliente/:id" element={<DetailsCustomer />} />{" "}
-                {/* Nuova rotta per i dettagli del cliente */}
               </Route>
 
               {/* Tecnico Routes */}
@@ -120,7 +116,6 @@ const App = () => {
                   <PrivateRoute roles={["admin", "partner", "tecnico"]} />
                 }
               >
-                <Route path="/ticket/:id" element={<DetailsTicket />} />
               </Route>
 
               {/* Error Routes */}

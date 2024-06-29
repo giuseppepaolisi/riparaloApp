@@ -46,10 +46,10 @@ const AddPartner = () => {
     setSuccess(null);
     try {
       console.log("Dati inviati al server:", formData);
-      const response = await addPartner(token, formData); // usa la funzione addPartner
+      const response = await addPartner(token, formData);
       console.log("Risposta del server:", response);
       setSuccess("Partner aggiunto con successo");
-      setTimeout(() => navigate("/partner"), 2000);
+      navigate("/partner");
     } catch (error) {
       console.error("Errore durante l'aggiunta del partner:", error);
       setError(error.message);

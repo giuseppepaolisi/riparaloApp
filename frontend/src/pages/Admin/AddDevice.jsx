@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Grid, Box, TextField, Button, MenuItem } from "@mui/material";
+import { Grid, Box, TextField, Button, Autocomplete, IconButton, InputAdornment } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import CustomAlert from "../../components/Alert/CustomAlert";
 import smartphoneBrands from "../../assets/js/brands";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTItle";
 import { addDevice } from "../../api/apiAdmin";
-
-smartphoneBrands.unshift("");
 
 const AddDevice = () => {
   usePageTitle("Aggiungi Dispositivo");
@@ -27,14 +26,27 @@ const AddDevice = () => {
     };
   }, []);
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setMarca(value);
+  const handleChange = (event, newValue) => {
+    setMarca(newValue);
+  };
+
+  const handleClearMarca = () => {
+    setMarca("");
   };
 
   const handleServizioChange = (index, event) => {
     const values = [...servizi];
-    values[index][event.target.name] = event.target.value;
+    const { name, value } = event.target;
+    const field = name.split('-')[0];  // get the base name, either 'servizio' or 'prezzo'
+
+    if (field === 'prezzo') {
+      // Allow only positive numbers
+      const validValue = value.replace(/[^0-9]/g, '');
+      values[index][field] = validValue;
+    } else {
+      values[index][field] = value;
+    }
+
     setServizi(values);
   };
 
@@ -50,9 +62,10 @@ const AddDevice = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Verifica che la marca sia valida o personalizzata
     const formData = {
       modello,
-      marca,
+      marca: marca || "Altro", // Imposta "Altro" se la marca è vuota
       servizi: servizi.map((servizio) => ({
         servizio: servizio.servizio,
         prezzo: Number(servizio.prezzo),
@@ -81,6 +94,13 @@ const AddDevice = () => {
     (servizio) => servizio.servizio === "" || servizio.prezzo === ""
   );
 
+  const handleKeyDown = (e) => {
+    // Prevent the user from typing '-' or '+' or 'e'
+    if (['-', '+', 'e'].includes(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <React.Fragment>
       <FormContainer title="Aggiungi Dispositivo">
@@ -88,27 +108,41 @@ const AddDevice = () => {
         <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
           <Grid container spacing={2} alignItems="flex-end">
             <Grid item xs={12} sm={6}>
-              <TextField
-                select
-                label="Marca"
-                id="marca"
-                name="marca"
+              <Autocomplete
+                freeSolo
+                options={smartphoneBrands}
                 value={marca}
                 onChange={handleChange}
-                fullWidth
-                required
-                variant="outlined"
-              >
-                {smartphoneBrands.map((brand, index) => (
-                  <MenuItem
-                    key={index}
-                    value={brand}
-                    disabled={brand === "" && marca !== ""}
-                  >
-                    {brand === "" ? "Seleziona una marca" : brand}
-                  </MenuItem>
-                ))}
-              </TextField>
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Marca"
+                    id="marca"
+                    name="marca"
+                    fullWidth
+                    required
+                    variant="outlined"
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {marca && (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="clear input"
+                                onClick={handleClearMarca}
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          )}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -148,9 +182,11 @@ const AddDevice = () => {
                     name={`prezzo-${index}`}
                     value={servizio.prezzo}
                     onChange={(e) => handleServizioChange(index, e)}
+                    onKeyDown={handleKeyDown}  // Added to prevent invalid characters
                     fullWidth
                     required
                     variant="outlined"
+                    inputProps={{ min: "0" }}  // This will prevent negative numbers
                   />
                 </Grid>
                 <Grid

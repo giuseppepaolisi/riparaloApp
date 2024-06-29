@@ -63,6 +63,7 @@ const AddTechnician = () => {
                 value={cognome}
                 onChange={(e) => setCognome(e.target.value)}
                 required
+                type="text"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -72,6 +73,7 @@ const AddTechnician = () => {
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
                 required
+                type="text"
               />
             </Grid>
             <Grid item xs={12} sm={6}>

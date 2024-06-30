@@ -24,6 +24,8 @@ const headerStyle = css`
 `;
 
 const PartnerDetailModal = ({ open, onClose, partner }) => {
+  console.log("Rendering PartnerDetailModal with partner:", partner); // Aggiungi questo log
+
   return (
     <Modal open={open} onClose={onClose}>
       <Box css={modalStyle}>
@@ -35,7 +37,7 @@ const PartnerDetailModal = ({ open, onClose, partner }) => {
             <CloseIcon />
           </IconButton>
         </div>
-        {partner && (
+        {partner ? (
           <Box mt={2}>
             <Typography variant="body1">
               <strong>Nome:</strong> {partner.nome}
@@ -71,6 +73,8 @@ const PartnerDetailModal = ({ open, onClose, partner }) => {
               <strong>Provincia:</strong> {partner.provincia}
             </Typography>
           </Box>
+        ) : (
+          <Typography sx={{ mt: 2 }}>Caricamento...</Typography>
         )}
       </Box>
     </Modal>
@@ -80,7 +84,20 @@ const PartnerDetailModal = ({ open, onClose, partner }) => {
 PartnerDetailModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  partner: PropTypes.object,
+  partner: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    nome: PropTypes.string.isRequired,
+    cognome: PropTypes.string.isRequired,
+    telefono: PropTypes.string.isRequired,
+    ragioneSociale: PropTypes.string.isRequired,
+    partitaIVA: PropTypes.string.isRequired,
+    codiceUnivoco: PropTypes.string.isRequired,
+    pec: PropTypes.string.isRequired,
+    cap: PropTypes.string.isRequired,
+    via: PropTypes.string.isRequired,
+    provincia: PropTypes.string.isRequired,
+  }), // Non più required
 };
 
 export default PartnerDetailModal;

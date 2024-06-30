@@ -181,16 +181,20 @@ export const addPartner = async (token, partner) => {
         },
       });
   
+      const data = await response.json();
+      console.log("API response:", data);
+  
       if (!response.ok) {
         throw new Error("Errore nel recupero del partner");
       }
-  
-      const data = await response.json();
-      return data.user;
+      
+      return data.user || data;
     } catch (error) {
       throw new Error(error.message);
     }
   };
+  
+  
 
   export const updatePartner = async (token, id, updatedData) => {
     try {

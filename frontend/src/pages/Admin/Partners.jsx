@@ -77,6 +77,7 @@ const Partners = () => {
     if (!token) return;
     try {
       const partner = await fetchPartnerById(token, id);
+      console.log("Partner fetched:", partner); // Aggiungi questo log
       setDetailModal({ isOpen: true, partner });
     } catch (error) {
       console.error(error.message);
@@ -105,40 +106,40 @@ const Partners = () => {
 
   return (
     <React.Fragment>
-    <div className="container mt-3 mb-4">
-      <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
-        Partner
-      </Typography>
-      {loading ? (
-        <Loading open={loading} />
-      ) : (
-        <>
-          <Table
-            columns={columns}
-            rows={partners}
-            actions={<AddButton label="Partner" link="/aggiungi-partner" />}
-            searchFields={searchFields}
-          />
-          {deleteModal.isOpen && (
-            <DeleteModal
-              message={`Sei sicuro di voler eliminare questo partner?`}
-              onDelete={confirmDelete}
-              onCancel={cancelDelete}
+      <div className="container mt-3 mb-4">
+        <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
+          Partner
+        </Typography>
+        {loading ? (
+          <Loading open={loading} />
+        ) : (
+          <>
+            <Table
+              columns={columns}
+              rows={partners}
+              actions={<AddButton label="Partner" link="/aggiungi-partner" />}
+              searchFields={searchFields}
             />
-          )}
-          {detailModal.isOpen && (
-            <PartnerDetailModal
-              open={detailModal.isOpen}
-              onClose={() => setDetailModal({ isOpen: false, partner: null })}
-              partner={detailModal.partner}
-            />
-          )}
-          {alert.open && (
-            <CustomAlert msg={alert.msg} severity={alert.severity} />
-          )}
-        </>
-      )}
-    </div>
+            {deleteModal.isOpen && (
+              <DeleteModal
+                message={`Sei sicuro di voler eliminare questo partner?`}
+                onDelete={confirmDelete}
+                onCancel={cancelDelete}
+              />
+            )}
+            {detailModal.isOpen && (
+              <PartnerDetailModal
+                open={detailModal.isOpen}
+                onClose={() => setDetailModal({ isOpen: false, partner: null })}
+                partner={detailModal.partner}
+              />
+            )}
+            {alert.open && (
+              <CustomAlert msg={alert.msg} severity={alert.severity} />
+            )}
+          </>
+        )}
+      </div>
     </React.Fragment>
   );
 };

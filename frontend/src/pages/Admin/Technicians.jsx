@@ -77,6 +77,7 @@ const Technicians = () => {
     if (!token) return;
     try {
       const tecnico = await fetchTecnicoById(token, id);
+      console.log("Tecnico fetched:", tecnico);
       setDetailModal({ isOpen: true, tecnico });
     } catch (error) {
       console.error(error.message);
@@ -104,40 +105,40 @@ const Technicians = () => {
 
   return (
     <React.Fragment>
-    <div className="container mt-3 mb-4">
-      <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
-        Tecnici
-      </Typography>
-      {loading ? (
-        <Loading open={loading} />
-      ) : (
-        <>
-          <Table
-            columns={columns}
-            rows={tecnici}
-            actions={<AddButton label="Tecnico" link="/aggiungi-tecnico" />}
-            searchFields={searchFields}
-          />
-          {deleteModal.isOpen && (
-            <DeleteModal
-              message={`Sei sicuro di voler eliminare questo tecnico?`}
-              onDelete={confirmDelete}
-              onCancel={cancelDelete}
+      <div className="container mt-3 mb-4">
+        <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
+          Tecnici
+        </Typography>
+        {loading ? (
+          <Loading open={loading} />
+        ) : (
+          <>
+            <Table
+              columns={columns}
+              rows={tecnici}
+              actions={<AddButton label="Tecnico" link="/aggiungi-tecnico" />}
+              searchFields={searchFields}
             />
-          )}
-          {detailModal.isOpen && (
-            <TecnicoDetailModal
-              open={detailModal.isOpen}
-              onClose={() => setDetailModal({ isOpen: false, tecnico: null })}
-              tecnico={detailModal.tecnico}
-            />
-          )}
-          {alert.open && (
-            <CustomAlert msg={alert.msg} severity={alert.severity} />
-          )}
-        </>
-      )}
-    </div>
+            {deleteModal.isOpen && (
+              <DeleteModal
+                message={`Sei sicuro di voler eliminare questo tecnico?`}
+                onDelete={confirmDelete}
+                onCancel={cancelDelete}
+              />
+            )}
+            {detailModal.isOpen && (
+              <TecnicoDetailModal
+                open={detailModal.isOpen}
+                onClose={() => setDetailModal({ isOpen: false, tecnico: null })}
+                tecnico={detailModal.tecnico}
+              />
+            )}
+            {alert.open && (
+              <CustomAlert msg={alert.msg} severity={alert.severity} />
+            )}
+          </>
+        )}
+      </div>
     </React.Fragment>
   );
 };

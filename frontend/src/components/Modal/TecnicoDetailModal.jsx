@@ -23,11 +23,9 @@ const headerStyle = css`
   align-items: center;
 `;
 
-const capitalizeFirstLetter = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-};
-
 const TecnicoDetailModal = ({ open, onClose, tecnico }) => {
+  console.log("Rendering TecnicoDetailModal with tecnico:", tecnico);
+
   return (
     <Modal open={open} onClose={onClose}>
       <Box css={modalStyle}>
@@ -39,25 +37,20 @@ const TecnicoDetailModal = ({ open, onClose, tecnico }) => {
             <CloseIcon />
           </IconButton>
         </div>
-        {tecnico && (
+        {tecnico ? (
           <Box mt={2}>
             <Typography variant="body1">
-              <strong>Nome:</strong> {capitalizeFirstLetter(tecnico.nome)}
+              <strong>Nome:</strong> {tecnico.nome}
             </Typography>
             <Typography variant="body1">
-              <strong>Cognome:</strong> {capitalizeFirstLetter(tecnico.cognome)}
+              <strong>Cognome:</strong> {tecnico.cognome}
             </Typography>
             <Typography variant="body1">
               <strong>Email:</strong> {tecnico.email}
             </Typography>
-            <Typography variant="body1">
-              <strong>Telefono:</strong> {tecnico.telefono}
-            </Typography>
-            <Typography variant="body1">
-              <strong>Specializzazione:</strong> {tecnico.specializzazione}
-            </Typography>
-            {/* Aggiungi altri campi come necessario */}
           </Box>
+        ) : (
+          <Typography sx={{ mt: 2 }}>Caricamento...</Typography>
         )}
       </Box>
     </Modal>
@@ -67,7 +60,12 @@ const TecnicoDetailModal = ({ open, onClose, tecnico }) => {
 TecnicoDetailModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  tecnico: PropTypes.object,
+  tecnico: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    nome: PropTypes.string.isRequired,
+    cognome: PropTypes.string.isRequired,
+  }),
 };
 
 export default TecnicoDetailModal;

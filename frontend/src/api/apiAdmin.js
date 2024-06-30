@@ -187,7 +187,7 @@ export const addPartner = async (token, partner) => {
       if (!response.ok) {
         throw new Error("Errore nel recupero del partner");
       }
-      
+
       return data.user || data;
     } catch (error) {
       throw new Error(error.message);
@@ -253,26 +253,29 @@ export const addPartner = async (token, partner) => {
     }
   };
 
-  export const fetchTecnicoById = async (token, id) => {
-    try {
-      const response = await fetch(`/api/user/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error("Errore nel recupero del tecnico");
-      }
-  
-      const data = await response.json();
-      return data.user;
-    } catch (error) {
-      throw new Error(error.message);
+export const fetchTecnicoById = async (token, id) => {
+  try {
+    const response = await fetch(`/api/user/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    console.log("API response:", data);
+
+    if (!response.ok) {
+      throw new Error("Errore nel recupero del tecnico");
     }
-  };
+    
+    return data.user || data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 
   export const updateTecnico = async (token, id, updatedData) => {
     try {

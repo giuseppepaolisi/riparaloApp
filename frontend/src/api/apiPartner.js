@@ -112,10 +112,6 @@ export const updateCliente = async (token, id, updatedData) => {
   }
 };
 
-
-
-
-
 //------------------------------------------------------- API TICKET -----------------------------------------------------------------------
 export const fetchTickets = async (token) => {
   try {

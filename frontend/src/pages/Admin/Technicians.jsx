@@ -14,7 +14,7 @@ import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import TecnicoDetailModal from "../../components/Modal/TecnicoDetailModal";
 import { Typography } from "@mui/material";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 
 const Technicians = () => {
   usePageTitle("Tecnici");

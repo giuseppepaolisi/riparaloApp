@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Box, TextField, Button } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import FormContainer from "../../components/FormContainer";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 import { fetchDevice, updateDevice } from "../../api/apiAdmin";
 
 const EditDevice = () => {
@@ -88,7 +88,9 @@ const EditDevice = () => {
   return (
     <React.Fragment>
       <FormContainer title="Modifica Dispositivo">
-        {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
+        {alert.open && (
+          <CustomAlert msg={alert.msg} severity={alert.severity} />
+        )}
         <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
           <Grid container spacing={2} alignItems="flex-end">
             <Grid item xs={12} sm={6}>

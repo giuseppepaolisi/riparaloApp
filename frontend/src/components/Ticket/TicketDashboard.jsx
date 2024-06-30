@@ -86,8 +86,12 @@ const TicketDashboard = ({
       renderCell: (params) => (
         <div>
           <DetailButton onClick={() => handleDetail(params.row._id)} />
-          {showEditButton && <EditButton onClick={() => handleEdit(params.row._id)} />}
-          {showDeleteButton && <DeleteButton onClick={() => handleDelete(params.row._id)} />}
+          {showEditButton && (
+            <EditButton onClick={() => handleEdit(params.row._id)} />
+          )}
+          {showDeleteButton && (
+            <DeleteButton onClick={() => handleDelete(params.row._id)} />
+          )}
         </div>
       ),
     },

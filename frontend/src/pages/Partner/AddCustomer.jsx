@@ -7,7 +7,7 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 
 const AddCustomer = () => {
   usePageTitle("Aggiungi Cliente");
@@ -89,27 +89,29 @@ const AddCustomer = () => {
 
   return (
     <React.Fragment>
-    <FormContainer title="Aggiungi Cliente" maxWidth="sm">
-      <form onSubmit={handleAggiungiCliente}>
-        <Grid container spacing={2}>
-          {formFields.map(({ id, label, type, value, onChange }) => (
-            <Grid item xs={12} key={id}>
-              <FormInput
-                id={id}
-                label={label}
-                type={type}
-                value={value}
-                onChange={onChange}
-                required
-              />
-            </Grid>
-          ))}
-        </Grid>
-        <FormActions onSubmit={handleAggiungiCliente} />
-      </form>
-      {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
-    </FormContainer>
-  </React.Fragment>
+      <FormContainer title="Aggiungi Cliente" maxWidth="sm">
+        <form onSubmit={handleAggiungiCliente}>
+          <Grid container spacing={2}>
+            {formFields.map(({ id, label, type, value, onChange }) => (
+              <Grid item xs={12} key={id}>
+                <FormInput
+                  id={id}
+                  label={label}
+                  type={type}
+                  value={value}
+                  onChange={onChange}
+                  required
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <FormActions onSubmit={handleAggiungiCliente} />
+        </form>
+        {alert.open && (
+          <CustomAlert msg={alert.msg} severity={alert.severity} />
+        )}
+      </FormContainer>
+    </React.Fragment>
   );
 };
 

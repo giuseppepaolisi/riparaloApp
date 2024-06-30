@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Grid, Box, TextField, Button, Autocomplete, IconButton, InputAdornment } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import {
+  Grid,
+  Box,
+  TextField,
+  Button,
+  Autocomplete,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import smartphoneBrands from "../../assets/js/brands";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 import { addDevice } from "../../api/apiAdmin";
 
 const AddDevice = () => {
@@ -37,11 +45,11 @@ const AddDevice = () => {
   const handleServizioChange = (index, event) => {
     const values = [...servizi];
     const { name, value } = event.target;
-    const field = name.split('-')[0];  // get the base name, either 'servizio' or 'prezzo'
+    const field = name.split("-")[0]; // get the base name, either 'servizio' or 'prezzo'
 
-    if (field === 'prezzo') {
+    if (field === "prezzo") {
       // Allow only positive numbers
-      const validValue = value.replace(/[^0-9]/g, '');
+      const validValue = value.replace(/[^0-9]/g, "");
       values[index][field] = validValue;
     } else {
       values[index][field] = value;
@@ -96,7 +104,7 @@ const AddDevice = () => {
 
   const handleKeyDown = (e) => {
     // Prevent the user from typing '-' or '+' or 'e'
-    if (['-', '+', 'e'].includes(e.key)) {
+    if (["-", "+", "e"].includes(e.key)) {
       e.preventDefault();
     }
   };
@@ -104,7 +112,9 @@ const AddDevice = () => {
   return (
     <React.Fragment>
       <FormContainer title="Aggiungi Dispositivo">
-        {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
+        {alert.open && (
+          <CustomAlert msg={alert.msg} severity={alert.severity} />
+        )}
         <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
           <Grid container spacing={2} alignItems="flex-end">
             <Grid item xs={12} sm={6}>
@@ -182,11 +192,11 @@ const AddDevice = () => {
                     name={`prezzo-${index}`}
                     value={servizio.prezzo}
                     onChange={(e) => handleServizioChange(index, e)}
-                    onKeyDown={handleKeyDown}  // Added to prevent invalid characters
+                    onKeyDown={handleKeyDown} // Added to prevent invalid characters
                     fullWidth
                     required
                     variant="outlined"
-                    inputProps={{ min: "0" }}  // This will prevent negative numbers
+                    inputProps={{ min: "0" }} // This will prevent negative numbers
                   />
                 </Grid>
                 <Grid

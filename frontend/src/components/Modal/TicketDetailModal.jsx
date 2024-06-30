@@ -59,7 +59,8 @@ const TicketDetailModal = ({ open, onClose, ticket }) => {
               <strong>Stato:</strong> {ticket.stato}
             </Typography>
             <Typography sx={{ mt: 1 }}>
-              <strong>Descrizione Problema:</strong> {ticket.descrizione_problema}
+              <strong>Descrizione Problema:</strong>{" "}
+              {ticket.descrizione_problema}
             </Typography>
           </>
         ) : (

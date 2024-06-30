@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Container, Typography, Button } from "@mui/material";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 
 const Error404 = () => {
   usePageTitle("404 Pagina non trovata");

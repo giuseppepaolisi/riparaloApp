@@ -7,7 +7,7 @@ import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 
 const AddTechnician = () => {
   usePageTitle("Aggiungi Tecnico");

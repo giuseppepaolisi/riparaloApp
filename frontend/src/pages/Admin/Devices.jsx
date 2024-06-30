@@ -12,8 +12,12 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import { useNavigate } from "react-router-dom";
 import DeviceDetailModal from "../../components/Modal/DeviceDetailModal";
 import { Typography } from "@mui/material";
-import usePageTitle from "../../CustomHooks/usePageTItle";
-import { fetchDevices, deleteDevice, fetchDeviceDetails } from "../../api/apiAdmin";
+import usePageTitle from "../../CustomHooks/usePageTitle";
+import {
+  fetchDevices,
+  deleteDevice,
+  fetchDeviceDetails,
+} from "../../api/apiAdmin";
 
 const Devices = () => {
   usePageTitle("Dispositivi");
@@ -57,7 +61,9 @@ const Devices = () => {
     try {
       if (!token) return;
       await deleteDevice(token, deleteModal.item._id);
-      setDevices((devices) => devices.filter((device) => device._id !== deleteModal.item._id));
+      setDevices((devices) =>
+        devices.filter((device) => device._id !== deleteModal.item._id)
+      );
       setAlert({
         open: true,
         msg: "Dispositivo eliminato con successo",
@@ -129,7 +135,9 @@ const Devices = () => {
             <Table
               columns={columns}
               rows={devices}
-              actions={<AddButton label="Dispositivo" link="/aggiungi-modello" />}
+              actions={
+                <AddButton label="Dispositivo" link="/aggiungi-modello" />
+              }
               searchFields={searchFields}
             />
             {deleteModal.isOpen && (
@@ -139,7 +147,9 @@ const Devices = () => {
                 onCancel={cancelDelete}
               />
             )}
-            {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} />}
+            {alert.open && (
+              <CustomAlert msg={alert.msg} severity={alert.severity} />
+            )}
             {detailModal.isOpen && (
               <DeviceDetailModal
                 open={detailModal.isOpen}

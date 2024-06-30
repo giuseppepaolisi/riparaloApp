@@ -112,11 +112,12 @@ const App = () => {
               </Route>
 
               {/* Shared Routes */}
-              <Route element={<PrivateRoute roles={["tecnico", "admin", "partner"]} />}>
-                <Route
-                  path="/account"
-                  element={<Account />}
-                />
+              <Route
+                element={
+                  <PrivateRoute roles={["tecnico", "admin", "partner"]} />
+                }
+              >
+                <Route path="/account" element={<Account />} />
               </Route>
 
               {/* Error Routes */}

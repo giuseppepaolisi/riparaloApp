@@ -13,7 +13,7 @@ import {
   CardContent,
   Alert,
 } from "@mui/material";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const Login = () => {
@@ -59,63 +59,63 @@ const Login = () => {
 
   return (
     <React.Fragment>
-    <Container maxWidth="sm">
-      <Box mt={5}>
-        <Card>
-          <CardContent>
-            <Typography variant="h4" align="center" gutterBottom>
-              Login
-            </Typography>
-            <form onSubmit={handleLogin}>
-              <TextField
-                fullWidth
-                label="E-mail"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                margin="normal"
-                required
-              />
-              <TextField
-                fullWidth
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                margin="normal"
-                required
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    color="primary"
-                  />
-                }
-                label="Rimani connesso"
-              />
-              <Box mt={2} mb={2}>
-                <Button
-                  type="submit"
+      <Container maxWidth="sm">
+        <Box mt={5}>
+          <Card>
+            <CardContent>
+              <Typography variant="h4" align="center" gutterBottom>
+                Login
+              </Typography>
+              <form onSubmit={handleLogin}>
+                <TextField
                   fullWidth
-                  variant="contained"
-                  color="primary"
-                >
-                  Accedi
-                </Button>
-              </Box>
-            </form>
-            {error && (
-              <Alert severity="error" sx={{ mt: 2 }}>
-                {error}
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
-      </Box>
-    </Container>
-  </React.Fragment>
+                  label="E-mail"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  margin="normal"
+                  required
+                />
+                <TextField
+                  fullWidth
+                  label="Password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  margin="normal"
+                  required
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      color="primary"
+                    />
+                  }
+                  label="Rimani connesso"
+                />
+                <Box mt={2} mb={2}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                  >
+                    Accedi
+                  </Button>
+                </Box>
+              </form>
+              {error && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                  {error}
+                </Alert>
+              )}
+            </CardContent>
+          </Card>
+        </Box>
+      </Container>
+    </React.Fragment>
   );
 };
 

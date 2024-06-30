@@ -14,7 +14,7 @@ import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import PartnerDetailModal from "../../components/Modal/PartnerDetailModal";
 import { Typography } from "@mui/material";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 
 const Partners = () => {
   usePageTitle("Partners");

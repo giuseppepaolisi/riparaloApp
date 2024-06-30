@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchClienti, deleteCliente, fetchClienteById } from "../../api/apiPartner";
+import {
+  fetchClienti,
+  deleteCliente,
+  fetchClienteById,
+} from "../../api/apiPartner";
 import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
 import EditButton from "../../components/Action/EditButton";
@@ -12,7 +16,7 @@ import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import CustomerDetailModal from "../../components/Modal/CustomerDetailModal";
 import { Typography } from "@mui/material";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 
 const Customers = () => {
   usePageTitle("Clienti");
@@ -21,7 +25,10 @@ const Customers = () => {
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, item: null });
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
-  const [detailModal, setDetailModal] = useState({ isOpen: false, customer: null });
+  const [detailModal, setDetailModal] = useState({
+    isOpen: false,
+    customer: null,
+  });
   const navigate = useNavigate();
 
   const { token } = useSelector((state) => state.auth);

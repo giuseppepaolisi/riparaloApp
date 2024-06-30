@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { fetchTickets, fetchTicketById } from "../../api/apiPartner";
 import TicketDashboard from "../../components/Ticket/TicketDashboard";
 import stateColors from "../../assets/json/state.json";
-import usePageTitle from "../../CustomHooks/usePageTItle";
+import usePageTitle from "../../CustomHooks/usePageTitle";
 import TicketDetailModal from "../../components/Modal/TicketDetailModal";
 
 const columns = [

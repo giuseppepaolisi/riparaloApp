@@ -34,6 +34,7 @@ import EditCustomer from "./pages/Partner/EditCustomer";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./assets/js/theme";
+import Account from "./pages/Generic/Account";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -111,11 +112,11 @@ const App = () => {
               </Route>
 
               {/* Shared Routes */}
-              <Route
-                element={
-                  <PrivateRoute roles={["admin", "partner", "tecnico"]} />
-                }
-              >
+              <Route element={<PrivateRoute roles={["tecnico", "admin", "partner"]} />}>
+                <Route
+                  path="/account"
+                  element={<Account />}
+                />
               </Route>
 
               {/* Error Routes */}

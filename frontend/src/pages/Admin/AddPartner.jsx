@@ -8,9 +8,12 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTItle";
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor"; // Importa l'hook
 
 const AddPartner = () => {
   usePageTitle("Aggiungi Partner");
+  useBodyBackgroundColor("#007bff"); // Usa l'hook per impostare il colore di sfondo
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",

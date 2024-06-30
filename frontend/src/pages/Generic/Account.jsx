@@ -30,7 +30,11 @@ const Account = () => {
         setUserData(data);
       } catch (error) {
         console.error(error);
-        setAlert({ open: true, msg: "Errore nel caricamento dei dati", severity: "error" });
+        setAlert({
+          open: true,
+          msg: "Errore nel caricamento dei dati",
+          severity: "error",
+        });
       } finally {
         setLoading(false);
       }
@@ -47,24 +51,36 @@ const Account = () => {
   const handleSave = async (event) => {
     event.preventDefault();
     const { newPassword, oldPassword, ...dataToSave } = userData;
-    if (Object.values(dataToSave).some(field => field === "")) {
-      setAlert({ open: true, msg: "Tutti i campi devono essere riempiti", severity: "error" });
+    if (Object.values(dataToSave).some((field) => field === "")) {
+      setAlert({
+        open: true,
+        msg: "Tutti i campi devono essere riempiti",
+        severity: "error",
+      });
       return;
     }
     try {
       const payload = {
         ...dataToSave,
         ...(newPassword && { newPassword }),
-        ...(oldPassword && { oldPassword })
+        ...(oldPassword && { oldPassword }),
       };
       await updateUserData(token, user._id, payload);
-      setAlert({ open: true, msg: "Dati aggiornati con successo", severity: "success" });
+      setAlert({
+        open: true,
+        msg: "Dati aggiornati con successo",
+        severity: "success",
+      });
       setTimeout(() => {
         navigate("/"); // Reindirizza dopo aver mostrato l'alert
       }, 1000); // Imposta un ritardo di 1 secondo prima del reindirizzamento
     } catch (error) {
       console.error(error);
-      setAlert({ open: true, msg: error.message || "Errore nell'aggiornamento dei dati", severity: "error" });
+      setAlert({
+        open: true,
+        msg: error.message || "Errore nell'aggiornamento dei dati",
+        severity: "error",
+      });
     }
   };
 
@@ -78,8 +94,17 @@ const Account = () => {
 
   return (
     <React.Fragment>
-      <FormContainer title="Account" style={{ maxWidth: '1400px', margin: 'auto' }}>
-        {alert.open && <CustomAlert msg={alert.msg} severity={alert.severity} onClose={() => setAlert({ open: false, msg: "", severity: "" })} />}
+      <FormContainer
+        title="Account"
+        style={{ maxWidth: "1400px", margin: "auto" }}
+      >
+        {alert.open && (
+          <CustomAlert
+            msg={alert.msg}
+            severity={alert.severity}
+            onClose={() => setAlert({ open: false, msg: "", severity: "" })}
+          />
+        )}
         <form onSubmit={handleSave} style={{ marginTop: 1 }}>
           <Box sx={{ p: 3 }}>
             <Grid container spacing={3}>

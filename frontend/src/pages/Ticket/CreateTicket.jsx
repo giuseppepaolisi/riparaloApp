@@ -72,7 +72,10 @@ const CreateTicket = () => {
 
   return (
     <React.Fragment>
-      <FormContainer title="Apri Ticket" style={{ maxWidth: '1400px', margin: 'auto' }}>
+      <FormContainer
+        title="Apri Ticket"
+        style={{ maxWidth: "1400px", margin: "auto" }}
+      >
         <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
           <Box sx={{ p: 3 }}>
             <Grid container spacing={3}>

@@ -7,7 +7,6 @@ import {
   TextField,
   Button,
   Container,
-  Typography,
   Box,
   Grid,
 } from "@mui/material";
@@ -84,9 +83,6 @@ const EditPartner = () => {
     <React.Fragment>
       <Container component="main" maxWidth="xs">
         <Box mt={8} display="flex" flexDirection="column" alignItems="center">
-          <Typography component="h1" variant="h5">
-            Modifica Partner
-          </Typography>
           <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
             <TextField
               variant="outlined"

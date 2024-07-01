@@ -17,9 +17,6 @@ const AboutUs = () => {
     <React.Fragment>
       <Container sx={{ mt: 5 }}>
         <Box textAlign="center" mb={4}>
-          <Typography variant="h3" color="black">
-            Sedi e contatti
-          </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" flexWrap="wrap">
           <Box width={{ xs: "100%", md: "48%" }} mb={4}>

@@ -15,7 +15,6 @@ import Loading from "../../components/Loading";
 import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import CustomerDetailModal from "../../components/Modal/CustomerDetailModal";
-import { Typography } from "@mui/material";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 
 const Customers = () => {
@@ -120,9 +119,6 @@ const Customers = () => {
 
   return (
     <React.Fragment>
-      <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
-        Clienti
-      </Typography>
       {loading ? (
         <Loading open={loading} />
       ) : (

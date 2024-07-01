@@ -13,7 +13,6 @@ import Loading from "../../components/Loading";
 import DeleteModal from "../../components/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import TecnicoDetailModal from "../../components/Modal/TecnicoDetailModal";
-import { Typography } from "@mui/material";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 
 const Technicians = () => {
@@ -106,9 +105,6 @@ const Technicians = () => {
   return (
     <React.Fragment>
       <div className="container mt-3 mb-4">
-        <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
-          Tecnici
-        </Typography>
         {loading ? (
           <Loading open={loading} />
         ) : (

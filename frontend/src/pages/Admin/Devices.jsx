@@ -11,7 +11,6 @@ import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import { useNavigate } from "react-router-dom";
 import DeviceDetailModal from "../../components/Modal/DeviceDetailModal";
-import { Typography } from "@mui/material";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import {
   fetchDevices,
@@ -125,9 +124,6 @@ const Devices = () => {
   return (
     <React.Fragment>
       <div className="container mt-3 mb-4">
-        <Typography variant="h3" gutterBottom className="mb-2 text-gray-800">
-          Dispositivi
-        </Typography>
         {loading ? (
           <Loading open={loading} />
         ) : (
@@ -136,7 +132,7 @@ const Devices = () => {
               columns={columns}
               rows={devices}
               actions={
-                <AddButton label="Dispositivo" link="/aggiungi-modello" />
+                <AddButton label="Modello" link="/aggiungi-modello" />
               }
               searchFields={searchFields}
             />

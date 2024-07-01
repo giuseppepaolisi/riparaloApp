@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 import { Button, Container, Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import logo from "../../assets/img/logo-riparalo.png";
-import React, { useEffect } from "react";
+import React from "react";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 
 const HomePage = () => {
-  useEffect(() => {}, []);
   usePageTitle("Homepage");
 
   const { isAuthenticated } = useSelector((state) => state.auth);

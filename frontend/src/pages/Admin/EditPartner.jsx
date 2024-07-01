@@ -18,7 +18,7 @@ import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const EditPartner = () => {
   usePageTitle("Modifica Partner");
-  useBodyBackgroundColor("white");
+  useBodyBackgroundColor("#007bff");
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);

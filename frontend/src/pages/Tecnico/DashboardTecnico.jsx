@@ -97,7 +97,7 @@ const DashboardTecnico = () => {
         filterStatuses={filterStatuses}
         alignSearchWithFilters={true}
         onDetail={handleDetail}
-        showDeleteButton={false} // Do not show the delete button
+        showDeleteButton={false}
       />
       <TicketDetailModal
         open={isDetailModalOpen}

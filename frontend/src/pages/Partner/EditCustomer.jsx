@@ -13,9 +13,12 @@ import {
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const EditCustomer = () => {
   usePageTitle("Modifica Cliente");
+  useBodyBackgroundColor("#007bff");
+
 
   const { id } = useParams();
   const navigate = useNavigate();

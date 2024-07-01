@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,22 +17,17 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import { addDevice } from "../../api/apiAdmin";
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const AddDevice = () => {
   usePageTitle("Aggiungi Dispositivo");
+  useBodyBackgroundColor("#007bff");
   const { token } = useSelector((state) => state.auth);
   const [modello, setModello] = useState("");
   const [marca, setMarca] = useState("");
   const [servizi, setServizi] = useState([{ servizio: "", prezzo: "" }]);
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const navigate = useNavigate();
-
-  useEffect(() => {
-    document.body.style.backgroundColor = "#007bff";
-    return () => {
-      document.body.style.backgroundColor = null;
-    };
-  }, []);
 
   const handleChange = (event, newValue) => {
     setMarca(newValue);

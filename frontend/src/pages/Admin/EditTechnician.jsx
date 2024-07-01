@@ -13,9 +13,11 @@ import {
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const EditTechnician = () => {
   usePageTitle("Modifica Tecnico");
+  useBodyBackgroundColor("#007bff");
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
@@ -8,9 +8,12 @@ import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const AddCustomer = () => {
   usePageTitle("Aggiungi Cliente");
+  useBodyBackgroundColor("#007bff");
+
   const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
   const [cognome, setCognome] = useState("");
@@ -45,13 +48,6 @@ const AddCustomer = () => {
     },
     [email, nome, cognome, telefono, token, navigate]
   );
-
-  useEffect(() => {
-    document.body.style.backgroundColor = "#007bff";
-    return () => {
-      document.body.style.backgroundColor = null;
-    };
-  }, []);
 
   const formFields = useMemo(
     () => [

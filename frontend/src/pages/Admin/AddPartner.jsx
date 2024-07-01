@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
@@ -8,11 +8,11 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
-import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor"; // Importa l'hook
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const AddPartner = () => {
   usePageTitle("Aggiungi Partner");
-  useBodyBackgroundColor("#007bff"); // Usa l'hook per impostare il colore di sfondo
+  useBodyBackgroundColor("#007bff");
 
   const [formData, setFormData] = useState({
     email: "",
@@ -58,13 +58,6 @@ const AddPartner = () => {
       setError(error.message);
     }
   };
-
-  useEffect(() => {
-    document.body.style.backgroundColor = "#007bff";
-    return () => {
-      document.body.style.backgroundColor = null;
-    };
-  }, []);
 
   return (
     <React.Fragment>

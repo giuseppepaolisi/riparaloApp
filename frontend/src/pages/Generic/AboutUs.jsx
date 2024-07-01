@@ -8,15 +8,16 @@ import {
 } from "@mui/material";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import React from "react";
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const AboutUs = () => {
   usePageTitle("Sedi e Contatti");
-
+  useBodyBackgroundColor("#007bff");
   return (
     <React.Fragment>
       <Container sx={{ mt: 5 }}>
         <Box textAlign="center" mb={4}>
-          <Typography variant="h3" color="primary">
+          <Typography variant="h3" color="black">
             Sedi e contatti
           </Typography>
         </Box>
@@ -30,7 +31,7 @@ const AboutUs = () => {
               }}
             >
               <CardContent>
-                <Typography variant="h5" color="primary" gutterBottom>
+                <Typography variant="h5" color="black" gutterBottom>
                   Crotone
                 </Typography>
                 <Typography variant="body1" color="textSecondary" gutterBottom>
@@ -65,7 +66,7 @@ const AboutUs = () => {
               }}
             >
               <CardContent>
-                <Typography variant="h5" color="primary" gutterBottom>
+                <Typography variant="h5" color="black" gutterBottom>
                   Isola di Capo Rizzuto
                 </Typography>
                 <Typography variant="body1" color="textSecondary" gutterBottom>

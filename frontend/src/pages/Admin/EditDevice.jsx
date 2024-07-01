@@ -6,9 +6,11 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import { fetchDevice, updateDevice } from "../../api/apiAdmin";
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const EditDevice = () => {
   usePageTitle("Modifica Dispositivo");
+  useBodyBackgroundColor("#007bff");
   const { id } = useParams();
   const { token } = useSelector((state) => state.auth);
   const [modello, setModello] = useState("");

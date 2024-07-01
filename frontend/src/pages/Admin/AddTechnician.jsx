@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
@@ -8,9 +8,11 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
+import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const AddTechnician = () => {
   usePageTitle("Aggiungi Tecnico");
+  useBodyBackgroundColor("#007bff");
   const [cognome, setCognome] = useState("");
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
@@ -47,13 +49,6 @@ const AddTechnician = () => {
     },
     [cognome, nome, email, password, token, navigate]
   );
-
-  useEffect(() => {
-    document.body.style.backgroundColor = "#007bff";
-    return () => {
-      document.body.style.backgroundColor = null;
-    };
-  }, []);
 
   return (
     <React.Fragment>

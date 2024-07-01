@@ -98,7 +98,9 @@ const DashboardPartner = () => {
         showAddButton={true}
         filterStatuses={filterStatuses}
         alignSearchWithFilters={false}
-        onDetail={handleDetail} // Pass the detail handler to TicketDashboard
+        onDetail={handleDetail}
+        showDeleteButton={true} // Pass the showDeleteButton prop
+        showDeleteButtonOnlyOpen={true} // Show delete button only if state is open
       />
       <TicketDetailModal
         open={isDetailModalOpen}

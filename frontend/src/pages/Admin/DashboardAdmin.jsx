@@ -91,7 +91,8 @@ const DashboardAdmin = () => {
         addTicketLink="/apri-ticket"
         filterStatuses={filterStatuses}
         alignSearchWithFilters={true}
-        onDetail={handleDetail} // Pass the detail handler to TicketDashboard
+        onDetail={handleDetail}
+        showDeleteButton={true} // Show delete button for all states
       />
       <TicketDetailModal
         open={isDetailModalOpen}

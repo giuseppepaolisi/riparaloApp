@@ -96,7 +96,8 @@ const DashboardTecnico = () => {
         addTicketLink="/apri-ticket"
         filterStatuses={filterStatuses}
         alignSearchWithFilters={true}
-        onDetail={handleDetail} // Pass the detail handler to TicketDashboard
+        onDetail={handleDetail}
+        showDeleteButton={false} // Do not show the delete button
       />
       <TicketDetailModal
         open={isDetailModalOpen}

@@ -21,7 +21,8 @@ const TicketDashboard = ({
   alignSearchWithFilters,
   showEditButton,
   showDeleteButton,
-  onDetail, // Add onDetail prop
+  showDeleteButtonOnlyOpen,
+  onDetail, 
 }) => {
   const [tickets, setTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -51,7 +52,7 @@ const TicketDashboard = ({
 
   const handleDetail = useCallback(
     (id) => {
-      onDetail(id); // Call onDetail when the detail button is clicked
+      onDetail(id);
     },
     [onDetail]
   );
@@ -89,7 +90,7 @@ const TicketDashboard = ({
           {showEditButton && (
             <EditButton onClick={() => handleEdit(params.row._id)} />
           )}
-          {showDeleteButton && (
+          {showDeleteButton && (!showDeleteButtonOnlyOpen || params.row.stato === "Aperto") && (
             <DeleteButton onClick={() => handleDelete(params.row._id)} />
           )}
         </div>
@@ -142,7 +143,7 @@ const TicketDashboard = ({
         searchTerm={searchTerm}
         showSearchBar={!alignSearchWithFilters}
         setSearchTerm={setSearchTerm}
-        onDetail={handleDetail} // Pass the detail handler to TicketTable
+        onDetail={handleDetail}
       />
     </div>
   );
@@ -169,17 +170,19 @@ TicketDashboard.propTypes = {
     })
   ).isRequired,
   alignSearchWithFilters: PropTypes.bool,
-  showEditButton: PropTypes.bool, // New prop for showing/hiding the edit button
-  showDeleteButton: PropTypes.bool, // New prop for showing/hiding the delete button
-  onDetail: PropTypes.func, // New prop for detail handler
+  showEditButton: PropTypes.bool,
+  showDeleteButton: PropTypes.bool,
+  showDeleteButtonOnlyOpen: PropTypes.bool, // New prop to control delete button visibility
+  onDetail: PropTypes.func,
 };
 
 TicketDashboard.defaultProps = {
   showAddButton: false,
   alignSearchWithFilters: false,
-  showEditButton: true, // Default to showing the edit button
-  showDeleteButton: true, // Default to showing the delete button
-  onDetail: () => {}, // Default to an empty function
+  showEditButton: true,
+  showDeleteButton: true,
+  showDeleteButtonOnlyOpen: false, // Default to showing delete button for all states
+  onDetail: () => {},
 };
 
 export default TicketDashboard;

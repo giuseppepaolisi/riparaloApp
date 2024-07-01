@@ -84,6 +84,14 @@ const CreateTicket = () => {
                   Informazioni Cliente
                 </Typography>
                 <FormInput
+                  id="telefono_cliente"
+                  label="Telefono Cliente"
+                  type="text"
+                  value={formData.telefono_cliente}
+                  onChange={handleChange}
+                  required
+                />
+                <FormInput
                   id="nome_cliente"
                   label="Nome Cliente"
                   type="text"
@@ -96,14 +104,6 @@ const CreateTicket = () => {
                   label="Cognome Cliente"
                   type="text"
                   value={formData.cognome_cliente}
-                  onChange={handleChange}
-                  required
-                />
-                <FormInput
-                  id="telefono_cliente"
-                  label="Telefono Cliente"
-                  type="text"
-                  value={formData.telefono_cliente}
                   onChange={handleChange}
                   required
                 />

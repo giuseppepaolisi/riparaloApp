@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid, Box, Typography, Button } from "@mui/material";
@@ -12,6 +12,7 @@ import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 import { validatePhoneNumber, validateIMEI, validatePrice, validateDeposit, validateName } from "../../utils/validationUtils";
 import { handleValidationError } from "../../utils/errorHandling";
 import useFormFields from "../../CustomHooks/useFormFields";
+import { formFieldsConfig } from "../../utils/formConfig";
 
 const CreateTicket = () => {
   useBodyBackgroundColor("#007bff");
@@ -94,92 +95,7 @@ const CreateTicket = () => {
     [fields, token, navigate]
   );
 
-  const formFields = useMemo(() => [
-    {
-      id: "telefono_cliente",
-      label: "Telefono Cliente",
-      type: "text",
-      value: fields.telefono_cliente,
-      onChange: (e) => setField("telefono_cliente")(e.target.value),
-      required: true,
-      inputProps: { pattern: "^\\+?[0-9]{10,13}$" },
-      onKeyPress: handleTelefonoKeyPress,
-    },
-    {
-      id: "nome_cliente",
-      label: "Nome Cliente",
-      type: "text",
-      value: fields.nome_cliente,
-      onChange: (e) => setField("nome_cliente")(e.target.value),
-      required: true,
-    },
-    {
-      id: "cognome_cliente",
-      label: "Cognome Cliente",
-      type: "text",
-      value: fields.cognome_cliente,
-      onChange: (e) => setField("cognome_cliente")(e.target.value),
-      required: true,
-    },
-    {
-      id: "descrizione_problema",
-      label: "Descrizione Problema",
-      type: "text",
-      value: fields.descrizione_problema,
-      onChange: (e) => setField("descrizione_problema")(e.target.value),
-      required: true,
-    },
-    {
-      id: "marca",
-      label: "Marca",
-      type: "text",
-      value: fields.marca,
-      onChange: (e) => setField("marca")(e.target.value),
-      required: true,
-    },
-    {
-      id: "modello",
-      label: "Modello",
-      type: "text",
-      value: fields.modello,
-      onChange: (e) => setField("modello")(e.target.value),
-      required: true,
-    },
-    {
-      id: "acconto",
-      label: "Acconto",
-      type: "number",
-      value: fields.acconto,
-      onChange: (e) => setField("acconto")(e.target.value),
-      required: true,
-      inputProps: { min: 0, step: "0.01" },
-      onKeyPress: handleKeyPress,
-    },
-    {
-      id: "imei",
-      label: "IMEI",
-      type: "text",
-      value: fields.imei,
-      onChange: (e) => setField("imei")(e.target.value),
-      required: true,
-    },
-    {
-      id: "pin",
-      label: "PIN",
-      type: "text",
-      value: fields.pin,
-      onChange: (e) => setField("pin")(e.target.value),
-      required: true,
-    },
-    {
-      id: "seriale",
-      label: "Seriale",
-      type: "text",
-      value: fields.seriale,
-      onChange: (e) => setField("seriale")(e.target.value),
-      required: true,
-    },
-  ], [fields, setField]);
+  const formFields = formFieldsConfig(fields, setField);
 
   return (
     <React.Fragment>
@@ -194,7 +110,7 @@ const CreateTicket = () => {
                 <Typography variant="h6" gutterBottom>
                   Informazioni Cliente
                 </Typography>
-                {formFields.map(({ id, label, type, value, onChange, required, inputProps, onKeyPress }) => (
+                {formFields.slice(0, 6).map(({ id, label, type, value, onChange, required, inputProps }) => (
                   <FormInput
                     key={id}
                     id={id}
@@ -204,7 +120,7 @@ const CreateTicket = () => {
                     onChange={onChange}
                     required={required}
                     inputProps={inputProps}
-                    onKeyPress={onKeyPress}
+                    onKeyPress={id === "telefono_cliente" ? handleTelefonoKeyPress : null}
                   />
                 ))}
               </Grid>
@@ -237,6 +153,18 @@ const CreateTicket = () => {
                 <Button type="button" onClick={addService}>
                   Aggiungi Servizio
                 </Button>
+                {formFields.slice(6).map(({ id, label, type, value, onChange, required, inputProps }) => (
+                  <FormInput
+                    key={id}
+                    id={id}
+                    label={label}
+                    type={type}
+                    value={value}
+                    onChange={onChange}
+                    required={required}
+                    inputProps={inputProps}
+                  />
+                ))}
               </Grid>
             </Grid>
           </Box>

@@ -1,39 +1,87 @@
 // frontend/src/utils/formConfig.js
 
-export const formFieldsConfig = (email, setEmail, nome, setNome, cognome, setCognome, telefono, setTelefono) => [
+export const formFieldsConfig = (fields, setField) => [
     {
-      id: "email",
-      label: "Email",
-      type: "email",
-      value: email,
-      onChange: (e) => setEmail(e.target.value),
-    },
-    {
-      id: "nome",
-      label: "Nome",
+      id: "telefono_cliente",
+      label: "Telefono Cliente",
       type: "text",
-      value: nome,
-      onChange: (e) => setNome(e.target.value),
-    },
-    {
-      id: "cognome",
-      label: "Cognome",
-      type: "text",
-      value: cognome,
-      onChange: (e) => setCognome(e.target.value),
-    },
-    {
-      id: "telefono",
-      label: "Telefono",
-      type: "tel",
-      value: telefono,
-      onChange: (e) => setTelefono(e.target.value),
+      value: fields.telefono_cliente,
+      onChange: (e) => setField("telefono_cliente")(e.target.value),
+      required: true,
       inputProps: { pattern: "^\\+?[0-9]{10,13}$" },
-      onKeyPress: (e) => {
-        if (!/[0-9+]/.test(e.key)) {
-          e.preventDefault();
-        }
-      },
+    },
+    {
+      id: "nome_cliente",
+      label: "Nome Cliente",
+      type: "text",
+      value: fields.nome_cliente,
+      onChange: (e) => setField("nome_cliente")(e.target.value),
+      required: true,
+    },
+    {
+      id: "cognome_cliente",
+      label: "Cognome Cliente",
+      type: "text",
+      value: fields.cognome_cliente,
+      onChange: (e) => setField("cognome_cliente")(e.target.value),
+      required: true,
+    },
+    {
+      id: "descrizione_problema",
+      label: "Descrizione Problema",
+      type: "text",
+      value: fields.descrizione_problema,
+      onChange: (e) => setField("descrizione_problema")(e.target.value),
+      required: true,
+    },
+    {
+      id: "marca",
+      label: "Marca",
+      type: "text",
+      value: fields.marca,
+      onChange: (e) => setField("marca")(e.target.value),
+      required: true,
+    },
+    {
+      id: "modello",
+      label: "Modello",
+      type: "text",
+      value: fields.modello,
+      onChange: (e) => setField("modello")(e.target.value),
+      required: true,
+    },
+    {
+      id: "acconto",
+      label: "Acconto",
+      type: "number",
+      value: fields.acconto,
+      onChange: (e) => setField("acconto")(e.target.value),
+      required: true,
+      inputProps: { min: 0, step: "0.01" },
+    },
+    {
+      id: "imei",
+      label: "IMEI",
+      type: "text",
+      value: fields.imei,
+      onChange: (e) => setField("imei")(e.target.value),
+      required: true,
+    },
+    {
+      id: "pin",
+      label: "PIN",
+      type: "text",
+      value: fields.pin,
+      onChange: (e) => setField("pin")(e.target.value),
+      required: true,
+    },
+    {
+      id: "seriale",
+      label: "Seriale",
+      type: "text",
+      value: fields.seriale,
+      onChange: (e) => setField("seriale")(e.target.value),
+      required: true,
     },
   ];
   

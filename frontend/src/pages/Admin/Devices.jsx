@@ -131,9 +131,7 @@ const Devices = () => {
             <Table
               columns={columns}
               rows={devices}
-              actions={
-                <AddButton label="Modello" link="/aggiungi-modello" />
-              }
+              actions={<AddButton label="Modello" link="/aggiungi-modello" />}
               searchFields={searchFields}
             />
             {deleteModal.isOpen && (

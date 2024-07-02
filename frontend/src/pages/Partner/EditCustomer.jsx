@@ -19,7 +19,6 @@ const EditCustomer = () => {
   usePageTitle("Modifica Cliente");
   useBodyBackgroundColor("#007bff");
 
-
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);

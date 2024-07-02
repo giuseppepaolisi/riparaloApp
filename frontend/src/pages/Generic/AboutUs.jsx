@@ -16,8 +16,7 @@ const AboutUs = () => {
   return (
     <React.Fragment>
       <Container sx={{ mt: 5 }}>
-        <Box textAlign="center" mb={4}>
-        </Box>
+        <Box textAlign="center" mb={4}></Box>
         <Box display="flex" justifyContent="space-between" flexWrap="wrap">
           <Box width={{ xs: "100%", md: "48%" }} mb={4}>
             <Card

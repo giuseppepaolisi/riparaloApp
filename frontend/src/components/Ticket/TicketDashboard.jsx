@@ -22,7 +22,7 @@ const TicketDashboard = ({
   showEditButton,
   showDeleteButton,
   showDeleteButtonOnlyOpen,
-  onDetail, 
+  onDetail,
 }) => {
   const [tickets, setTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -90,9 +90,10 @@ const TicketDashboard = ({
           {showEditButton && (
             <EditButton onClick={() => handleEdit(params.row._id)} />
           )}
-          {showDeleteButton && (!showDeleteButtonOnlyOpen || params.row.stato === "Aperto") && (
-            <DeleteButton onClick={() => handleDelete(params.row._id)} />
-          )}
+          {showDeleteButton &&
+            (!showDeleteButtonOnlyOpen || params.row.stato === "Aperto") && (
+              <DeleteButton onClick={() => handleDelete(params.row._id)} />
+            )}
         </div>
       ),
     },

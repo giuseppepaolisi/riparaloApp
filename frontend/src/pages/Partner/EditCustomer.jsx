@@ -13,6 +13,7 @@ import {
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
+import { validateTelefono } from "../../utils/validationUtils";
 
 const EditCustomer = () => {
   usePageTitle("Modifica Cliente");
@@ -52,8 +53,25 @@ const EditCustomer = () => {
     setCliente((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleKeyPress = (e) => {
+    if (!/[0-9+]/.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const telefonoError = validateTelefono(cliente.telefono);
+    if (telefonoError) {
+      setAlert({
+        open: true,
+        msg: telefonoError,
+        severity: "error",
+      });
+      return;
+    }
+
     try {
       await updateCliente(token, id, cliente);
       setAlert({
@@ -63,7 +81,7 @@ const EditCustomer = () => {
       });
       setTimeout(() => {
         navigate("/clienti");
-      }, 1000); // Ritardo di 1 secondo prima di reindirizzare
+      }, 1000);
     } catch (error) {
       console.error(error);
       setAlert({
@@ -136,6 +154,8 @@ const EditCustomer = () => {
               autoComplete="telefono"
               value={cliente?.telefono || ""}
               onChange={handleChange}
+              inputProps={{ pattern: "^\\+?[0-9]{10,13}$" }}
+              onKeyPress={handleKeyPress}
             />
             <Grid container spacing={2} sx={{ mt: 3 }}>
               <Grid item xs={6}>

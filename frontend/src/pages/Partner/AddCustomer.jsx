@@ -9,6 +9,7 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
+import { validateTelefono } from "../../utils/validationUtils";
 
 const AddCustomer = () => {
   usePageTitle("Aggiungi Cliente");
@@ -27,6 +28,16 @@ const AddCustomer = () => {
     async (event) => {
       event.preventDefault();
       if (!token) return;
+
+      const telefonoError = validateTelefono(telefono);
+      if (telefonoError) {
+        setAlert({
+          open: true,
+          msg: telefonoError,
+          severity: "error",
+        });
+        return;
+      }
 
       try {
         const newCustomer = { email, nome, cognome, telefono };
@@ -78,6 +89,12 @@ const AddCustomer = () => {
         type: "tel",
         value: telefono,
         onChange: (e) => setTelefono(e.target.value),
+        inputProps: { pattern: "^\\+?[0-9]{10,13}$" },
+        onKeyPress: (e) => {
+          if (!/[0-9+]/.test(e.key)) {
+            e.preventDefault();
+          }
+        },
       },
     ],
     [email, nome, cognome, telefono]
@@ -88,7 +105,7 @@ const AddCustomer = () => {
       <FormContainer title="Aggiungi Cliente" maxWidth="sm">
         <form onSubmit={handleAggiungiCliente}>
           <Grid container spacing={2}>
-            {formFields.map(({ id, label, type, value, onChange }) => (
+            {formFields.map(({ id, label, type, value, onChange, inputProps, onKeyPress }) => (
               <Grid item xs={12} key={id}>
                 <FormInput
                   id={id}
@@ -97,6 +114,8 @@ const AddCustomer = () => {
                   value={value}
                   onChange={onChange}
                   required
+                  inputProps={inputProps}
+                  onKeyPress={onKeyPress}
                 />
               </Grid>
             ))}

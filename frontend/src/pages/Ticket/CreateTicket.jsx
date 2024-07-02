@@ -9,6 +9,7 @@ import CustomAlert from "../../components/Alert/CustomAlert";
 import { createTicket } from "../../api/apiPartner";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
+import { validateForm, validateTelefono } from "../../utils/validationUtils";
 
 const CreateTicket = () => {
   useBodyBackgroundColor("#007bff");
@@ -52,10 +53,34 @@ const CreateTicket = () => {
     });
   };
 
+  const handleKeyPress = (e) => {
+    if (!/[0-9]/.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const handleTelefonoKeyPress = (e) => {
+    if (!/[0-9+]/.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
+
+    const telefonoError = validateTelefono(formData.telefono_cliente);
+    if (telefonoError) {
+      setError(telefonoError);
+      return;
+    }
+
+    const validationError = validateForm(formData);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
 
     const filteredServices = formData.servizi.filter(
       (service) => service.servizio && service.prezzo
@@ -90,6 +115,8 @@ const CreateTicket = () => {
                   value={formData.telefono_cliente}
                   onChange={handleChange}
                   required
+                  inputProps={{ pattern: "^\\+?[0-9]{10,13}$" }}
+                  onKeyPress={handleTelefonoKeyPress}
                 />
                 <FormInput
                   id="nome_cliente"
@@ -153,6 +180,8 @@ const CreateTicket = () => {
                       value={service.prezzo}
                       onChange={(e) => handleServiceChange(index, e)}
                       required
+                      inputProps={{ min: 0, step: "0.01" }}
+                      onKeyPress={handleKeyPress}
                     />
                   </div>
                 ))}
@@ -166,6 +195,8 @@ const CreateTicket = () => {
                   value={formData.acconto}
                   onChange={handleChange}
                   required
+                  inputProps={{ min: 0, step: "0.01" }}
+                  onKeyPress={handleKeyPress}
                 />
                 <FormInput
                   id="imei"

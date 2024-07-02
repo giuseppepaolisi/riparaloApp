@@ -1,61 +1,49 @@
-// src/utils/validationUtils.js
+// frontend/src/utils/validationUtils.js
 
-export const validateServicePrice = (price) => {
-    if (isNaN(price) || price < 0) {
-      return "Il prezzo del servizio deve essere un numero maggiore o uguale a 0.";
-    }
-    return "";
-  };
+export function validatePhoneNumber(phone) {
+    const phoneRegex = /^(?:\+?\d{13}|\d{10})$/;
+    return phoneRegex.test(phone);
+  }
   
-  export const validateAcconto = (acconto, totalPrice) => {
-    if (isNaN(acconto) || acconto < 0) {
-      return "L'acconto deve essere un numero maggiore o uguale a 0.";
-    }
-    if (acconto > totalPrice) {
-      return "L'acconto non può superare il valore totale dei servizi.";
-    }
-    return "";
-  };
+  export function validateIMEI(imei) {
+    const imeiRegex = /^\d{15}$/;
+    return imeiRegex.test(imei);
+  }
   
-  export const validateIMEI = (imei) => {
-    if (imei.length !== 15) {
-      return "L'IMEI deve essere di 15 cifre.";
-    }
-    return "";
-  };
+  export function validatePrice(price) {
+    return !isNaN(price) && Number(price) >= 0;
+  }
   
-  export const validateTelefono = (telefono) => {
-    const telefonoRegex = /^\+?([0-9]{10,13})$/;
-    if (!telefonoRegex.test(telefono)) {
-      return "Il numero di telefono deve essere di 10-13 cifre, con un prefisso opzionale.";
-    }
-    return "";
-  };
+  export function validateDeposit(deposit, price) {
+    return validatePrice(deposit) && Number(deposit) <= Number(price);
+  }
   
-  export const validateForm = (formData) => {
-    for (const service of formData.servizi) {
-      const serviceError = validateServicePrice(service.prezzo);
-      if (serviceError) {
-        return serviceError;
-      }
-    }
+  export function validateName(name) {
+    const nameRegex = /^[A-Za-z]+$/;
+    return nameRegex.test(name);
+  }
   
-    const totalPrice = formData.servizi.reduce((total, service) => total + parseFloat(service.prezzo || 0), 0);
-    const accontoError = validateAcconto(formData.acconto, totalPrice);
-    if (accontoError) {
-      return accontoError;
-    }
+  export function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
   
-    const imeiError = validateIMEI(formData.imei);
-    if (imeiError) {
-      return imeiError;
-    }
+  export function validateVAT(vat) {
+    const vatRegex = /^\d{11}$/;
+    return vatRegex.test(vat);
+  }
   
-    const telefonoError = validateTelefono(formData.telefono_cliente);
-    if (telefonoError) {
-      return telefonoError;
-    }
+  export function validateUniqueCode(code) {
+    const codeRegex = /^[A-Za-z]{6}$/;
+    return codeRegex.test(code);
+  }
   
-    return "";
-  };
+  export function validateProvince(province) {
+    const provinceRegex = /^[A-Za-z]{2}$/;
+    return provinceRegex.test(province);
+  }
+  
+  export function validatePassword(password) {
+    return password.length >= 8;
+  }
   

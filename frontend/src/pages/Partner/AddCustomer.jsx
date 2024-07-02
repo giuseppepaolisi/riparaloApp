@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
@@ -9,18 +9,23 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
-import { validateTelefono } from "../../utils/validationUtils";
+import { validatePhoneNumber, validateEmail, validateName } from "../../utils/validationUtils";
+import { handleValidationError } from "../../utils/errorHandling";
+import { formFieldsConfig } from "../../utils/formConfig";
+import useFormFields from "../../CustomHooks/useFormFields";
 
 const AddCustomer = () => {
   usePageTitle("Aggiungi Cliente");
   useBodyBackgroundColor("#007bff");
 
-  const [email, setEmail] = useState("");
-  const [nome, setNome] = useState("");
-  const [cognome, setCognome] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
+  const [fields, setField] = useFormFields({
+    email: "",
+    nome: "",
+    cognome: "",
+    telefono: ""
+  });
 
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -29,13 +34,14 @@ const AddCustomer = () => {
       event.preventDefault();
       if (!token) return;
 
-      const telefonoError = validateTelefono(telefono);
-      if (telefonoError) {
-        setAlert({
-          open: true,
-          msg: telefonoError,
-          severity: "error",
-        });
+      const { email, nome, cognome, telefono } = fields;
+
+      if (
+        handleValidationError(validatePhoneNumber, telefono, "Numero di telefono non valido", setAlert) ||
+        handleValidationError(validateEmail, email, "Email non valida", setAlert) ||
+        handleValidationError(validateName, nome, "Nome non valido", setAlert) ||
+        handleValidationError(validateName, cognome, "Cognome non valido", setAlert)
+      ) {
         return;
       }
 
@@ -57,48 +63,10 @@ const AddCustomer = () => {
         });
       }
     },
-    [email, nome, cognome, telefono, token, navigate]
+    [fields, token, navigate]
   );
 
-  const formFields = useMemo(
-    () => [
-      {
-        id: "email",
-        label: "Email",
-        type: "email",
-        value: email,
-        onChange: (e) => setEmail(e.target.value),
-      },
-      {
-        id: "nome",
-        label: "Nome",
-        type: "text",
-        value: nome,
-        onChange: (e) => setNome(e.target.value),
-      },
-      {
-        id: "cognome",
-        label: "Cognome",
-        type: "text",
-        value: cognome,
-        onChange: (e) => setCognome(e.target.value),
-      },
-      {
-        id: "telefono",
-        label: "Telefono",
-        type: "tel",
-        value: telefono,
-        onChange: (e) => setTelefono(e.target.value),
-        inputProps: { pattern: "^\\+?[0-9]{10,13}$" },
-        onKeyPress: (e) => {
-          if (!/[0-9+]/.test(e.key)) {
-            e.preventDefault();
-          }
-        },
-      },
-    ],
-    [email, nome, cognome, telefono]
-  );
+  const formFields = useMemo(() => formFieldsConfig(fields.email, setField("email"), fields.nome, setField("nome"), fields.cognome, setField("cognome"), fields.telefono, setField("telefono")), [fields, setField]);
 
   return (
     <React.Fragment>

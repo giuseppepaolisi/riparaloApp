@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { fetchClienteById, updateCliente } from "../../api/apiPartner";
-import {
-  TextField,
-  Button,
-  Container,
-  Typography,
-  Box,
-  Grid,
-} from "@mui/material";
+import { TextField, Button, Container, Typography, Box, Grid } from "@mui/material";
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
-import { validateTelefono } from "../../utils/validationUtils";
+import { validatePhoneNumber, validateEmail, validateName } from "../../utils/validationUtils";
+import { handleValidationError } from "../../utils/errorHandling";
+import useFormFields from "../../CustomHooks/useFormFields";
 
 const EditCustomer = () => {
   usePageTitle("Modifica Cliente");
@@ -22,7 +17,13 @@ const EditCustomer = () => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
 
-  const [cliente, setCliente] = useState(null);
+  const [fields, setField] = useFormFields({
+    nome: "",
+    cognome: "",
+    email: "",
+    telefono: "",
+  });
+  
   const [loading, setLoading] = useState(true);
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
 
@@ -30,7 +31,10 @@ const EditCustomer = () => {
     const loadCliente = async () => {
       try {
         const clienteData = await fetchClienteById(token, id);
-        setCliente(clienteData);
+        setField("nome")(clienteData.nome);
+        setField("cognome")(clienteData.cognome);
+        setField("email")(clienteData.email);
+        setField("telefono")(clienteData.telefono);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -46,12 +50,7 @@ const EditCustomer = () => {
     if (token) {
       loadCliente();
     }
-  }, [token, id]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCliente((prev) => ({ ...prev, [name]: value }));
-  };
+  }, [token, id, setField]);
 
   const handleKeyPress = (e) => {
     if (!/[0-9+]/.test(e.key)) {
@@ -59,38 +58,40 @@ const EditCustomer = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-    const telefonoError = validateTelefono(cliente.telefono);
-    if (telefonoError) {
-      setAlert({
-        open: true,
-        msg: telefonoError,
-        severity: "error",
-      });
-      return;
-    }
+      if (
+        handleValidationError(validatePhoneNumber, fields.telefono, "Numero di telefono non valido", setAlert) ||
+        handleValidationError(validateName, fields.nome, "Nome non valido", setAlert) ||
+        handleValidationError(validateName, fields.cognome, "Cognome non valido", setAlert) ||
+        handleValidationError(validateEmail, fields.email, "Email non valida", setAlert)
+      ) {
+        return;
+      }
 
-    try {
-      await updateCliente(token, id, cliente);
-      setAlert({
-        open: true,
-        msg: "Cliente aggiornato con successo",
-        severity: "success",
-      });
-      setTimeout(() => {
-        navigate("/clienti");
-      }, 1000);
-    } catch (error) {
-      console.error(error);
-      setAlert({
-        open: true,
-        msg: "Errore nell'aggiornamento del cliente",
-        severity: "error",
-      });
-    }
-  };
+      try {
+        await updateCliente(token, id, fields);
+        setAlert({
+          open: true,
+          msg: "Cliente aggiornato con successo",
+          severity: "success",
+        });
+        setTimeout(() => {
+          navigate("/clienti");
+        }, 1000);
+      } catch (error) {
+        console.error(error);
+        setAlert({
+          open: true,
+          msg: "Errore nell'aggiornamento del cliente",
+          severity: "error",
+        });
+      }
+    },
+    [fields, token, id, navigate]
+  );
 
   const handleCancel = () => {
     navigate("/clienti");
@@ -116,8 +117,8 @@ const EditCustomer = () => {
               name="nome"
               autoComplete="nome"
               autoFocus
-              value={cliente?.nome || ""}
-              onChange={handleChange}
+              value={fields.nome}
+              onChange={(e) => setField("nome")(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -128,8 +129,8 @@ const EditCustomer = () => {
               label="Cognome"
               name="cognome"
               autoComplete="cognome"
-              value={cliente?.cognome || ""}
-              onChange={handleChange}
+              value={fields.cognome}
+              onChange={(e) => setField("cognome")(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -140,8 +141,8 @@ const EditCustomer = () => {
               label="Email"
               name="email"
               autoComplete="email"
-              value={cliente?.email || ""}
-              onChange={handleChange}
+              value={fields.email}
+              onChange={(e) => setField("email")(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -152,8 +153,8 @@ const EditCustomer = () => {
               label="Telefono"
               name="telefono"
               autoComplete="telefono"
-              value={cliente?.telefono || ""}
-              onChange={handleChange}
+              value={fields.telefono}
+              onChange={(e) => setField("telefono")(e.target.value)}
               inputProps={{ pattern: "^\\+?[0-9]{10,13}$" }}
               onKeyPress={handleKeyPress}
             />

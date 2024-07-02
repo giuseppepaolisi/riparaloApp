@@ -34,7 +34,11 @@ const EditCustomer = () => {
     const loadCliente = async () => {
       try {
         const clienteData = await fetchClienteById(token, id);
-        Object.keys(clienteData).forEach(key => setField(key)(clienteData[key]));
+        Object.keys(clienteData).forEach(key => {
+          if (key in fields) {
+            setField(key)(clienteData[key]);
+          }
+        });
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -50,7 +54,7 @@ const EditCustomer = () => {
     if (token) {
       loadCliente();
     }
-  }, [token, id, setField]);
+  }, [token, id, setField, fields]);
 
   const handleKeyPress = (e) => {
     if (!/[0-9+]/.test(e.key)) {

@@ -1,6 +1,8 @@
 // frontend/src/utils/formConfig.js
 
-export const formFieldsConfig = (fields, setField) => [
+
+export const formFieldsConfig = (fields, setField, config) => {
+  const defaultConfig = [
     {
       id: "telefono_cliente",
       label: "Telefono Cliente",
@@ -84,4 +86,15 @@ export const formFieldsConfig = (fields, setField) => [
       required: true,
     },
   ];
-  
+
+  if (config && Array.isArray(config)) {
+    return config.map((item) => {
+      const defaultField = defaultConfig.find((field) => field.id === item.id);
+      return defaultField
+        ? { ...defaultField, ...item }
+        : { ...item, value: fields[item.id], onChange: (e) => setField(item.id)(e.target.value) };
+    });
+  }
+
+  return defaultConfig;
+};

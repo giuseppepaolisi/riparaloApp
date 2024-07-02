@@ -13,12 +13,9 @@ import {
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
-import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 
 const EditCustomer = () => {
   usePageTitle("Modifica Cliente");
-  useBodyBackgroundColor("#007bff");
-
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -64,7 +61,9 @@ const EditCustomer = () => {
         msg: "Cliente aggiornato con successo",
         severity: "success",
       });
-      navigate("/clienti");
+      setTimeout(() => {
+        navigate("/clienti");
+      }, 1000); // Ritardo di 1 secondo prima di reindirizzare
     } catch (error) {
       console.error(error);
       setAlert({
@@ -124,6 +123,18 @@ const EditCustomer = () => {
               name="email"
               autoComplete="email"
               value={cliente?.email || ""}
+              onChange={handleChange}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="telefono"
+              label="Telefono"
+              name="telefono"
+              autoComplete="telefono"
+              value={cliente?.telefono || ""}
               onChange={handleChange}
             />
             <Grid container spacing={2} sx={{ mt: 3 }}>

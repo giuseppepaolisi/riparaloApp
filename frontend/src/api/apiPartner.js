@@ -100,17 +100,22 @@ export const updateCliente = async (token, id, updatedData) => {
     });
 
     const text = await response.text();
-    const data = JSON.parse(text);
+    console.log('Response text:', text);
+
     if (!response.ok) {
-      throw new Error(
-        data.error || "Non è stato possibile aggiornare il cliente"
-      );
+      throw new Error(`Error ${response.status}: ${text}`);
     }
+
+    const data = JSON.parse(text);
     return data;
   } catch (error) {
+    console.error('Fetch error:', error);
     throw new Error(error.message);
   }
 };
+
+
+
 
 //------------------------------------------------------- API TICKET -----------------------------------------------------------------------
 export const fetchTickets = async (token) => {

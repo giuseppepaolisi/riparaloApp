@@ -9,7 +9,7 @@ const createCustomer = async (req, res, next) => {
 
   try {
     // validazione input
-    if (!/\S+@\S+\.\S+/.test(email)) {
+    if (email && !/\S+@\S+\.\S+/.test(email)) {
       return next(new ErrorResponse("Inserire un'email valida", 400));
     }
     if (!nome) {
@@ -121,7 +121,7 @@ const updateCustomer = async (req, res, next) => {
     if (!updatedCustomer) {
       return next(new ErrorResponse('Cliente non trovato', 404));
     }
-    
+
     res.status(200).json({ success: true, data: updatedCustomer });
   } catch (error) {
     next(error);

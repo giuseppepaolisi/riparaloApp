@@ -11,7 +11,9 @@ function readKeyFile(primaryPath, secondaryPath) {
   } else if (fs.existsSync(secondaryPath)) {
     return fs.readFileSync(secondaryPath, 'utf8');
   } else {
-    throw new Error(`Key file not found in either path: ${primaryPath} or ${secondaryPath}`);
+    throw new Error(
+      `Key file not found in either path: ${primaryPath} or ${secondaryPath}`
+    );
   }
 }
 

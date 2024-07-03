@@ -4,7 +4,6 @@ const validator = require('validator');
 const customerSchema = new mongoose.Schema({
   email: {
     type: String,
-    unique: true,
     lowercase: true,
     validate: [validator.isEmail, 'Inserire un indirizzo email valido'],
   },

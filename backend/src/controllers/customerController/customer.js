@@ -24,14 +24,6 @@ const createCustomer = async (req, res, next) => {
       );
     }
 
-    // Controlla se esiste già un cliente con la stessa email
-    const existingCustomer = await Customer.findOne({ email });
-    if (existingCustomer) {
-      return next(
-        new ErrorResponse('Questo cliente è già stato inserito.', 400)
-      );
-    }
-
     const customer = await Customer.create({
       email,
       nome,

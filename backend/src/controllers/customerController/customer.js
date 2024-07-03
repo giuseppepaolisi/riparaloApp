@@ -91,9 +91,47 @@ const getCustomer = async (req, res, next) => {
   }
 };
 
+// Aggiorna dati cliente
+const updateCustomer = async (req, res, next) => {
+  const { id } = req.params;
+  const partner = req.user._id;
+  const { email, nome, cognome, telefono } = req.body;
+  try {
+    if (email && !/\S+@\S+\.\S+/.test(email)) {
+      return next(new ErrorResponse("Inserire un'email valida", 400));
+    }
+    if (!nome) {
+      return next(new ErrorResponse('Inserire un nome', 400));
+    }
+    if (!cognome) {
+      return next(new ErrorResponse('Inserire un cognome', 400));
+    }
+    if (!telefono || telefono.length < 10) {
+      return next(
+        new ErrorResponse('Inserire un numero di telefono valido', 400)
+      );
+    }
+
+    const updatedCustomer = await Customer.findOneAndUpdate(
+      { _id: id, partner },
+      { email, nome, cognome, telefono },
+      { new: true }
+    );
+
+    if (!updatedCustomer) {
+      return next(new ErrorResponse('Cliente non trovato', 404));
+    }
+    
+    res.status(200).json({ success: true, data: updatedCustomer });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createCustomer,
   getCustomers,
   deleteCustomer,
   getCustomer,
+  updateCustomer,
 };

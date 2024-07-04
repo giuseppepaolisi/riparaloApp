@@ -1,6 +1,4 @@
 // frontend/src/utils/formConfig.js
-
-
 export const formFieldsConfig = (fields, setField, config) => {
   const defaultConfig = [
     {

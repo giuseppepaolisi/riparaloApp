@@ -1,5 +1,4 @@
 // frontend/src/utils/validationUtils.js
-
 export function validatePhoneNumber(phone) {
     const phoneRegex = /^(?:\+?\d{13}|\d{10})$/;
     return phoneRegex.test(phone);

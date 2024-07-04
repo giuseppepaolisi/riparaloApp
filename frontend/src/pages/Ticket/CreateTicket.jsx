@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid, Box, Typography, Button } from "@mui/material";
@@ -6,13 +6,13 @@ import FormContainer from "../../components/FormContainer";
 import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import { createTicket } from "../../api/apiPartner";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 import { validatePhoneNumber, validateIMEI, validatePrice, validateDeposit, validateName } from "../../utils/validationUtils";
 import { handleValidationError } from "../../utils/errorHandling";
 import useFormFields from "../../CustomHooks/useFormFields";
 import { formFieldsConfig } from "../../utils/formConfig";
+import { handleTicketCreate } from "../../utils/ticketUtils";
 
 const CreateTicket = () => {
   useBodyBackgroundColor("#007bff");
@@ -65,7 +65,7 @@ const CreateTicket = () => {
       e.preventDefault();
       setAlert({ open: false, msg: "", severity: "" });
 
-      const { nome_cliente, cognome_cliente, telefono_cliente, acconto, servizi, imei } = fields;
+      const { telefono_cliente, nome_cliente, cognome_cliente, imei, acconto, servizi } = fields;
 
       const totalPrice = servizi.reduce((acc, service) => acc + parseFloat(service.prezzo || 0), 0);
 
@@ -80,22 +80,12 @@ const CreateTicket = () => {
         return;
       }
 
-      const filteredServices = servizi.filter(
-        (service) => service.servizio && service.prezzo
-      );
-
-      try {
-        await createTicket(token, { ...fields, servizi: filteredServices });
-        setAlert({ open: true, msg: "Ticket creato con successo", severity: "success" });
-        setTimeout(() => navigate("/partner-dashboard"), 2000);
-      } catch (err) {
-        setAlert({ open: true, msg: "Errore nella creazione del ticket", severity: "error" });
-      }
+      handleTicketCreate(fields, token, setAlert, navigate);
     },
-    [fields, token, navigate]
+    [fields, token, navigate, setAlert]
   );
 
-  const formFields = formFieldsConfig(fields, setField);
+  const formFields = useMemo(() => formFieldsConfig(fields, setField), [fields, setField]);
 
   return (
     <React.Fragment>

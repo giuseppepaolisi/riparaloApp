@@ -2,7 +2,13 @@
 import { updateCliente } from "../api/apiPartner";
 import { addCliente } from "../api/apiPartner";
 
-export async function handleCustomerUpdate(token, id, fields, setAlert, navigate) {
+export async function handleCustomerUpdate(
+  token,
+  id,
+  fields,
+  setAlert,
+  navigate
+) {
   try {
     await updateCliente(token, id, fields);
     setAlert({
@@ -24,7 +30,12 @@ export async function handleCustomerUpdate(token, id, fields, setAlert, navigate
 }
 
 export async function handleCustomerAdd(fields, token, setAlert, navigate) {
-  const { email_cliente, nome_cliente, cognome_cliente, telefono_cliente } = fields;
+  const {
+    email_cliente,
+    nome_cliente,
+    cognome_cliente,
+    telefono_cliente,
+  } = fields;
 
   try {
     const newCustomer = {

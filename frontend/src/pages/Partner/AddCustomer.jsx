@@ -8,7 +8,11 @@ import FormActions from "../../components/FormActions";
 import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
-import { validatePhoneNumber, validateEmail, validateName } from "../../utils/validationUtils";
+import {
+  validatePhoneNumber,
+  validateEmail,
+  validateName,
+} from "../../utils/validationUtils";
 import { handleValidationError } from "../../utils/errorHandling";
 import { formFieldsConfig } from "../../utils/formConfig";
 import useFormFields from "../../CustomHooks/useFormFields";
@@ -22,7 +26,7 @@ const AddCustomer = () => {
     email_cliente: "",
     nome_cliente: "",
     cognome_cliente: "",
-    telefono_cliente: ""
+    telefono_cliente: "",
   });
 
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
@@ -35,10 +39,30 @@ const AddCustomer = () => {
       if (!token) return;
 
       if (
-        handleValidationError(validatePhoneNumber, fields.telefono_cliente, "Numero di telefono non valido", setAlert) ||
-        handleValidationError(validateEmail, fields.email_cliente, "Email non valida", setAlert) ||
-        handleValidationError(validateName, fields.nome_cliente, "Nome non valido", setAlert) ||
-        handleValidationError(validateName, fields.cognome_cliente, "Cognome non valido", setAlert)
+        handleValidationError(
+          validatePhoneNumber,
+          fields.telefono_cliente,
+          "Numero di telefono non valido",
+          setAlert
+        ) ||
+        handleValidationError(
+          validateEmail,
+          fields.email_cliente,
+          "Email non valida",
+          setAlert
+        ) ||
+        handleValidationError(
+          validateName,
+          fields.nome_cliente,
+          "Nome non valido",
+          setAlert
+        ) ||
+        handleValidationError(
+          validateName,
+          fields.cognome_cliente,
+          "Cognome non valido",
+          setAlert
+        )
       ) {
         return;
       }
@@ -48,32 +72,46 @@ const AddCustomer = () => {
     [fields, token, navigate]
   );
 
-  const formFields = useMemo(() => formFieldsConfig(fields, setField, [
-    { id: "nome_cliente" },
-    { id: "cognome_cliente" },
-    { id: "telefono_cliente" },
-    { id: "email_cliente", label: "Email Cliente", type: "email" }
-  ]), [fields, setField]);
+  const formFields = useMemo(
+    () =>
+      formFieldsConfig(fields, setField, [
+        { id: "nome_cliente" },
+        { id: "cognome_cliente" },
+        { id: "telefono_cliente" },
+        { id: "email_cliente", label: "Email Cliente", type: "email" },
+      ]),
+    [fields, setField]
+  );
 
   return (
     <React.Fragment>
       <FormContainer title="Aggiungi Cliente" maxWidth="sm">
         <form onSubmit={handleAggiungiCliente}>
           <Grid container spacing={2}>
-            {formFields.map(({ id, label, type, value, onChange, inputProps, onKeyPress }) => (
-              <Grid item xs={12} key={id}>
-                <FormInput
-                  id={id}
-                  label={label}
-                  type={type}
-                  value={value}
-                  onChange={onChange}
-                  required
-                  inputProps={inputProps}
-                  onKeyPress={onKeyPress}
-                />
-              </Grid>
-            ))}
+            {formFields.map(
+              ({
+                id,
+                label,
+                type,
+                value,
+                onChange,
+                inputProps,
+                onKeyPress,
+              }) => (
+                <Grid item xs={12} key={id}>
+                  <FormInput
+                    id={id}
+                    label={label}
+                    type={type}
+                    value={value}
+                    onChange={onChange}
+                    required
+                    inputProps={inputProps}
+                    onKeyPress={onKeyPress}
+                  />
+                </Grid>
+              )
+            )}
           </Grid>
           <FormActions onSubmit={handleAggiungiCliente} />
         </form>

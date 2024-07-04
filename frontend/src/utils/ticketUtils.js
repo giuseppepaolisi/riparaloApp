@@ -10,9 +10,17 @@ export async function handleTicketCreate(fields, token, setAlert, navigate) {
 
   try {
     await createTicket(token, { ...fields, servizi: filteredServices });
-    setAlert({ open: true, msg: "Ticket creato con successo", severity: "success" });
+    setAlert({
+      open: true,
+      msg: "Ticket creato con successo",
+      severity: "success",
+    });
     setTimeout(() => navigate("/partner-dashboard"), 2000);
   } catch (err) {
-    setAlert({ open: true, msg: "Errore nella creazione del ticket", severity: "error" });
+    setAlert({
+      open: true,
+      msg: "Errore nella creazione del ticket",
+      severity: "error",
+    });
   }
 }

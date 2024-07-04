@@ -100,7 +100,7 @@ export const updateCliente = async (token, id, updatedData) => {
     });
 
     const text = await response.text();
-    console.log('Response text:', text);
+    console.log("Response text:", text);
 
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${text}`);
@@ -109,13 +109,10 @@ export const updateCliente = async (token, id, updatedData) => {
     const data = JSON.parse(text);
     return data;
   } catch (error) {
-    console.error('Fetch error:', error);
+    console.error("Fetch error:", error);
     throw new Error(error.message);
   }
 };
-
-
-
 
 //------------------------------------------------------- API TICKET -----------------------------------------------------------------------
 export const fetchTickets = async (token) => {

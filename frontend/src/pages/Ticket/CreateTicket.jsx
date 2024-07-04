@@ -8,7 +8,13 @@ import FormActions from "../../components/FormActions";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
-import { validatePhoneNumber, validateIMEI, validatePrice, validateDeposit, validateName } from "../../utils/validationUtils";
+import {
+  validatePhoneNumber,
+  validateIMEI,
+  validatePrice,
+  validateDeposit,
+  validateName,
+} from "../../utils/validationUtils";
 import { handleValidationError } from "../../utils/errorHandling";
 import useFormFields from "../../CustomHooks/useFormFields";
 import { formFieldsConfig } from "../../utils/formConfig";
@@ -65,17 +71,57 @@ const CreateTicket = () => {
       e.preventDefault();
       setAlert({ open: false, msg: "", severity: "" });
 
-      const { telefono_cliente, nome_cliente, cognome_cliente, imei, acconto, servizi } = fields;
+      const {
+        telefono_cliente,
+        nome_cliente,
+        cognome_cliente,
+        imei,
+        acconto,
+        servizi,
+      } = fields;
 
-      const totalPrice = servizi.reduce((acc, service) => acc + parseFloat(service.prezzo || 0), 0);
+      const totalPrice = servizi.reduce(
+        (acc, service) => acc + parseFloat(service.prezzo || 0),
+        0
+      );
 
       if (
-        handleValidationError(validatePhoneNumber, telefono_cliente, "Numero di telefono non valido", setAlert) ||
-        handleValidationError(validateName, nome_cliente, "Nome cliente non valido", setAlert) ||
-        handleValidationError(validateName, cognome_cliente, "Cognome cliente non valido", setAlert) ||
-        handleValidationError(validateIMEI, imei, "IMEI non valido", setAlert) ||
-        handleValidationError(validatePrice, acconto, "Acconto non valido", setAlert) ||
-        handleValidationError((deposit) => validateDeposit(deposit, totalPrice), acconto, "Acconto deve essere minore o uguale al totale dei servizi", setAlert)
+        handleValidationError(
+          validatePhoneNumber,
+          telefono_cliente,
+          "Numero di telefono non valido",
+          setAlert
+        ) ||
+        handleValidationError(
+          validateName,
+          nome_cliente,
+          "Nome cliente non valido",
+          setAlert
+        ) ||
+        handleValidationError(
+          validateName,
+          cognome_cliente,
+          "Cognome cliente non valido",
+          setAlert
+        ) ||
+        handleValidationError(
+          validateIMEI,
+          imei,
+          "IMEI non valido",
+          setAlert
+        ) ||
+        handleValidationError(
+          validatePrice,
+          acconto,
+          "Acconto non valido",
+          setAlert
+        ) ||
+        handleValidationError(
+          (deposit) => validateDeposit(deposit, totalPrice),
+          acconto,
+          "Acconto deve essere minore o uguale al totale dei servizi",
+          setAlert
+        )
       ) {
         return;
       }
@@ -85,7 +131,10 @@ const CreateTicket = () => {
     [fields, token, navigate, setAlert]
   );
 
-  const formFields = useMemo(() => formFieldsConfig(fields, setField), [fields, setField]);
+  const formFields = useMemo(() => formFieldsConfig(fields, setField), [
+    fields,
+    setField,
+  ]);
 
   return (
     <React.Fragment>
@@ -100,19 +149,35 @@ const CreateTicket = () => {
                 <Typography variant="h6" gutterBottom>
                   Informazioni Cliente
                 </Typography>
-                {formFields.slice(0, 6).map(({ id, label, type, value, onChange, required, inputProps }) => (
-                  <FormInput
-                    key={id}
-                    id={id}
-                    label={label}
-                    type={type}
-                    value={value}
-                    onChange={onChange}
-                    required={required}
-                    inputProps={inputProps}
-                    onKeyPress={id === "telefono_cliente" ? handleTelefonoKeyPress : null}
-                  />
-                ))}
+                {formFields
+                  .slice(0, 6)
+                  .map(
+                    ({
+                      id,
+                      label,
+                      type,
+                      value,
+                      onChange,
+                      required,
+                      inputProps,
+                    }) => (
+                      <FormInput
+                        key={id}
+                        id={id}
+                        label={label}
+                        type={type}
+                        value={value}
+                        onChange={onChange}
+                        required={required}
+                        inputProps={inputProps}
+                        onKeyPress={
+                          id === "telefono_cliente"
+                            ? handleTelefonoKeyPress
+                            : null
+                        }
+                      />
+                    )
+                  )}
               </Grid>
               <Grid item xs={12} md={6}>
                 <Typography variant="h6" gutterBottom>
@@ -143,18 +208,30 @@ const CreateTicket = () => {
                 <Button type="button" onClick={addService}>
                   Aggiungi Servizio
                 </Button>
-                {formFields.slice(6).map(({ id, label, type, value, onChange, required, inputProps }) => (
-                  <FormInput
-                    key={id}
-                    id={id}
-                    label={label}
-                    type={type}
-                    value={value}
-                    onChange={onChange}
-                    required={required}
-                    inputProps={inputProps}
-                  />
-                ))}
+                {formFields
+                  .slice(6)
+                  .map(
+                    ({
+                      id,
+                      label,
+                      type,
+                      value,
+                      onChange,
+                      required,
+                      inputProps,
+                    }) => (
+                      <FormInput
+                        key={id}
+                        id={id}
+                        label={label}
+                        type={type}
+                        value={value}
+                        onChange={onChange}
+                        required={required}
+                        inputProps={inputProps}
+                      />
+                    )
+                  )}
               </Grid>
             </Grid>
           </Box>

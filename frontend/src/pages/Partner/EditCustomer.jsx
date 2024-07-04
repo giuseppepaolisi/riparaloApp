@@ -1,20 +1,19 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchClienteById } from "../../api/apiPartner";
-import { Grid } from "@mui/material";
+import { fetchClienteById, updateCliente } from "../../api/apiPartner";
+import {
+  TextField,
+  Button,
+  Container,
+  Typography,
+  Box,
+  Grid,
+} from "@mui/material";
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import FormInput from "../../components/FormInput";
-import FormActions from "../../components/FormActions";
-import FormContainer from "../../components/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
-import { validatePhoneNumber, validateEmail, validateName } from "../../utils/validationUtils";
-import { handleValidationError } from "../../utils/errorHandling";
-import { formFieldsConfig } from "../../utils/formConfig";
-import useFormFields from "../../CustomHooks/useFormFields";
-import { handleCustomerUpdate } from "../../utils/customerUtils";
 
 const EditCustomer = () => {
   usePageTitle("Modifica Cliente");
@@ -24,13 +23,7 @@ const EditCustomer = () => {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
 
-  const [fields, setField] = useFormFields({
-    email_cliente: "",
-    nome_cliente: "",
-    cognome_cliente: "",
-    telefono_cliente: ""
-  });
-
+  const [cliente, setCliente] = useState(null);
   const [loading, setLoading] = useState(true);
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
 
@@ -38,11 +31,7 @@ const EditCustomer = () => {
     const loadCliente = async () => {
       try {
         const clienteData = await fetchClienteById(token, id);
-        Object.keys(clienteData).forEach((key) => {
-          if (key in fields) {
-            setField(key)(clienteData[key]);
-          }
-        });
+        setCliente(clienteData);
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -58,65 +47,112 @@ const EditCustomer = () => {
     if (token) {
       loadCliente();
     }
-  }, [token, id, setField, fields]);
+  }, [token, id]);
 
-  const handleSubmit = useCallback(
-    async (event) => {
-      event.preventDefault();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCliente((prev) => ({ ...prev, [name]: value }));
+  };
 
-      if (
-        handleValidationError(validatePhoneNumber, fields.telefono_cliente, "Numero di telefono non valido", setAlert) ||
-        handleValidationError(validateEmail, fields.email_cliente, "Email non valida", setAlert) ||
-        handleValidationError(validateName, fields.nome_cliente, "Nome non valido", setAlert) ||
-        handleValidationError(validateName, fields.cognome_cliente, "Cognome non valido", setAlert)
-      ) {
-        return;
-      }
-
-      handleCustomerUpdate(token, id, fields, setAlert, navigate);
-    },
-    [fields, token, id, navigate, setAlert]
-  );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await updateCliente(token, id, cliente);
+      setAlert({
+        open: true,
+        msg: "Cliente aggiornato con successo",
+        severity: "success",
+      });
+      navigate("/clienti");
+    } catch (error) {
+      console.error(error);
+      setAlert({
+        open: true,
+        msg: "Errore nell'aggiornamento del cliente",
+        severity: "error",
+      });
+    }
+  };
 
   const handleCancel = () => {
     navigate("/clienti");
   };
 
-  const formFields = useMemo(() => formFieldsConfig(fields, setField, [
-    { id: "nome_cliente" },
-    { id: "cognome_cliente" },
-    { id: "telefono_cliente" },
-    { id: "email_cliente", label: "Email Cliente", type: "email" }
-  ]), [fields, setField]);
-
   if (loading) return <Loading open={loading} />;
 
   return (
     <React.Fragment>
-      <FormContainer title="Modifica Cliente" maxWidth="sm">
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            {formFields.map(({ id, label, type, value, onChange, inputProps, onKeyPress }) => (
-              <Grid item xs={12} key={id}>
-                <FormInput
-                  id={id}
-                  label={label}
-                  type={type}
-                  value={value}
-                  onChange={onChange}
-                  required
-                  inputProps={inputProps}
-                  onKeyPress={onKeyPress}
-                />
+      <Container component="main" maxWidth="xs">
+        <Box mt={8} display="flex" flexDirection="column" alignItems="center">
+          <Typography component="h1" variant="h5">
+            Modifica Cliente
+          </Typography>
+          <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="nome"
+              label="Nome"
+              name="nome"
+              autoComplete="nome"
+              autoFocus
+              value={cliente?.nome || ""}
+              onChange={handleChange}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="cognome"
+              label="Cognome"
+              name="cognome"
+              autoComplete="cognome"
+              value={cliente?.cognome || ""}
+              onChange={handleChange}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
+              value={cliente?.email || ""}
+              onChange={handleChange}
+            />
+            <Grid container spacing={2} sx={{ mt: 3 }}>
+              <Grid item xs={6}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                >
+                  Salva
+                </Button>
               </Grid>
-            ))}
-          </Grid>
-          <FormActions onSubmit={handleSubmit} onCancel={handleCancel} />
-        </form>
-        {alert.open && (
-          <CustomAlert msg={alert.msg} severity={alert.severity} />
-        )}
-      </FormContainer>
+              <Grid item xs={6}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleCancel}
+                >
+                  Annulla
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+          {alert.open && (
+            <CustomAlert msg={alert.msg} severity={alert.severity} />
+          )}
+        </Box>
+      </Container>
     </React.Fragment>
   );
 };

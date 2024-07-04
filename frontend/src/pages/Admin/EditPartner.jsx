@@ -3,13 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { fetchPartnerById } from "../../api/apiAdmin";
 import { updatePartner } from "../../api/apiAdmin";
-import {
-  TextField,
-  Button,
-  Container,
-  Box,
-  Grid,
-} from "@mui/material";
+import { TextField, Button, Container, Box, Grid } from "@mui/material";
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";

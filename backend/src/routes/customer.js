@@ -5,6 +5,7 @@ const {
   getCustomers,
   getCustomer,
   deleteCustomer,
+  updateCustomer,
 } = require('../controllers/customerController/customer');
 const { requirePartner, requireAuth } = require('../middleware/requireAuth');
 
@@ -22,6 +23,8 @@ router.delete('/customer/:id', requirePartner, deleteCustomer);
 router.get('/customers', requirePartner, getCustomers);
 
 router.get('/customer/:id', requirePartner, getCustomer);
+
+router.patch('/customer/:id', requirePartner, updateCustomer);
 
 router.use(errorHandler);
 

@@ -4,16 +4,27 @@ const fs = require('fs');
 const path = require('path');
 const { ADMIN, TECHNICIAN, PARTNER } = require('../conf/role');
 
-// Carica la chiave privata per firmare il token
-const privateKey = fs.readFileSync(
+// Funzione per leggere il file in modo sicuro da due percorsi possibili
+function readKeyFile(primaryPath, secondaryPath) {
+  if (fs.existsSync(primaryPath)) {
+    return fs.readFileSync(primaryPath, 'utf8');
+  } else if (fs.existsSync(secondaryPath)) {
+    return fs.readFileSync(secondaryPath, 'utf8');
+  } else {
+    throw new Error(
+      `Key file not found in either path: ${primaryPath} or ${secondaryPath}`
+    );
+  }
+}
+
+const privateKey = readKeyFile(
   path.join(__dirname, '../keys/rsa.private'),
-  'utf8'
+  path.join(__dirname, 'src/keys/rsa.private')
 );
 
-// Carica la chiave pubblica per verificare il token
-const publicKey = fs.readFileSync(
+const publicKey = readKeyFile(
   path.join(__dirname, '../keys/rsa.public'),
-  'utf8'
+  path.join(__dirname, 'src/keys/rsa.public')
 );
 
 // Funzione per generare un token JWT

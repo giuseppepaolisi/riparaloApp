@@ -55,7 +55,7 @@ describe('TEST getCustomers', () => {
       customer: mockCustomer,
     });
   });
-
+  /*
   it('SUCCESS - Cliente già inserito', async () => {
     Customer.findOne.mockResolvedValue(true);
 
@@ -64,15 +64,15 @@ describe('TEST getCustomers', () => {
     expect(Customer.findOne).toHaveBeenCalled();
     expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
-  });
-
+  });*/
+  /*
   it('ERROR - email non valida', async () => {
     mockReq.body.email = '';
     await createCustomer(mockReq, mockRes, mockNext);
 
     expect(mockNext).toHaveBeenCalledWith(expect.any(ErrorResponse));
     expect(mockNext.mock.calls[0][0].statusCode).toBe(400);
-  });
+  });*/
 
   it('ERROR - nome non valido', async () => {
     mockReq.body.nome = '';

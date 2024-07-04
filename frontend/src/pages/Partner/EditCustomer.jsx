@@ -14,6 +14,8 @@ import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
+import { validatePhoneNumber, validateEmail, validateName } from "../../utils/validationUtils";
+import { handleValidationError } from "../../utils/errorHandling";
 
 const EditCustomer = () => {
   usePageTitle("Modifica Cliente");
@@ -56,6 +58,16 @@ const EditCustomer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      handleValidationError(validatePhoneNumber, cliente.telefono, "Numero di telefono non valido", setAlert) ||
+      (cliente.email && handleValidationError(validateEmail, cliente.email, "Email non valida", setAlert)) ||
+      handleValidationError(validateName, cliente.nome, "Nome non valido", setAlert) ||
+      handleValidationError(validateName, cliente.cognome, "Cognome non valido", setAlert)
+    ) {
+      return;
+    }
+
     try {
       await updateCliente(token, id, cliente);
       setAlert({
@@ -117,6 +129,17 @@ const EditCustomer = () => {
               variant="outlined"
               margin="normal"
               required
+              fullWidth
+              id="telefono"
+              label="Telefono"
+              name="telefono"
+              autoComplete="telefono"
+              value={cliente?.telefono || ""}
+              onChange={handleChange}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
               fullWidth
               id="email"
               label="Email"

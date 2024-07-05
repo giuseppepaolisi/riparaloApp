@@ -167,6 +167,9 @@ export const fetchTicketsByState = async (token, stato) => {
 
 export const deleteTicket = async (token, id) => {
   try {
+    console.log("Token:", token);
+    console.log("Deleting ticket ID:", id);
+
     const response = await fetch(`/api/ticket/${id}`, {
       method: "DELETE",
       headers: {
@@ -177,12 +180,17 @@ export const deleteTicket = async (token, id) => {
 
     if (!response.ok) {
       const errorData = await response.json();
+      console.log("Errore nella risposta del server:", errorData);
       throw new Error(errorData.error || "Errore nell'eliminazione del ticket");
     }
   } catch (error) {
+    console.error("Error deleting ticket:", error);
     throw new Error(error.message);
   }
 };
+
+
+
 
 export const fetchTicketById = async (token, id) => {
   try {

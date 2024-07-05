@@ -7,10 +7,7 @@ import {
   TextField,
   Button,
   Autocomplete,
-  IconButton,
-  InputAdornment,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import smartphoneBrands from "../../assets/js/brands";
 import FormActions from "../../components/FormActions";
@@ -30,11 +27,12 @@ const AddDevice = () => {
   const navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
-    setMarca(newValue);
+    console.log("New value:", newValue); // Log per verificare il nuovo valore
+    setMarca(newValue || ""); // Ensure marca is never null or undefined
   };
 
-  const handleClearMarca = () => {
-    setMarca("");
+  const handleInputChange = (event) => {
+    setMarca(event.target.value);
   };
 
   const handleServizioChange = (index, event) => {
@@ -65,15 +63,29 @@ const AddDevice = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("Form submit event triggered"); // Log per verificare l'invio del form
+    console.log("Marca:", marca); // Log per verificare il valore di marca
+
     // Verifica che la marca sia valida o personalizzata
+    if (!marca) {
+      setAlert({
+        open: true,
+        msg: "Inserisci una marca valida.",
+        severity: "error",
+      });
+      return;
+    }
+
     const formData = {
       modello,
-      marca: marca || "Altro", // Imposta "Altro" se la marca è vuota
+      marca,
       servizi: servizi.map((servizio) => ({
         servizio: servizio.servizio,
         prezzo: Number(servizio.prezzo),
       })),
     };
+
+    console.log("FormData inviato:", formData); // Verifica dei dati inviati
 
     try {
       await addDevice(token, formData); // usa la funzione addDevice
@@ -118,6 +130,9 @@ const AddDevice = () => {
                 options={smartphoneBrands}
                 value={marca}
                 onChange={handleChange}
+                onInputChange={handleInputChange}
+                onBlur={(e) => handleInputChange(e)} // Aggiorna il valore di marca quando il campo perde il focus
+                clearOnEscape
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -127,24 +142,6 @@ const AddDevice = () => {
                     fullWidth
                     required
                     variant="outlined"
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <>
-                          {marca && (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="clear input"
-                                onClick={handleClearMarca}
-                              >
-                                <CloseIcon />
-                              </IconButton>
-                            </InputAdornment>
-                          )}
-                          {params.InputProps.endAdornment}
-                        </>
-                      ),
-                    }}
                   />
                 )}
               />
@@ -223,7 +220,7 @@ const AddDevice = () => {
               </Button>
             </Grid>
           </Grid>
-          <FormActions onSubmit={handleSubmit} />
+          <FormActions onSubmit={handleSubmit} isSubmitDisabled={isAddServizioDisabled} />
         </form>
       </FormContainer>
     </React.Fragment>

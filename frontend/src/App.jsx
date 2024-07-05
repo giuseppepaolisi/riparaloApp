@@ -35,6 +35,7 @@ import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./assets/js/theme";
 import Account from "./pages/Generic/Account";
+import AcceptedTickets from "./pages/Ticket/AcceptedTickets";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -108,6 +109,10 @@ const App = () => {
                 <Route
                   path="/tecnico-dashboard"
                   element={<DashboardTecnico />}
+                />
+                <Route
+                  path="/tickets-accettati"
+                  element={<AcceptedTickets />}
                 />
               </Route>
 

@@ -189,9 +189,6 @@ export const deleteTicket = async (token, id) => {
   }
 };
 
-
-
-
 export const fetchTicketById = async (token, id) => {
   try {
     const response = await fetch(`/api/ticket/${id}`, {
@@ -236,6 +233,34 @@ export const createTicket = async (token, ticketData) => {
 
     const data = JSON.parse(text);
     return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const fetchTicketsByTechnician = async (token, tecnicoId) => {
+  try {
+    const response = await fetch(`/api/tickets`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore nel recupero dei ticket");
+    }
+
+    const json = await response.json();
+    if (!Array.isArray(json.tickets)) {
+      throw new Error("La risposta del server non è un array");
+    }
+    const filteredTickets = json.tickets.filter((ticket) =>
+      ticket.storico_stato.some((stato) => stato.tecnico === tecnicoId)
+    );
+
+    return filteredTickets;
   } catch (error) {
     throw new Error(error.message);
   }

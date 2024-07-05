@@ -1,31 +1,68 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { fetchTicketsByTechnician, fetchTicketById } from "../../api/apiPartner";
+import TicketDashboard from "../../components/Ticket/TicketDashboard";
+import stateColors from "../../assets/json/state.json";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import TicketDetailModal from "../../components/Modal/TicketDetailModal";
-import stateColors from "../../assets/json/state.json";
+
+const columns = [
+  { field: "_id", headerName: "ID", flex: 1 },
+  { field: "id_partner", headerName: "ID Partner", flex: 1 },
+  { field: "marca", headerName: "Marca", flex: 1 },
+  { field: "modello", headerName: "Modello", flex: 1 },
+  {
+    field: "stato",
+    headerName: "Stato",
+    flex: 1,
+    renderCell: (params) => {
+      const color = stateColors[params.value] || "#FFFFFF";
+      return (
+        <div
+          style={{
+            backgroundColor: color,
+            padding: "8px",
+            borderRadius: "4px",
+          }}
+        >
+          {params.value}
+        </div>
+      );
+    },
+  },
+  {
+    field: "descrizione_problema",
+    headerName: "Descrizione Problema",
+    flex: 1,
+  },
+];
+
+const filterStatuses = [
+  { label: "Aperto", color: stateColors["Aperto"], filterValue: "aperto" },
+  {
+    label: "In attesa",
+    color: stateColors["Attesa conferma preventivo"],
+    filterValue: "attesa",
+  },
+  {
+    label: "Annullato",
+    color: stateColors["Annullato"],
+    filterValue: "annullato",
+  },
+  {
+    label: "Completato",
+    color: stateColors["Completato"],
+    filterValue: "completato",
+  },
+];
 
 const AcceptedTickets = () => {
   usePageTitle("Tickets Tecnico");
 
   const [ticketDetails, setTicketDetails] = useState(null);
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
-  const [tickets, setTickets] = useState([]);
+
   const { token, user } = useSelector((state) => state.auth);
-
-  const fetchTickets = useCallback(async () => {
-    if (!token) return;
-    try {
-      const fetchedTickets = await fetchTicketsByTechnician(token, user._id);
-      setTickets(fetchedTickets);
-    } catch (error) {
-      console.error("Error fetching tickets:", error);
-    }
-  }, [token, user._id]);
-
-  useEffect(() => {
-    fetchTickets();
-  }, [fetchTickets]);
 
   const handleDetail = async (id) => {
     if (!token) return;
@@ -44,48 +81,30 @@ const AcceptedTickets = () => {
   };
 
   return (
-    <div>
-      <h1>Tickets del Tecnico</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome Cliente</th>
-            <th>Cognome Cliente</th>
-            <th>Marca</th>
-            <th>Modello</th>
-            <th>Stato</th>
-            <th>Descrizione Problema</th>
-            <th>Azioni</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tickets.map(ticket => (
-            <tr key={ticket._id}>
-              <td>{ticket._id}</td>
-              <td>{ticket.nome_cliente}</td>
-              <td>{ticket.cognome_cliente}</td>
-              <td>{ticket.marca}</td>
-              <td>{ticket.modello}</td>
-              <td style={{ backgroundColor: stateColors[ticket.stato] || "#FFFFFF" }}>
-                {ticket.stato}
-              </td>
-              <td>{ticket.descrizione_problema}</td>
-              <td>
-                <button onClick={() => handleDetail(ticket._id)}>Dettagli</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {isDetailModalOpen && (
-        <TicketDetailModal
-          open={isDetailModalOpen}
-          onClose={closeDetailModal}
-          ticket={ticketDetails}
-        />
-      )}
-    </div>
+    <React.Fragment>
+      <TicketDashboard
+        fetchTickets={() => fetchTicketsByTechnician(token, user._id)}
+        columns={columns}
+        searchFields={[
+          "_id",
+          "id_partner",
+          "marca",
+          "modello",
+          "stato",
+          "descrizione_problema",
+        ]}
+        addTicketLink="/apri-ticket"
+        filterStatuses={filterStatuses}
+        alignSearchWithFilters={true}
+        onDetail={handleDetail}
+        showDeleteButton={false}
+      />
+      <TicketDetailModal
+        open={isDetailModalOpen}
+        onClose={closeDetailModal}
+        ticket={ticketDetails}
+      />
+    </React.Fragment>
   );
 };
 

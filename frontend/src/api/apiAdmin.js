@@ -338,3 +338,40 @@ export const deleteTecnico = async (token, id) => {
     throw new Error(error.message);
   }
 };
+
+
+
+// api/apiAdmin.js
+export const fetchBrands = async (token) => {
+  const response = await fetch("/api/brands", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Errore nel recupero dei brand");
+  }
+
+  const data = await response.json();
+  return data.brands;
+};
+
+export const fetchModelsByBrand = async (token, brand) => {
+  const response = await fetch(`/api/devices/${brand}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Errore nel recupero dei modelli per il brand: ${brand}`);
+  }
+
+  const data = await response.json();
+  return data.modelli;
+};

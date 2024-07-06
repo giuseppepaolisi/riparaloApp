@@ -1,24 +1,19 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Grid, Box, Typography, Button } from "@mui/material";
+import { Grid, Box, Typography, Button, Autocomplete, TextField } from "@mui/material";
 import FormContainer from "../../components/FormContainer";
 import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
-import {
-  validatePhoneNumber,
-  validateIMEI,
-  validatePrice,
-  validateDeposit,
-  validateName,
-} from "../../utils/validationUtils";
+import { validatePhoneNumber, validateIMEI, validatePrice, validateDeposit, validateName } from "../../utils/validationUtils";
 import { handleValidationError } from "../../utils/errorHandling";
 import useFormFields from "../../CustomHooks/useFormFields";
 import { formFieldsConfig } from "../../utils/formConfig";
 import { handleTicketCreate } from "../../utils/ticketUtils";
+import { fetchBrands, fetchModelsByBrand } from "../../api/apiAdmin";
 
 const CreateTicket = () => {
   useBodyBackgroundColor("#007bff");
@@ -41,6 +36,10 @@ const CreateTicket = () => {
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+
+  const [brandSuggestions, setBrandSuggestions] = useState([]);
+  const [modelSuggestions, setModelSuggestions] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState("");
 
   const handleServiceChange = (index, e) => {
     const { id, value } = e.target;
@@ -136,21 +135,40 @@ const CreateTicket = () => {
     setField,
   ]);
 
+  const fetchBrandSuggestions = async (input) => {
+    try {
+      const brands = await fetchBrands(token);
+      setBrandSuggestions(brands.filter(brand => brand.toLowerCase().includes(input.toLowerCase())));
+    } catch (error) {
+      console.error("Error fetching brand suggestions:", error);
+    }
+  };
+
+  const fetchModelSuggestions = async (brand, input) => {
+    try {
+      const models = await fetchModelsByBrand(token, brand);
+      setModelSuggestions(models.filter(model => model.toLowerCase().includes(input.toLowerCase())));
+    } catch (error) {
+      console.error("Error fetching model suggestions:", error);
+    }
+  };
+
   return (
     <React.Fragment>
       <FormContainer
         title="Apri Ticket"
-        style={{ maxWidth: "1400px", margin: "auto" }}
+        maxWidth="lg" // Imposta maxWidth su "lg" per un container ancora più largo
+        style={{ maxWidth: "1600px", margin: "auto" }}
       >
         <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
           <Box sx={{ p: 3 }}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h6" gutterBottom>
                   Informazioni Cliente
                 </Typography>
                 {formFields
-                  .slice(0, 6)
+                  .slice(0, 4)  // Ridotto a 4 per escludere i vecchi input "marca" e "modello"
                   .map(
                     ({
                       id,
@@ -179,7 +197,7 @@ const CreateTicket = () => {
                     )
                   )}
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="h6" gutterBottom>
                   Dettagli Ticket
                 </Typography>
@@ -208,6 +226,50 @@ const CreateTicket = () => {
                 <Button type="button" onClick={addService}>
                   Aggiungi Servizio
                 </Button>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Typography variant="h6" gutterBottom>
+                  Informazioni Dispositivo
+                </Typography>
+                {/* Autocomplete for brand */}
+                <Autocomplete
+                  freeSolo
+                  options={brandSuggestions}
+                  onInputChange={(e, value) => fetchBrandSuggestions(value)}
+                  onChange={(e, value) => {
+                    setSelectedBrand(value);
+                    setField("marca")(value);
+                    fetchModelSuggestions(value, "");
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Marca"
+                      value={fields.marca}
+                      onChange={(e) => setField("marca")(e.target.value)}
+                      required
+                      sx={{ marginTop: 2 }}
+                    />
+                  )}
+                />
+
+                {/* Autocomplete for model */}
+                <Autocomplete
+                  freeSolo
+                  options={modelSuggestions}
+                  onInputChange={(e, value) => fetchModelSuggestions(selectedBrand, value)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Modello"
+                      value={fields.modello}
+                      onChange={(e) => setField("modello")(e.target.value)}
+                      required
+                      sx={{ marginTop: 2 }}
+                    />
+                  )}
+                />
+
                 {formFields
                   .slice(6)
                   .map(

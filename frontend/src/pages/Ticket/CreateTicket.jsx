@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Grid, Box, Typography, Button, Autocomplete, TextField } from "@mui/material";
+import { Grid, Box, Typography, Checkbox, FormControlLabel, TextField, Autocomplete } from "@mui/material";
 import FormContainer from "../../components/FormContainer";
 import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
@@ -15,19 +15,25 @@ import { formFieldsConfig } from "../../utils/formConfig";
 import { handleTicketCreate } from "../../utils/ticketUtils";
 import { fetchBrands, fetchModelsByBrand } from "../../api/apiAdmin";
 
+const servicesList = [
+  { servizio: "Riparazione Schermo", prezzo: 50 },
+  { servizio: "Connettore Ricarica", prezzo: 40 },
+  { servizio: "Altro", prezzo: 0 }
+];
+
 const CreateTicket = () => {
-  useBodyBackgroundColor("#007bff");
+  useBodyBackgroundColor("#f5f5f5");
   usePageTitle("Apri Ticket");
 
   const [fields, setField] = useFormFields({
+    telefono_cliente: "",
     nome_cliente: "",
     cognome_cliente: "",
-    telefono_cliente: "",
     descrizione_problema: "",
     marca: "",
     modello: "",
-    servizi: [{ servizio: "", prezzo: "" }],
-    acconto: "",
+    servizi: [],
+    acconto: "10",
     imei: "",
     pin: "",
     seriale: "",
@@ -41,16 +47,13 @@ const CreateTicket = () => {
   const [modelSuggestions, setModelSuggestions] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("");
 
-  const handleServiceChange = (index, e) => {
-    const { id, value } = e.target;
-    const newServices = fields.servizi.map((service, i) =>
-      i === index ? { ...service, [id]: value } : service
-    );
-    setField("servizi")(newServices);
-  };
+  const handleServiceChange = (e, service) => {
+    const isChecked = e.target.checked;
+    const updatedServices = isChecked
+      ? [...fields.servizi, service]
+      : fields.servizi.filter(s => s.servizio !== service.servizio);
 
-  const addService = () => {
-    setField("servizi")([...fields.servizi, { servizio: "", prezzo: "" }]);
+    setField("servizi")(updatedServices);
   };
 
   const handleKeyPress = (e) => {
@@ -153,22 +156,24 @@ const CreateTicket = () => {
     }
   };
 
+  const totalPrice = fields.servizi.reduce((acc, service) => acc + service.prezzo, 0);
+
   return (
     <React.Fragment>
       <FormContainer
         title="Apri Ticket"
-        maxWidth="lg" // Imposta maxWidth su "lg" per un container ancora più largo
-        style={{ maxWidth: "1600px", margin: "auto" }}
+        maxWidth="lg"
+        style={{ maxWidth: "1200px", margin: "auto", backgroundColor: "#fff", padding: "20px", borderRadius: "8px", boxShadow: "0 0 10px rgba(0,0,0,0.1)" }}
       >
         <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
           <Box sx={{ p: 3 }}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={4}>
                 <Typography variant="h6" gutterBottom>
-                  Informazioni Cliente
+                  INFORMAZIONI CLIENTE
                 </Typography>
                 {formFields
-                  .slice(0, 4)  // Ridotto a 4 per escludere i vecchi input "marca" e "modello"
+                  .slice(0, 3)
                   .map(
                     ({
                       id,
@@ -199,39 +204,8 @@ const CreateTicket = () => {
               </Grid>
               <Grid item xs={12} md={4}>
                 <Typography variant="h6" gutterBottom>
-                  Dettagli Ticket
+                  INFORMAZIONI DISPOSITIVO
                 </Typography>
-                {fields.servizi.map((service, index) => (
-                  <div key={index}>
-                    <FormInput
-                      id="servizio"
-                      label="Servizio"
-                      type="text"
-                      value={service.servizio}
-                      onChange={(e) => handleServiceChange(index, e)}
-                      required
-                    />
-                    <FormInput
-                      id="prezzo"
-                      label="Prezzo"
-                      type="number"
-                      value={service.prezzo}
-                      onChange={(e) => handleServiceChange(index, e)}
-                      required
-                      inputProps={{ min: 0, step: "0.01" }}
-                      onKeyPress={handleKeyPress}
-                    />
-                  </div>
-                ))}
-                <Button type="button" onClick={addService}>
-                  Aggiungi Servizio
-                </Button>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Typography variant="h6" gutterBottom>
-                  Informazioni Dispositivo
-                </Typography>
-                {/* Autocomplete for brand */}
                 <Autocomplete
                   freeSolo
                   options={brandSuggestions}
@@ -255,8 +229,6 @@ const CreateTicket = () => {
                     />
                   )}
                 />
-
-                {/* Autocomplete for model */}
                 <Autocomplete
                   freeSolo
                   options={modelSuggestions}
@@ -276,31 +248,71 @@ const CreateTicket = () => {
                     />
                   )}
                 />
-
-                {formFields
-                  .slice(6)
-                  .map(
-                    ({
-                      id,
-                      label,
-                      type,
-                      value,
-                      onChange,
-                      required,
-                      inputProps,
-                    }) => (
-                      <FormInput
-                        key={id}
-                        id={id}
-                        label={label}
-                        type={type}
-                        value={value}
-                        onChange={onChange}
-                        required={required}
-                        inputProps={inputProps}
+                <FormInput
+                  id="descrizione_problema"
+                  label="Descrizione del problema"
+                  type="text"
+                  value={fields.descrizione_problema}
+                  onChange={(e) => setField("descrizione_problema")(e.target.value)}
+                  required
+                />
+                <FormInput
+                  id="imei"
+                  label="IMEI"
+                  type="text"
+                  value={fields.imei}
+                  onChange={(e) => setField("imei")(e.target.value)}
+                  required
+                  onKeyPress={handleKeyPress}
+                />
+                <FormInput
+                  id="pin"
+                  label="PIN"
+                  type="text"
+                  value={fields.pin}
+                  onChange={(e) => setField("pin")(e.target.value)}
+                  required
+                  onKeyPress={handleKeyPress}
+                />
+                <FormInput
+                  id="seriale"
+                  label="Seriale"
+                  type="text"
+                  value={fields.seriale}
+                  onChange={(e) => setField("seriale")(e.target.value)}
+                  required
+                  onKeyPress={handleKeyPress}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Typography variant="h6" gutterBottom>
+                  SERVIZI OFFERTI PER QUESTO DISPOSITIVO
+                </Typography>
+                {servicesList.map(service => (
+                  <FormControlLabel
+                    key={service.servizio}
+                    control={
+                      <Checkbox
+                        checked={fields.servizi.some(s => s.servizio === service.servizio)}
+                        onChange={(e) => handleServiceChange(e, service)}
                       />
-                    )
-                  )}
+                    }
+                    label={`${service.servizio} - ${service.prezzo}€`}
+                  />
+                ))}
+                <Typography variant="h6" gutterBottom>
+                  Totale stimato: {totalPrice}€
+                </Typography>
+                <FormInput
+                  id="acconto"
+                  label="Acconto"
+                  type="number"
+                  value={fields.acconto}
+                  onChange={(e) => setField("acconto")(e.target.value)}
+                  required
+                  inputProps={{ min: 0, step: "0.01" }}
+                  onKeyPress={handleKeyPress}
+                />
               </Grid>
             </Grid>
           </Box>

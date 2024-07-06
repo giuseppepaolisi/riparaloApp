@@ -73,7 +73,7 @@ const Account = () => {
       });
       setTimeout(() => {
         navigate("/"); // Reindirizza dopo aver mostrato l'alert
-      }, 1000); // Imposta un ritardo di 1 secondo prima del reindirizzamento
+      }, 500); // Imposta un ritardo di 1 secondo prima del reindirizzamento
     } catch (error) {
       console.error(error);
       setAlert({

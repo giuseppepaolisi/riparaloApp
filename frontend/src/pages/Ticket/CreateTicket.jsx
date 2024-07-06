@@ -235,7 +235,10 @@ const CreateTicket = () => {
                 <Autocomplete
                   freeSolo
                   options={brandSuggestions}
-                  onInputChange={(e, value) => fetchBrandSuggestions(value)}
+                  onInputChange={(e, value) => {
+                    setField("marca")(value);
+                    fetchBrandSuggestions(value);
+                  }}
                   onChange={(e, value) => {
                     setSelectedBrand(value);
                     setField("marca")(value);
@@ -257,7 +260,11 @@ const CreateTicket = () => {
                 <Autocomplete
                   freeSolo
                   options={modelSuggestions}
-                  onInputChange={(e, value) => fetchModelSuggestions(selectedBrand, value)}
+                  onInputChange={(e, value) => {
+                    setField("modello")(value);
+                    fetchModelSuggestions(selectedBrand, value);
+                  }}
+                  onChange={(e, value) => setField("modello")(value)}
                   renderInput={(params) => (
                     <TextField
                       {...params}

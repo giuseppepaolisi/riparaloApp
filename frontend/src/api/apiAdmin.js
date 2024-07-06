@@ -375,3 +375,20 @@ export const fetchModelsByBrand = async (token, brand) => {
   const data = await response.json();
   return data.modelli;
 };
+
+export const fetchServicesByDevice = async (token, brand, model) => {
+  const response = await fetch(`/api/services/${brand}/${model}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Errore nel recupero dei servizi per il dispositivo: ${brand} ${model}`);
+  }
+
+  const data = await response.json();
+  return data.servizi;
+};

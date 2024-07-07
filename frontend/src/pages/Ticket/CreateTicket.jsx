@@ -13,16 +13,10 @@ import { handleValidationError } from "../../utils/errorHandling";
 import useFormFields from "../../CustomHooks/useFormFields";
 import { formFieldsConfig } from "../../utils/formConfig";
 import { handleTicketCreate } from "../../utils/ticketUtils";
-import { fetchBrands, fetchModelsByBrand } from "../../api/apiAdmin";
-
-const servicesList = [
-  { servizio: "Riparazione Schermo", prezzo: 50 },
-  { servizio: "Connettore Ricarica", prezzo: 40 },
-  { servizio: "Altro", prezzo: 0 }
-];
+import { fetchBrands, fetchModelsByBrand, fetchServicesByDevice, fetchCustomerByPhone } from "../../api/apiAdmin";
 
 const CreateTicket = () => {
-  useBodyBackgroundColor("#f5f5f5");
+  useBodyBackgroundColor("#007bff");
   usePageTitle("Apri Ticket");
 
   const [fields, setField] = useFormFields({
@@ -46,6 +40,7 @@ const CreateTicket = () => {
   const [brandSuggestions, setBrandSuggestions] = useState([]);
   const [modelSuggestions, setModelSuggestions] = useState([]);
   const [selectedBrand, setSelectedBrand] = useState("");
+  const [servicesList, setServicesList] = useState([]);
 
   const handleServiceChange = (e, service) => {
     const isChecked = e.target.checked;
@@ -65,6 +60,26 @@ const CreateTicket = () => {
   const handleTelefonoKeyPress = (e) => {
     if (!/[0-9+]/.test(e.key)) {
       e.preventDefault();
+    }
+  };
+
+  const handlePhoneBlur = async () => {
+    console.log("handlePhoneBlur called with phone:", fields.telefono_cliente);
+    try {
+      const customer = await fetchCustomerByPhone(token, fields.telefono_cliente);
+      console.log("Customer retrieved:", customer);
+      setField("nome_cliente")(customer.nome);
+      setField("cognome_cliente")(customer.cognome);
+    } catch (error) {
+      console.error("Errore nel recupero del cliente:", error);
+      setAlert({ open: true, msg: "Cliente non trovato", severity: "error" });
+    }
+  };
+
+  const handlePhoneKeyDown = async (e) => {
+    if (e.key === 'Enter') {
+      console.log("Enter key pressed"); // Debugging
+      await handlePhoneBlur();
     }
   };
 
@@ -156,6 +171,22 @@ const CreateTicket = () => {
     }
   };
 
+  const fetchServices = async (device) => {
+    try {
+      const services = await fetchServicesByDevice(token, device);
+      setServicesList(services);
+    } catch (error) {
+      console.error(`Errore nel recupero dei servizi per il dispositivo: ${device}`, error);
+    }
+  };
+
+  const handleModelChange = async (brand, model) => {
+    setField("marca")(brand);
+    setField("modello")(model);
+    const device = `${brand} ${model}`.replace(" ", "%20");
+    await fetchServices(device);
+  };
+
   const totalPrice = fields.servizi.reduce((acc, service) => acc + service.prezzo, 0);
 
   return (
@@ -198,6 +229,16 @@ const CreateTicket = () => {
                             ? handleTelefonoKeyPress
                             : null
                         }
+                        onKeyDown={
+                          id === "telefono_cliente"
+                            ? handlePhoneKeyDown
+                            : null
+                        }
+                        onBlur={
+                          id === "telefono_cliente"
+                            ? handlePhoneBlur
+                            : null
+                        }
                       />
                     )
                   )}
@@ -236,7 +277,7 @@ const CreateTicket = () => {
                     setField("modello")(value);
                     fetchModelSuggestions(selectedBrand, value);
                   }}
-                  onChange={(e, value) => setField("modello")(value)}
+                  onChange={(e, value) => handleModelChange(selectedBrand, value)}
                   renderInput={(params) => (
                     <TextField
                       {...params}

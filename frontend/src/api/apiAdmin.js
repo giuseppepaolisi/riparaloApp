@@ -339,9 +339,6 @@ export const deleteTecnico = async (token, id) => {
   }
 };
 
-
-
-// api/apiAdmin.js
 export const fetchBrands = async (token) => {
   const response = await fetch("/api/brands", {
     method: "GET",
@@ -376,7 +373,27 @@ export const fetchModelsByBrand = async (token, brand) => {
   return data.modelli;
 };
 
-export const fetchServicesByDevice = async (token, brand, model) => {
+export const fetchCustomerByPhone = async (token, phone) => {
+  console.log("fetchCustomerByPhone called with phone:", phone);
+  const response = await fetch(`/api/customer/phone/${phone}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    console.error("Errore nel recupero del cliente:", response.statusText);
+    throw new Error("Errore nel recupero del cliente");
+  }
+
+  const data = await response.json();
+  console.log("Customer data retrieved:", data);
+  return data.customer;
+};
+
+/*export const fetchServicesByDevice = async (token, brand, model) => {
   const response = await fetch(`/api/services/${brand}/${model}`, {
     method: "GET",
     headers: {
@@ -387,6 +404,26 @@ export const fetchServicesByDevice = async (token, brand, model) => {
 
   if (!response.ok) {
     throw new Error(`Errore nel recupero dei servizi per il dispositivo: ${brand} ${model}`);
+  }
+
+  const data = await response.json();
+  return data.servizi;
+};
+*/
+
+export const fetchServicesByDevice = async (token, device) => {
+  const response = await fetch(`/api/services/${device}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Errore nel recupero dei servizi per il dispositivo: ${device}`
+    );
   }
 
   const data = await response.json();

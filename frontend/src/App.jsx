@@ -36,6 +36,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./assets/js/theme";
 import Account from "./pages/Generic/Account";
 import AcceptedTickets from "./pages/Ticket/AcceptedTickets";
+import TicketDetails from "./pages/Ticket/TicketDetails";
+import TicketEditPartner from "./pages/Ticket/TicketEditPartner";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -123,6 +125,8 @@ const App = () => {
                 }
               >
                 <Route path="/account" element={<Account />} />
+                <Route path="/edit-ticket" element={<TicketDetails />} />
+                <Route path="/edit-ticket-partner" element={<TicketEditPartner/>} />
               </Route>
 
               {/* Error Routes */}

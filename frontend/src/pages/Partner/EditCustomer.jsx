@@ -101,7 +101,9 @@ const EditCustomer = () => {
         msg: "Cliente aggiornato con successo",
         severity: "success",
       });
-      navigate("/clienti");
+      setTimeout(() => {
+        navigate("/clienti");
+      }, 1000);
     } catch (error) {
       console.error(error);
       setAlert({

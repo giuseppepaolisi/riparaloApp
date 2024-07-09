@@ -98,6 +98,7 @@ const DashboardTecnico = () => {
         alignSearchWithFilters={true}
         onDetail={handleDetail}
         showDeleteButton={false}
+        editTicketLink="/edit-ticket-technician"
       />
       <TicketDetailModal
         open={isDetailModalOpen}

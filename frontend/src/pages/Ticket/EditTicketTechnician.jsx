@@ -18,10 +18,17 @@ import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 import stateColors from "../../assets/json/state.json";
 import DetailButton from "../../components/Action/DetailButton"; // Assicurati che il percorso sia corretto
+import EditModal from "../../components/Modal/EditModal"; // Assicurati che il percorso sia corretto
+import DeleteModal from "../../components/Modal/DeleteModal"; // Assicurati che il percorso sia corretto
 
-const TicketEditPartner = () => {
+const EditTicketTechnician = () => {
   usePageTitle("Modifica Ticket Partner");
   useBodyBackgroundColor("#fff");
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [currentAction, setCurrentAction] = useState(null);
 
   const ticketStatus = "In lavorazione"; // Questo dovrebbe essere dinamico, impostato in base ai dati del ticket
   const statusColor = stateColors[ticketStatus] || "#FFFFFF";
@@ -94,8 +101,28 @@ const TicketEditPartner = () => {
   } = calculateTotal();
 
   const handleInfoClick = (infoType) => {
-    // Gestisci il click del pulsante di dettaglio
     console.log(`Clicked ${infoType}`);
+  };
+
+  const handleDelete = () => {
+    console.log("Ticket eliminato");
+    setDeleteModalOpen(false);
+  };
+
+  const handleStatusChange = (newStatus) => {
+    setCurrentAction(() => () => console.log(`Changed status to ${newStatus}`));
+    setModalMessage(`Sei sicuro di voler cambiare lo stato del ticket in "${newStatus}"?`);
+    setModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setModalOpen(false);
+    setDeleteModalOpen(false);
+  };
+
+  const handleConfirm = () => {
+    if (currentAction) currentAction();
+    setModalOpen(false);
   };
 
   return (
@@ -107,6 +134,20 @@ const TicketEditPartner = () => {
         height: "100vh",
       }}
     >
+      {modalOpen && (
+        <EditModal
+          message={modalMessage}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      )}
+      {deleteModalOpen && (
+        <DeleteModal
+          message="Sei sicuro di voler eliminare il ticket?"
+          onDelete={handleDelete}
+          onCancel={handleCancel}
+        />
+      )}
       <Box>
         <Typography variant="h6" gutterBottom>
           TICKET ID: 662a6d00eedee8b18bb75f53
@@ -143,6 +184,42 @@ const TicketEditPartner = () => {
               <PrintIcon />
             </IconButton>
           </Box>
+        </Box>
+
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+          <Typography variant="h6" sx={{ mr: 2 }}>
+            AZIONI
+          </Typography>
+          {["Attesa conferma preventivo", "Annullato"].map((status) => (
+            <Chip
+              key={status}
+              label={status}
+              onClick={() => handleStatusChange(status)}
+              clickable
+              sx={{
+                backgroundColor: stateColors[status],
+                color: "#000",
+                mr: 2,
+                "&:hover": {
+                  backgroundColor: stateColors[status],
+                  opacity: 0.8,
+                },
+              }}
+            />
+          ))}
+          <Chip
+            label="ELIMINA TICKET"
+            onClick={() => setDeleteModalOpen(true)}
+            clickable
+            sx={{
+              backgroundColor: "#f44336",
+              color: "#fff",
+              mr: 2,
+              "&:hover": {
+                backgroundColor: "#d32f2f",
+              },
+            }}
+          />
         </Box>
 
         <Grid container spacing={2}>
@@ -306,12 +383,6 @@ const TicketEditPartner = () => {
       <Box
         sx={{ display: "flex", justifyContent: "center", mt: "auto", mb: 3 }}
       >
-        <Button variant="contained" color="success" sx={{ marginRight: 2 }}>
-          AGGIORNA IN ATTESA CONFERMA PREVENTIVO
-        </Button>
-        <Button variant="contained" color="error" sx={{ marginRight: 2 }}>
-          AGGIORNA IN ANNULLATO
-        </Button>
         <Button
           variant="outlined"
           sx={{ color: "#1976d2", borderColor: "#1976d2" }}
@@ -323,4 +394,4 @@ const TicketEditPartner = () => {
   );
 };
 
-export default TicketEditPartner;
+export default EditTicketTechnician;

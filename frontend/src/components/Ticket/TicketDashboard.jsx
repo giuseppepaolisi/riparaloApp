@@ -8,9 +8,9 @@ import AddButton from "../Action/AddButton";
 import DetailButton from "../Action/DetailButton";
 import EditButton from "../Action/EditButton";
 import DeleteButton from "../Action/DeleteButton";
-import StatusFilterButtons from "../../components/StatusFilterButtons";
+import StatusFilterButtons from "../Button/StatusFilterButtons";
 import { fetchTicketsByState, deleteTicket } from "../../api/apiPartner";
-import DeleteModal from "../DeleteModal";
+import DeleteModal from "../Modal/DeleteModal";
 import CustomAlert from "../Alert/CustomAlert";
 
 const TicketDashboard = ({

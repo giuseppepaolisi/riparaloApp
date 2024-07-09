@@ -10,9 +10,9 @@ import {
   TextField,
   Autocomplete,
 } from "@mui/material";
-import FormContainer from "../../components/FormContainer";
-import FormInput from "../../components/FormInput";
-import FormActions from "../../components/FormActions";
+import FormContainer from "../../components/Form/FormContainer";
+import FormInput from "../../components/Form/FormInput";
+import FormActions from "../../components/Form/FormActions";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";

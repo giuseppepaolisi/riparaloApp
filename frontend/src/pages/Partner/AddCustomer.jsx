@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import FormInput from "../../components/FormInput";
-import FormActions from "../../components/FormActions";
-import FormContainer from "../../components/FormContainer";
+import FormInput from "../../components/Form/FormInput";
+import FormActions from "../../components/Form/FormActions";
+import FormContainer from "../../components/Form/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 import {

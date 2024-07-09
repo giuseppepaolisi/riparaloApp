@@ -28,8 +28,6 @@ import CreateTicket from "./pages/Ticket/CreateTicket";
 import Devices from "./pages/Admin/Devices";
 import AddDevice from "./pages/Admin/AddDevice";
 import EditDevice from "./pages/Admin/EditDevice";
-import EditTechnician from "./pages/Admin/EditTechnician";
-import EditPartner from "./pages/Admin/EditPartner";
 import EditCustomer from "./pages/Partner/EditCustomer";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
 import { ThemeProvider } from "@mui/material/styles";
@@ -78,9 +76,7 @@ const App = () => {
                 <Route path="/aggiungi-modello" element={<AddDevice />} />
                 <Route path="/modifica-modello/:id" element={<EditDevice />} />
                 <Route path="/partner" element={<Partners />} />
-                <Route path="/modifica-partner/:id" element={<EditPartner />} />
                 <Route path="/tecnici" element={<Technicians />} />
-                <Route path="/modifica-tecnico/:id" element={<EditTechnician />} />
               </Route>
 
               {/* Partner Routes */}

@@ -52,7 +52,9 @@ const AddPartner = () => {
       const response = await addPartner(token, formData);
       console.log("Risposta del server:", response);
       setSuccess("Partner aggiunto con successo");
-      navigate("/partner");
+      setTimeout(() => {
+        navigate("/partner");
+      }, 1000);
     } catch (error) {
       console.error("Errore durante l'aggiunta del partner:", error);
       setError(error.message);

@@ -41,7 +41,9 @@ const AddTechnician = () => {
         setEmail("");
         setPassword("");
         setSuccess("Tecnico aggiunto con successo");
-        navigate("/tecnici");
+        setTimeout(() => {
+          navigate("/tecnici");
+        }, 1000);
       } catch (error) {
         console.error("Errore durante l'aggiunta del tecnico:", error);
         setError(error.message);

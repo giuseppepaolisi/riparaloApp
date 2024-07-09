@@ -373,7 +373,8 @@ const CreateTicket = () => {
                 </Typography>
                 {servicesList.length === 0 ? (
                   <Typography variant="body1" gutterBottom>
-                    Inserire marca e modello del dispositivo per visualizzare i relativi servizi
+                    Inserire marca e modello del dispositivo per visualizzare i
+                    relativi servizi
                   </Typography>
                 ) : (
                   servicesList.map((service) => (

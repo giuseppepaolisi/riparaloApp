@@ -67,7 +67,11 @@ const AddCustomer = () => {
         return;
       }
 
-      handleCustomerAdd(fields, token, setAlert, navigate);
+      await handleCustomerAdd(fields, token, setAlert, () => {
+        setTimeout(() => {
+          navigate("/clienti");
+        }, 1000);
+      });
     },
     [fields, token, navigate]
   );
@@ -116,7 +120,11 @@ const AddCustomer = () => {
           <FormActions onSubmit={handleAggiungiCliente} />
         </form>
         {alert.open && (
-          <CustomAlert msg={alert.msg} severity={alert.severity} />
+          <CustomAlert
+            msg={alert.msg}
+            severity={alert.severity}
+            onClose={() => setAlert({ ...alert, open: false })}
+          />
         )}
       </FormContainer>
     </React.Fragment>

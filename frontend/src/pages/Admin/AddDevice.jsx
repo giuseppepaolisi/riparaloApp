@@ -21,8 +21,8 @@ const AddDevice = () => {
   const navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
-    console.log("New value:", newValue); // Log per verificare il nuovo valore
-    setMarca(newValue || ""); // Ensure marca is never null or undefined
+    console.log("New value:", newValue);
+    setMarca(newValue || "");
   };
 
   const handleInputChange = (event) => {
@@ -32,10 +32,9 @@ const AddDevice = () => {
   const handleServizioChange = (index, event) => {
     const values = [...servizi];
     const { name, value } = event.target;
-    const field = name.split("-")[0]; // get the base name, either 'servizio' or 'prezzo'
+    const field = name.split("-")[0];
 
     if (field === "prezzo") {
-      // Allow only positive numbers
       const validValue = value.replace(/[^0-9]/g, "");
       values[index][field] = validValue;
     } else {
@@ -57,10 +56,9 @@ const AddDevice = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form submit event triggered"); // Log per verificare l'invio del form
-    console.log("Marca:", marca); // Log per verificare il valore di marca
+    console.log("Form submit event triggered");
+    console.log("Marca:", marca);
 
-    // Verifica che la marca sia valida o personalizzata
     if (!marca) {
       setAlert({
         open: true,
@@ -79,16 +77,18 @@ const AddDevice = () => {
       })),
     };
 
-    console.log("FormData inviato:", formData); // Verifica dei dati inviati
+    console.log("FormData inviato:", formData);
 
     try {
-      await addDevice(token, formData); // usa la funzione addDevice
+      await addDevice(token, formData);
       setAlert({
         open: true,
         msg: "Dispositivo aggiunto con successo",
         severity: "success",
       });
-      navigate("/modelli");
+      setTimeout(() => {
+        navigate("/modelli");
+      }, 1000);
     } catch (error) {
       console.error(error);
       setAlert({
@@ -104,7 +104,6 @@ const AddDevice = () => {
   );
 
   const handleKeyDown = (e) => {
-    // Prevent the user from typing '-' or '+' or 'e'
     if (["-", "+", "e"].includes(e.key)) {
       e.preventDefault();
     }
@@ -125,7 +124,7 @@ const AddDevice = () => {
                 value={marca}
                 onChange={handleChange}
                 onInputChange={handleInputChange}
-                onBlur={(e) => handleInputChange(e)} // Aggiorna il valore di marca quando il campo perde il focus
+                onBlur={(e) => handleInputChange(e)}
                 clearOnEscape
                 renderInput={(params) => (
                   <TextField
@@ -178,11 +177,11 @@ const AddDevice = () => {
                     name={`prezzo-${index}`}
                     value={servizio.prezzo}
                     onChange={(e) => handleServizioChange(index, e)}
-                    onKeyDown={handleKeyDown} // Added to prevent invalid characters
+                    onKeyDown={handleKeyDown}
                     fullWidth
                     required
                     variant="outlined"
-                    inputProps={{ min: "0" }} // This will prevent negative numbers
+                    inputProps={{ min: "0" }}
                   />
                 </Grid>
                 <Grid

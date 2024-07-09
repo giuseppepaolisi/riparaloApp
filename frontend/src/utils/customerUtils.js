@@ -1,6 +1,4 @@
-// frontend/src/utils/customerUtils.js
-import { updateCliente } from "../api/apiPartner";
-import { addCliente } from "../api/apiPartner";
+import { updateCliente, addCliente } from "../api/apiPartner";
 
 export async function handleCustomerUpdate(
   token,
@@ -29,7 +27,7 @@ export async function handleCustomerUpdate(
   }
 }
 
-export async function handleCustomerAdd(fields, token, setAlert, navigate) {
+export async function handleCustomerAdd(fields, token, setAlert, onSuccess) {
   const {
     email_cliente,
     nome_cliente,
@@ -50,7 +48,7 @@ export async function handleCustomerAdd(fields, token, setAlert, navigate) {
       msg: "Cliente registrato con successo",
       severity: "success",
     });
-    navigate("/clienti");
+    onSuccess();
   } catch (error) {
     console.error(error);
     setAlert({

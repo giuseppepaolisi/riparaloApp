@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { fetchTicketsByTechnician, fetchTicketById } from "../../api/apiPartner";
+import {
+  fetchTicketsByTechnician,
+  fetchTicketById,
+} from "../../api/apiPartner";
 import TicketDashboard from "../../components/Ticket/TicketDashboard";
 import stateColors from "../../assets/json/state.json";
 import usePageTitle from "../../CustomHooks/usePageTitle";

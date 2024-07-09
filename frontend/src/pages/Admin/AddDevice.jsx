@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  Grid,
-  Box,
-  TextField,
-  Button,
-  Autocomplete,
-} from "@mui/material";
+import { Grid, Box, TextField, Button, Autocomplete } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import smartphoneBrands from "../../assets/js/brands";
 import FormActions from "../../components/FormActions";
@@ -220,7 +214,10 @@ const AddDevice = () => {
               </Button>
             </Grid>
           </Grid>
-          <FormActions onSubmit={handleSubmit} isSubmitDisabled={isAddServizioDisabled} />
+          <FormActions
+            onSubmit={handleSubmit}
+            isSubmitDisabled={isAddServizioDisabled}
+          />
         </form>
       </FormContainer>
     </React.Fragment>

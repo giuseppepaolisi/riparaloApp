@@ -9,13 +9,17 @@ import {
   Typography,
   Box,
   Grid,
-  Paper
+  Paper,
 } from "@mui/material";
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
-import { validatePhoneNumber, validateEmail, validateName } from "../../utils/validationUtils";
+import {
+  validatePhoneNumber,
+  validateEmail,
+  validateName,
+} from "../../utils/validationUtils";
 import { handleValidationError } from "../../utils/errorHandling";
 
 const EditCustomer = () => {
@@ -61,10 +65,31 @@ const EditCustomer = () => {
     e.preventDefault();
 
     if (
-      handleValidationError(validatePhoneNumber, cliente.telefono, "Numero di telefono non valido", setAlert) ||
-      (cliente.email && handleValidationError(validateEmail, cliente.email, "Email non valida", setAlert)) ||
-      handleValidationError(validateName, cliente.nome, "Nome non valido", setAlert) ||
-      handleValidationError(validateName, cliente.cognome, "Cognome non valido", setAlert)
+      handleValidationError(
+        validatePhoneNumber,
+        cliente.telefono,
+        "Numero di telefono non valido",
+        setAlert
+      ) ||
+      (cliente.email &&
+        handleValidationError(
+          validateEmail,
+          cliente.email,
+          "Email non valida",
+          setAlert
+        )) ||
+      handleValidationError(
+        validateName,
+        cliente.nome,
+        "Nome non valido",
+        setAlert
+      ) ||
+      handleValidationError(
+        validateName,
+        cliente.cognome,
+        "Cognome non valido",
+        setAlert
+      )
     ) {
       return;
     }
@@ -96,7 +121,7 @@ const EditCustomer = () => {
   return (
     <Container component="main" maxWidth="sm">
       <Box mt={8} display="flex" flexDirection="column" alignItems="center">
-        <Paper elevation={3} style={{ padding: '20px', width: '100%' }}>
+        <Paper elevation={3} style={{ padding: "20px", width: "100%" }}>
           <Typography component="h1" variant="h5" align="center">
             Modifica Cliente
           </Typography>

@@ -1,19 +1,38 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Grid, Box, Typography, Checkbox, FormControlLabel, TextField, Autocomplete } from "@mui/material";
+import {
+  Grid,
+  Box,
+  Typography,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+  Autocomplete,
+} from "@mui/material";
 import FormContainer from "../../components/FormContainer";
 import FormInput from "../../components/FormInput";
 import FormActions from "../../components/FormActions";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
-import { validatePhoneNumber, validateIMEI, validatePrice, validateDeposit, validateName } from "../../utils/validationUtils";
+import {
+  validatePhoneNumber,
+  validateIMEI,
+  validatePrice,
+  validateDeposit,
+  validateName,
+} from "../../utils/validationUtils";
 import { handleValidationError } from "../../utils/errorHandling";
 import useFormFields from "../../CustomHooks/useFormFields";
 import { formFieldsConfig } from "../../utils/formConfig";
 import { handleTicketCreate } from "../../utils/ticketUtils";
-import { fetchBrands, fetchModelsByBrand, fetchServicesByDevice, fetchCustomerByPhone } from "../../api/apiAdmin";
+import {
+  fetchBrands,
+  fetchModelsByBrand,
+  fetchServicesByDevice,
+  fetchCustomerByPhone,
+} from "../../api/apiAdmin";
 
 const CreateTicket = () => {
   useBodyBackgroundColor("#007bff");
@@ -46,7 +65,7 @@ const CreateTicket = () => {
     const isChecked = e.target.checked;
     const updatedServices = isChecked
       ? [...fields.servizi, service]
-      : fields.servizi.filter(s => s.servizio !== service.servizio);
+      : fields.servizi.filter((s) => s.servizio !== service.servizio);
 
     setField("servizi")(updatedServices);
   };
@@ -66,7 +85,10 @@ const CreateTicket = () => {
   const handlePhoneBlur = async () => {
     console.log("handlePhoneBlur called with phone:", fields.telefono_cliente);
     try {
-      const customer = await fetchCustomerByPhone(token, fields.telefono_cliente);
+      const customer = await fetchCustomerByPhone(
+        token,
+        fields.telefono_cliente
+      );
       console.log("Customer retrieved:", customer);
       setField("nome_cliente")(customer.nome);
       setField("cognome_cliente")(customer.cognome);
@@ -77,7 +99,7 @@ const CreateTicket = () => {
   };
 
   const handlePhoneKeyDown = async (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       console.log("Enter key pressed"); // Debugging
       await handlePhoneBlur();
     }
@@ -156,7 +178,11 @@ const CreateTicket = () => {
   const fetchBrandSuggestions = async (input) => {
     try {
       const brands = await fetchBrands(token);
-      setBrandSuggestions(brands.filter(brand => brand.toLowerCase().includes(input.toLowerCase())));
+      setBrandSuggestions(
+        brands.filter((brand) =>
+          brand.toLowerCase().includes(input.toLowerCase())
+        )
+      );
     } catch (error) {
       console.error("Error fetching brand suggestions:", error);
     }
@@ -165,7 +191,11 @@ const CreateTicket = () => {
   const fetchModelSuggestions = async (brand, input) => {
     try {
       const models = await fetchModelsByBrand(token, brand);
-      setModelSuggestions(models.filter(model => model.toLowerCase().includes(input.toLowerCase())));
+      setModelSuggestions(
+        models.filter((model) =>
+          model.toLowerCase().includes(input.toLowerCase())
+        )
+      );
     } catch (error) {
       console.error("Error fetching model suggestions:", error);
     }
@@ -176,7 +206,10 @@ const CreateTicket = () => {
       const services = await fetchServicesByDevice(token, device);
       setServicesList(services);
     } catch (error) {
-      console.error(`Errore nel recupero dei servizi per il dispositivo: ${device}`, error);
+      console.error(
+        `Errore nel recupero dei servizi per il dispositivo: ${device}`,
+        error
+      );
     }
   };
 
@@ -187,14 +220,24 @@ const CreateTicket = () => {
     await fetchServices(device);
   };
 
-  const totalPrice = fields.servizi.reduce((acc, service) => acc + service.prezzo, 0);
+  const totalPrice = fields.servizi.reduce(
+    (acc, service) => acc + service.prezzo,
+    0
+  );
 
   return (
     <React.Fragment>
       <FormContainer
         title="Apri Ticket"
         maxWidth="lg"
-        style={{ maxWidth: "1200px", margin: "auto", backgroundColor: "#fff", padding: "20px", borderRadius: "8px", boxShadow: "0 0 10px rgba(0,0,0,0.1)" }}
+        style={{
+          maxWidth: "1200px",
+          margin: "auto",
+          backgroundColor: "#fff",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+        }}
       >
         <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
           <Box sx={{ p: 3 }}>
@@ -230,14 +273,10 @@ const CreateTicket = () => {
                             : null
                         }
                         onKeyDown={
-                          id === "telefono_cliente"
-                            ? handlePhoneKeyDown
-                            : null
+                          id === "telefono_cliente" ? handlePhoneKeyDown : null
                         }
                         onBlur={
-                          id === "telefono_cliente"
-                            ? handlePhoneBlur
-                            : null
+                          id === "telefono_cliente" ? handlePhoneBlur : null
                         }
                       />
                     )
@@ -277,7 +316,9 @@ const CreateTicket = () => {
                     setField("modello")(value);
                     fetchModelSuggestions(selectedBrand, value);
                   }}
-                  onChange={(e, value) => handleModelChange(selectedBrand, value)}
+                  onChange={(e, value) =>
+                    handleModelChange(selectedBrand, value)
+                  }
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -294,7 +335,9 @@ const CreateTicket = () => {
                   label="Descrizione del problema"
                   type="text"
                   value={fields.descrizione_problema}
-                  onChange={(e) => setField("descrizione_problema")(e.target.value)}
+                  onChange={(e) =>
+                    setField("descrizione_problema")(e.target.value)
+                  }
                   required
                 />
                 <FormInput
@@ -329,12 +372,14 @@ const CreateTicket = () => {
                 <Typography variant="h6" gutterBottom>
                   SERVIZI OFFERTI PER QUESTO DISPOSITIVO
                 </Typography>
-                {servicesList.map(service => (
+                {servicesList.map((service) => (
                   <FormControlLabel
                     key={service.servizio}
                     control={
                       <Checkbox
-                        checked={fields.servizi.some(s => s.servizio === service.servizio)}
+                        checked={fields.servizi.some(
+                          (s) => s.servizio === service.servizio
+                        )}
                         onChange={(e) => handleServiceChange(e, service)}
                       />
                     }

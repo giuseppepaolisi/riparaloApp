@@ -90,7 +90,11 @@ export const formFieldsConfig = (fields, setField, config) => {
       const defaultField = defaultConfig.find((field) => field.id === item.id);
       return defaultField
         ? { ...defaultField, ...item }
-        : { ...item, value: fields[item.id], onChange: (e) => setField(item.id)(e.target.value) };
+        : {
+            ...item,
+            value: fields[item.id],
+            onChange: (e) => setField(item.id)(e.target.value),
+          };
     });
   }
 

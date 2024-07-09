@@ -25,6 +25,7 @@ const TicketDashboard = ({
   showDeleteButton,
   showDeleteButtonOnlyOpen,
   onDetail,
+  editTicketLink,
 }) => {
   const [tickets, setTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -64,9 +65,9 @@ const TicketDashboard = ({
 
   const handleEdit = useCallback(
     (id) => {
-      navigate(`/modifica-ticket/${id}`);
+      navigate(`${editTicketLink}/${id}`);
     },
-    [navigate]
+    [navigate, editTicketLink]
   );
 
   const handleDeleteRequest = useCallback((id) => {
@@ -215,6 +216,7 @@ TicketDashboard.propTypes = {
   showDeleteButton: PropTypes.bool,
   showDeleteButtonOnlyOpen: PropTypes.bool,
   onDetail: PropTypes.func,
+  editTicketLink: PropTypes.string.isRequired,
 };
 
 TicketDashboard.defaultProps = {

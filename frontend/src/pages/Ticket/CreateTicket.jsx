@@ -216,8 +216,8 @@ const CreateTicket = () => {
   const handleModelChange = async (brand, model) => {
     setField("marca")(brand);
     setField("modello")(model);
-    const device = `${brand} ${model}`.replace(" ", "%20");
-    await fetchServices(device);
+    //const device = `${brand} ${model}`.replace(" ", "%20");
+    await fetchServices(model);
   };
 
   const totalPrice = fields.servizi.reduce(

@@ -126,7 +126,10 @@ const App = () => {
               >
                 <Route path="/account" element={<Account />} />
                 <Route path="/edit-ticket" element={<TicketDetails />} />
-                <Route path="/edit-ticket-partner" element={<TicketEditPartner/>} />
+                <Route
+                  path="/edit-ticket-partner"
+                  element={<TicketEditPartner />}
+                />
               </Route>
 
               {/* Error Routes */}

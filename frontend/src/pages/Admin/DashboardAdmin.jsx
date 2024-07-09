@@ -92,7 +92,7 @@ const DashboardAdmin = () => {
         filterStatuses={filterStatuses}
         alignSearchWithFilters={true}
         onDetail={handleDetail}
-        showDeleteButton={true} // Show delete button for all states
+          showDeleteButton={false}
       />
       <TicketDetailModal
         open={isDetailModalOpen}

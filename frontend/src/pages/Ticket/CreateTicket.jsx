@@ -46,7 +46,7 @@ const CreateTicket = () => {
     marca: "",
     modello: "",
     servizi: [],
-    acconto: "10",
+    acconto: "0",
     imei: "",
     pin: "",
     seriale: "",
@@ -216,7 +216,6 @@ const CreateTicket = () => {
   const handleModelChange = async (brand, model) => {
     setField("marca")(brand);
     setField("modello")(model);
-    //const device = `${brand} ${model}`.replace(" ", "%20");
     await fetchServices(model);
   };
 
@@ -372,20 +371,26 @@ const CreateTicket = () => {
                 <Typography variant="h6" gutterBottom>
                   SERVIZI OFFERTI PER QUESTO DISPOSITIVO
                 </Typography>
-                {servicesList.map((service) => (
-                  <FormControlLabel
-                    key={service.servizio}
-                    control={
-                      <Checkbox
-                        checked={fields.servizi.some(
-                          (s) => s.servizio === service.servizio
-                        )}
-                        onChange={(e) => handleServiceChange(e, service)}
-                      />
-                    }
-                    label={`${service.servizio} - ${service.prezzo}€`}
-                  />
-                ))}
+                {servicesList.length === 0 ? (
+                  <Typography variant="body1" gutterBottom>
+                    Inserire marca e modello del dispositivo per visualizzare i relativi servizi
+                  </Typography>
+                ) : (
+                  servicesList.map((service) => (
+                    <FormControlLabel
+                      key={service.servizio}
+                      control={
+                        <Checkbox
+                          checked={fields.servizi.some(
+                            (s) => s.servizio === service.servizio
+                          )}
+                          onChange={(e) => handleServiceChange(e, service)}
+                        />
+                      }
+                      label={`${service.servizio} - ${service.prezzo}€`}
+                    />
+                  ))
+                )}
                 <Typography variant="h6" gutterBottom>
                   Totale stimato: {totalPrice}€
                 </Typography>

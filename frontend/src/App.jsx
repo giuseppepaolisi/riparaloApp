@@ -36,9 +36,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./assets/js/theme";
 import Account from "./pages/Generic/Account";
 import AcceptedTickets from "./pages/Ticket/AcceptedTickets";
-import TicketDetails from "./pages/Ticket/TicketDetails";
-import TicketEditPartner from "./pages/Ticket/TicketEditPartner";
-
+import EdiTicketTechnician from "./pages/Ticket/EditTicketTechnician";
+import EdiTicketPartner from "./pages/Ticket/EditTicketPartner";
 const App = () => {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -66,10 +65,7 @@ const App = () => {
               {/* Senza autenticazione */}
               <Route path="/" element={<HomePage />} />
               <Route path="/logout" element={<Logout />} />
-              <Route
-                path="/login"
-                element={isAuthenticated ? <Navigate to="/" /> : <Login />}
-              />
+              <Route path="/login"  element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
 
               {/* Admin Routes */}
               <Route element={<PrivateRoute roles={["admin"]} />}>
@@ -84,52 +80,30 @@ const App = () => {
                 <Route path="/partner" element={<Partners />} />
                 <Route path="/modifica-partner/:id" element={<EditPartner />} />
                 <Route path="/tecnici" element={<Technicians />} />
-                <Route
-                  path="/modifica-tecnico/:id"
-                  element={<EditTechnician />}
-                />
+                <Route path="/modifica-tecnico/:id" element={<EditTechnician />} />
               </Route>
 
               {/* Partner Routes */}
               <Route element={<PrivateRoute roles={["partner"]} />}>
-                <Route
-                  path="/partner-dashboard"
-                  element={<DashboardPartner />}
-                />
+                <Route path="/partner-dashboard" element={<DashboardPartner />} />
                 <Route path="/aggiungi-cliente" element={<AddCustomer />} />
                 <Route path="/apri-ticket" element={<CreateTicket />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/clienti" element={<Customers />} />
-                <Route
-                  path="/modifica-cliente/:id"
-                  element={<EditCustomer />}
-                />
+                <Route path="/modifica-cliente/:id" element={<EditCustomer />} />
+                <Route path="/edit-ticket-partner" element={<EdiTicketPartner />}/>
               </Route>
 
               {/* Tecnico Routes */}
-              <Route element={<PrivateRoute roles={["tecnico", "admin"]} />}>
-                <Route
-                  path="/tecnico-dashboard"
-                  element={<DashboardTecnico />}
-                />
-                <Route
-                  path="/tickets-accettati"
-                  element={<AcceptedTickets />}
-                />
+              <Route element={<PrivateRoute roles={["tecnico"]} />}>
+                <Route path="/tecnico-dashboard" element={<DashboardTecnico />}/>
+                <Route path="/tickets-accettati" element={<AcceptedTickets />} />
+                <Route path="/edit-ticket-technician" element={<EdiTicketTechnician />} />
               </Route>
 
               {/* Shared Routes */}
-              <Route
-                element={
-                  <PrivateRoute roles={["tecnico", "admin", "partner"]} />
-                }
-              >
+              <Route element={<PrivateRoute roles={["tecnico", "admin", "partner"]} />}>
                 <Route path="/account" element={<Account />} />
-                <Route path="/edit-ticket" element={<TicketDetails />} />
-                <Route
-                  path="/edit-ticket-partner"
-                  element={<TicketEditPartner />}
-                />
               </Route>
 
               {/* Error Routes */}

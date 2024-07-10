@@ -95,7 +95,7 @@ const App = () => {
 
               {/* Tecnico Routes */}
               <Route element={<PrivateRoute roles={["tecnico"]} />}>
-                <Route path="/tecnico-dashboard" element={<DashboardTecnico />}/>
+                <Route path="/tecnico-dashboard" element={<DashboardTechnician />}/>
                 <Route path="/tickets-accettati" element={<AcceptedTickets />} />
                 <Route path="/edit-ticket-technician" element={<EdiTicketTechnician />} />
               </Route>

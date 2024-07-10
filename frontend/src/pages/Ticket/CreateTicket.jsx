@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,7 +11,6 @@ import {
   Autocomplete,
 } from "@mui/material";
 import FormContainer from "../../components/Form/FormContainer";
-import FormInput from "../../components/Form/FormInput";
 import FormActions from "../../components/Form/FormActions";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
@@ -25,7 +24,6 @@ import {
 } from "../../utils/validationUtils";
 import { handleValidationError } from "../../utils/errorHandling";
 import useFormFields from "../../CustomHooks/useFormFields";
-import { formFieldsConfig } from "../../utils/formConfig";
 import { handleTicketCreate } from "../../utils/ticketUtils";
 import {
   fetchBrands,
@@ -53,6 +51,7 @@ const CreateTicket = () => {
   });
 
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
+  const [isCustomerValid, setIsCustomerValid] = useState(false); // Stato per tracciare se il cliente è valido
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -92,9 +91,13 @@ const CreateTicket = () => {
       console.log("Customer retrieved:", customer);
       setField("nome_cliente")(customer.nome);
       setField("cognome_cliente")(customer.cognome);
+      setIsCustomerValid(true); // Cliente valido
     } catch (error) {
       console.error("Errore nel recupero del cliente:", error);
+      setField("nome_cliente")("");
+      setField("cognome_cliente")("");
       setAlert({ open: true, msg: "Cliente non trovato", severity: "error" });
+      setIsCustomerValid(false); // Cliente non valido
     }
   };
 
@@ -102,6 +105,9 @@ const CreateTicket = () => {
     if (e.key === "Enter") {
       console.log("Enter key pressed"); // Debugging
       await handlePhoneBlur();
+      console.log("Telefono:", fields.telefono_cliente);
+      console.log("Nome:", fields.nome_cliente);
+      console.log("Cognome:", fields.cognome_cliente);
     }
   };
 
@@ -169,11 +175,6 @@ const CreateTicket = () => {
     },
     [fields, token, navigate, setAlert]
   );
-
-  const formFields = useMemo(() => formFieldsConfig(fields, setField), [
-    fields,
-    setField,
-  ]);
 
   const fetchBrandSuggestions = async (input) => {
     try {
@@ -245,41 +246,42 @@ const CreateTicket = () => {
                 <Typography variant="h6" gutterBottom>
                   INFORMAZIONI CLIENTE
                 </Typography>
-                {formFields
-                  .slice(0, 3)
-                  .map(
-                    ({
-                      id,
-                      label,
-                      type,
-                      value,
-                      onChange,
-                      required,
-                      inputProps,
-                    }) => (
-                      <FormInput
-                        key={id}
-                        id={id}
-                        label={label}
-                        type={type}
-                        value={value}
-                        onChange={onChange}
-                        required={required}
-                        inputProps={inputProps}
-                        onKeyPress={
-                          id === "telefono_cliente"
-                            ? handleTelefonoKeyPress
-                            : null
-                        }
-                        onKeyDown={
-                          id === "telefono_cliente" ? handlePhoneKeyDown : null
-                        }
-                        onBlur={
-                          id === "telefono_cliente" ? handlePhoneBlur : null
-                        }
-                      />
-                    )
-                  )}
+                <TextField
+                  label="Telefono Cliente"
+                  value={fields.telefono_cliente}
+                  onChange={(e) => {
+                    setField("telefono_cliente")(e.target.value);
+                    setIsCustomerValid(false); // Resetta la validità del cliente quando il numero cambia
+                  }}
+                  onKeyPress={handleTelefonoKeyPress}
+                  onKeyDown={handlePhoneKeyDown}
+                  onBlur={handlePhoneBlur}
+                  required
+                  fullWidth
+                  margin="normal"
+                />
+                <TextField
+                  label="Nome Cliente"
+                  value={fields.nome_cliente}
+                  onChange={(e) => setField("nome_cliente")(e.target.value)}
+                  required
+                  fullWidth
+                  margin="normal"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+                <TextField
+                  label="Cognome Cliente"
+                  value={fields.cognome_cliente}
+                  onChange={(e) => setField("cognome_cliente")(e.target.value)}
+                  required
+                  fullWidth
+                  margin="normal"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
               </Grid>
               <Grid item xs={12} md={4}>
                 <Typography variant="h6" gutterBottom>
@@ -329,7 +331,7 @@ const CreateTicket = () => {
                     />
                   )}
                 />
-                <FormInput
+                <TextField
                   id="descrizione_problema"
                   label="Descrizione del problema"
                   type="text"
@@ -338,8 +340,10 @@ const CreateTicket = () => {
                     setField("descrizione_problema")(e.target.value)
                   }
                   required
+                  fullWidth
+                  margin="normal"
                 />
-                <FormInput
+                <TextField
                   id="imei"
                   label="IMEI"
                   type="text"
@@ -347,8 +351,10 @@ const CreateTicket = () => {
                   onChange={(e) => setField("imei")(e.target.value)}
                   required
                   onKeyPress={handleKeyPress}
+                  fullWidth
+                  margin="normal"
                 />
-                <FormInput
+                <TextField
                   id="pin"
                   label="PIN"
                   type="text"
@@ -356,8 +362,10 @@ const CreateTicket = () => {
                   onChange={(e) => setField("pin")(e.target.value)}
                   required
                   onKeyPress={handleKeyPress}
+                  fullWidth
+                  margin="normal"
                 />
-                <FormInput
+                <TextField
                   id="seriale"
                   label="Seriale"
                   type="text"
@@ -365,6 +373,8 @@ const CreateTicket = () => {
                   onChange={(e) => setField("seriale")(e.target.value)}
                   required
                   onKeyPress={handleKeyPress}
+                  fullWidth
+                  margin="normal"
                 />
               </Grid>
               <Grid item xs={12} md={4}>
@@ -395,7 +405,7 @@ const CreateTicket = () => {
                 <Typography variant="h6" gutterBottom>
                   Totale stimato: {totalPrice}€
                 </Typography>
-                <FormInput
+                <TextField
                   id="acconto"
                   label="Acconto"
                   type="number"
@@ -404,11 +414,13 @@ const CreateTicket = () => {
                   required
                   inputProps={{ min: 0, step: "0.01" }}
                   onKeyPress={handleKeyPress}
+                  fullWidth
+                  margin="normal"
                 />
               </Grid>
             </Grid>
           </Box>
-          <FormActions onSubmit={handleSubmit} />
+          <FormActions onSubmit={handleSubmit} disableSubmit={!isCustomerValid} />
         </form>
         {alert.open && (
           <CustomAlert

@@ -393,7 +393,6 @@ export const fetchCustomerByPhone = async (token, phone) => {
   return data.customer;
 };
 
-
 export const fetchServicesByDevice = async (token, device) => {
   const response = await fetch(`/api/services/${device}`, {
     method: "GET",

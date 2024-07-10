@@ -375,7 +375,7 @@ export const fetchModelsByBrand = async (token, brand) => {
 
 export const fetchCustomerByPhone = async (token, phone) => {
   console.log("fetchCustomerByPhone called with phone:", phone);
-  const response = await fetch(`/api/customer/phone/${phone}`, {
+  const response = await fetch(`/api/customer/phone/${encodeURIComponent(phone)}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -392,6 +392,7 @@ export const fetchCustomerByPhone = async (token, phone) => {
   console.log("Customer data retrieved:", data);
   return data.customer;
 };
+
 
 export const fetchServicesByDevice = async (token, device) => {
   const response = await fetch(`/api/services/${device}`, {

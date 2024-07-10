@@ -69,13 +69,10 @@ const TicketDashboard = ({
     [navigate]
   );
 
-  const handleDeleteRequest = useCallback(
-    (id) => {
-      setDeleteTicketId(id);
-      setDeleteModalOpen(true);
-    },
-    []
-  );
+  const handleDeleteRequest = useCallback((id) => {
+    setDeleteTicketId(id);
+    setDeleteModalOpen(true);
+  }, []);
 
   const handleDeleteCancel = useCallback(() => {
     setDeleteModalOpen(false);
@@ -119,7 +116,9 @@ const TicketDashboard = ({
           )}
           {showDeleteButton &&
             (!showDeleteButtonOnlyOpen || params.row.stato === "Aperto") && (
-              <DeleteButton onClick={() => handleDeleteRequest(params.row._id)} />
+              <DeleteButton
+                onClick={() => handleDeleteRequest(params.row._id)}
+              />
             )}
         </div>
       ),

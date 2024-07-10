@@ -51,7 +51,7 @@ const CreateTicket = () => {
   });
 
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
-  const [isCustomerValid, setIsCustomerValid] = useState(false); // Stato per tracciare se il cliente è valido
+  const [isCustomerValid, setIsCustomerValid] = useState(false);
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -91,19 +91,19 @@ const CreateTicket = () => {
       console.log("Customer retrieved:", customer);
       setField("nome_cliente")(customer.nome);
       setField("cognome_cliente")(customer.cognome);
-      setIsCustomerValid(true); // Cliente valido
+      setIsCustomerValid(true);
     } catch (error) {
       console.error("Errore nel recupero del cliente:", error);
       setField("nome_cliente")("");
       setField("cognome_cliente")("");
       setAlert({ open: true, msg: "Cliente non trovato", severity: "error" });
-      setIsCustomerValid(false); // Cliente non valido
+      setIsCustomerValid(false);
     }
   };
 
   const handlePhoneKeyDown = async (e) => {
     if (e.key === "Enter") {
-      console.log("Enter key pressed"); // Debugging
+      console.log("Enter key pressed");
       await handlePhoneBlur();
       console.log("Telefono:", fields.telefono_cliente);
       console.log("Nome:", fields.nome_cliente);
@@ -251,7 +251,7 @@ const CreateTicket = () => {
                   value={fields.telefono_cliente}
                   onChange={(e) => {
                     setField("telefono_cliente")(e.target.value);
-                    setIsCustomerValid(false); // Resetta la validità del cliente quando il numero cambia
+                    setIsCustomerValid(false);
                   }}
                   onKeyPress={handleTelefonoKeyPress}
                   onKeyDown={handlePhoneKeyDown}

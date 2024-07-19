@@ -192,33 +192,6 @@ export const fetchPartnerById = async (token, id) => {
   }
 };
 
-export const updatePartner = async (token, id, updatedData) => {
-  try {
-    console.log("Dati inviati per l'aggiornamento:", updatedData);
-    const response = await fetch(`/api/user/${id}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedData),
-    });
-
-    const text = await response.text();
-    console.log("Server response:", text);
-
-    const data = JSON.parse(text);
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Non è stato possibile aggiornare il partner"
-      );
-    }
-    return data;
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
-
 //------------------------------------------------------- API TECNICO -----------------------------------------------------------------------
 export const addTecnico = async (token, tecnico) => {
   try {
@@ -264,33 +237,6 @@ export const fetchTecnicoById = async (token, id) => {
     }
 
     return data.user || data;
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
-
-export const updateTecnico = async (token, id, updatedData) => {
-  try {
-    console.log("Dati inviati per l'aggiornamento:", updatedData);
-    const response = await fetch(`/api/user/${id}`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedData),
-    });
-
-    const text = await response.text();
-    console.log("Server response:", text);
-
-    const data = JSON.parse(text);
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Non è stato possibile aggiornare il tecnico"
-      );
-    }
-    return data;
   } catch (error) {
     throw new Error(error.message);
   }

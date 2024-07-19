@@ -1,10 +1,10 @@
+// EditTicketPartner.jsx
 import { useState } from "react";
 import {
   Box,
   Grid,
   Typography,
   IconButton,
-  Paper,
   Chip,
   Button,
 } from "@mui/material";
@@ -13,9 +13,10 @@ import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 import stateColors from "../../assets/json/state.json";
-import DetailButton from "../../components/Action/DetailButton";
-import EditModal from "../../components/Modal/EditModal";
-import DeleteModal from "../../components/Modal/DeleteModal";
+import TicketActions from "../../components/Ticket/TicketActions";
+import TicketDetails from "../../components/Ticket/TicketDetails";
+import EstimateDetails from "../../components/Ticket/EstimateDetails";
+import Modals from "../../components/Modal/Modals";
 
 const EditTicketPartner = () => {
   usePageTitle("Dettagli Ticket");
@@ -65,20 +66,14 @@ const EditTicketPartner = () => {
         height: "100vh",
       }}
     >
-      {modalOpen && (
-        <EditModal
-          message={modalMessage}
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
-        />
-      )}
-      {deleteModalOpen && (
-        <DeleteModal
-          message="Sei sicuro di voler eliminare il ticket?"
-          onDelete={handleDelete}
-          onCancel={handleCancel}
-        />
-      )}
+      <Modals
+        modalOpen={modalOpen}
+        deleteModalOpen={deleteModalOpen}
+        modalMessage={modalMessage}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        onDelete={handleDelete}
+      />
       <Box>
         <Typography variant="h6" gutterBottom>
           TICKET ID: 662a6d00eedee8b18bb75f53
@@ -118,91 +113,41 @@ const EditTicketPartner = () => {
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <Typography variant="h6" sx={{ mr: 2 }}>
-            AZIONI
-          </Typography>
-          {["Attesa conferma preventivo", "Annullato"].map((status) => (
-            <Chip
-              key={status}
-              label={status}
-              onClick={() => handleStatusChange(status)}
-              clickable
-              sx={{
-                backgroundColor: stateColors[status],
-                color: "#000",
-                mr: 2,
-                "&:hover": {
-                  backgroundColor: stateColors[status],
-                  opacity: 0.8,
-                },
-              }}
-            />
-          ))}
-          <Chip
-            label="ELIMINA TICKET"
-            onClick={() => setDeleteModalOpen(true)}
-            clickable
-            sx={{
-              backgroundColor: "#f44336",
-              color: "#fff",
-              mr: 2,
-              "&:hover": {
-                backgroundColor: "#d32f2f",
-              },
-            }}
-          />
-        </Box>
+        <TicketActions
+          ticketStatus={ticketStatus}
+          stateColors={stateColors}
+          onStatusChange={handleStatusChange}
+          onDelete={() => setDeleteModalOpen(true)}
+        />
 
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Paper sx={{ padding: 2, height: "100%", boxShadow: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                DATI GENERALI
-              </Typography>
-              <Box sx={{ mt: 1, mb: 1, border: "1px solid", padding: 1 }}>
-                <Typography
-                  variant="body1"
-                  gutterBottom
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  Samsung Galaxy s10
-                  <DetailButton
-                    onClick={() => handleInfoClick("DISPOSITIVO")}
-                  />
-                </Typography>
-                <Typography
-                  variant="body1"
-                  gutterBottom
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  INFORMAZIONI CLIENTE
-                  <DetailButton onClick={() => handleInfoClick("CLIENTE")} />
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  STORICO TICKET
-                  <DetailButton onClick={() => handleInfoClick("STORICO")} />
-                </Typography>
-              </Box>
-            </Paper>
+            <TicketDetails
+              ticketInfo={[
+                { label: "Samsung Galaxy s10", type: "DISPOSITIVO" },
+                { label: "INFORMAZIONI CLIENTE", type: "CLIENTE" },
+                { label: "STORICO TICKET", type: "STORICO" },
+              ]}
+              onInfoClick={handleInfoClick}
+            />
           </Grid>
           <Grid item xs={12} md={6}>
-            <Paper sx={{ padding: 2, height: "100%", boxShadow: 3 }}>
-              <Typography variant="h6">DETTAGLI PREVENTIVO</Typography>
-              <Box sx={{ mt: 1, mb: 1, border: "1px solid", padding: 1 }}>
-                <Typography variant="body2">
-                  Riparazione schermo 40 €
-                </Typography>
-                <Typography variant="body2">
-                  Connettore batteria 50 €
-                </Typography>
-                <Typography variant="body2">Connettore audio 30 €</Typography>
-                <Typography variant="h6">Prezzo stimato 110 €</Typography>
-              </Box>
-            </Paper>
+            <EstimateDetails
+              requestedServices={[
+                { service: "Riparazione schermo", price: 40 },
+                { service: "Connettore batteria", price: 50 },
+                { service: "Connettore audio", price: 30 },
+              ]}
+              extraServices={[]}
+              updatedPrices={[40, 50, 30]}
+              onRequestedServiceChange={() => {}}
+              calculateTotal={() => ({
+                prezzoStimato: 120,
+                prezzoAggiornato: 120,
+                prezzoServiziExtra: 0,
+                prezzoTotale: 120,
+              })}
+            />
           </Grid>
         </Grid>
       </Box>

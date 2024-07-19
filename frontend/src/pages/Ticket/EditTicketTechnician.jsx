@@ -4,25 +4,24 @@ import {
   Grid,
   Typography,
   IconButton,
-  Paper,
   Chip,
   Button,
   TextField,
-  MenuItem,
+  Paper
 } from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 import stateColors from "../../assets/json/state.json";
-import DetailButton from "../../components/Action/DetailButton"; // Assicurati che il percorso sia corretto
-import EditModal from "../../components/Modal/EditModal"; // Assicurati che il percorso sia corretto
-import DeleteModal from "../../components/Modal/DeleteModal"; // Assicurati che il percorso sia corretto
+import TicketActions from "../../components/Ticket/TicketActions";
+import TicketDetails from "../../components/Ticket/TicketDetails";
+import ExtraServices from "../../components/Ticket/ExtraServices";
+import EstimateDetails from "../../components/Ticket/EstimateDetails";
+import Modals from "../../components/Modal/Modals";
 
 const EditTicketTechnician = () => {
-  usePageTitle("Modifica Ticket Partner");
+  usePageTitle("Modifica Ticket");
   useBodyBackgroundColor("#fff");
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -30,7 +29,7 @@ const EditTicketTechnician = () => {
   const [modalMessage, setModalMessage] = useState("");
   const [currentAction, setCurrentAction] = useState(null);
 
-  const ticketStatus = "In lavorazione"; // Questo dovrebbe essere dinamico, impostato in base ai dati del ticket
+  const ticketStatus = "In lavorazione";
   const statusColor = stateColors[ticketStatus] || "#FFFFFF";
 
   const [extraServices, setExtraServices] = useState([
@@ -93,13 +92,6 @@ const EditTicketTechnician = () => {
     };
   };
 
-  const {
-    prezzoStimato,
-    prezzoAggiornato,
-    prezzoServiziExtra,
-    prezzoTotale,
-  } = calculateTotal();
-
   const handleInfoClick = (infoType) => {
     console.log(`Clicked ${infoType}`);
   };
@@ -133,24 +125,18 @@ const EditTicketTechnician = () => {
         padding: 3,
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        minHeight: "100vh",
       }}
     >
-      {modalOpen && (
-        <EditModal
-          message={modalMessage}
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
-        />
-      )}
-      {deleteModalOpen && (
-        <DeleteModal
-          message="Sei sicuro di voler eliminare il ticket?"
-          onDelete={handleDelete}
-          onCancel={handleCancel}
-        />
-      )}
-      <Box>
+      <Modals
+        modalOpen={modalOpen}
+        deleteModalOpen={deleteModalOpen}
+        modalMessage={modalMessage}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        onDelete={handleDelete}
+      />
+      <Box sx={{ flex: 1 }}>
         <Typography variant="h6" gutterBottom>
           TICKET ID: 662a6d00eedee8b18bb75f53
         </Typography>
@@ -188,196 +174,47 @@ const EditTicketTechnician = () => {
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <Typography variant="h6" sx={{ mr: 2 }}>
-            AZIONI
-          </Typography>
-          {["Attesa conferma preventivo", "Annullato"].map((status) => (
-            <Chip
-              key={status}
-              label={status}
-              onClick={() => handleStatusChange(status)}
-              clickable
-              sx={{
-                backgroundColor: stateColors[status],
-                color: "#000",
-                mr: 2,
-                "&:hover": {
-                  backgroundColor: stateColors[status],
-                  opacity: 0.8,
-                },
-              }}
-            />
-          ))}
-          <Chip
-            label="ELIMINA TICKET"
-            onClick={() => setDeleteModalOpen(true)}
-            clickable
-            sx={{
-              backgroundColor: "#f44336",
-              color: "#fff",
-              mr: 2,
-              "&:hover": {
-                backgroundColor: "#d32f2f",
-              },
-            }}
-          />
-        </Box>
+        <TicketActions
+          ticketStatus={ticketStatus}
+          stateColors={stateColors}
+          onStatusChange={handleStatusChange}
+          onDelete={() => setDeleteModalOpen(true)}
+        />
 
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Paper sx={{ padding: 2, height: "100%", boxShadow: 3 }}>
+            <TicketDetails
+              ticketInfo={[
+                { label: "Samsung Galaxy s10", type: "INFORMAZIONI DISPOSITIVO" },
+                { label: "INFORMAZIONI PARTNER", type: "INFORMAZIONI PARTNER" },
+                { label: "STORICO TICKET", type: "STORICO TICKET" },
+              ]}
+              onInfoClick={handleInfoClick}
+            />
+            <ExtraServices
+              extraServices={extraServices}
+              onAddService={handleAddService}
+              onRemoveService={handleRemoveService}
+              onServiceChange={handleServiceChange}
+              isServiceFilled={isServiceFilled}
+            />
+            <Paper sx={{ padding: 2, boxShadow: 3, mt: 2 }}>
               <Typography variant="h6" gutterBottom>
-                DATI GENERALI
+                AGGIUNGI DESCRIZIONE TECNICA
               </Typography>
-              <Box sx={{ border: "1px solid #000", padding: 2 }}>
-                <Typography
-                  variant="body1"
-                  gutterBottom
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  INFORMAZIONI DISPOSITIVO
-                  <DetailButton
-                    onClick={() => handleInfoClick("INFORMAZIONI DISPOSITIVO")}
-                  />
-                </Typography>
-                <Typography
-                  variant="body1"
-                  gutterBottom
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  INFORMAZIONI PARTNER
-                  <DetailButton
-                    onClick={() => handleInfoClick("INFORMAZIONI PARTNER")}
-                  />
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  STORICO TICKET
-                  <DetailButton
-                    onClick={() => handleInfoClick("STORICO TICKET")}
-                  />
-                </Typography>
-              </Box>
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                  AGGIUNGI SERVIZI EXTRA
-                </Typography>
-                {extraServices.map((service, index) => (
-                  <Box
-                    key={index}
-                    sx={{ display: "flex", alignItems: "center", mb: 1 }}
-                  >
-                    <TextField
-                      select
-                      label="Servizio"
-                      name="service"
-                      value={service.service}
-                      onChange={(event) => handleServiceChange(index, event)}
-                      sx={{ width: "45%" }}
-                    >
-                      <MenuItem value="Tasto volume up">
-                        Tasto volume up
-                      </MenuItem>
-                      <MenuItem value="Altoparlante">Altoparlante</MenuItem>
-                    </TextField>
-                    <TextField
-                      label="Prezzo"
-                      name="price"
-                      value={service.price}
-                      onChange={(event) => handleServiceChange(index, event)}
-                      sx={{ width: "20%", ml: 1 }}
-                    />
-                    {isServiceFilled(service) && (
-                      <>
-                        <IconButton
-                          color="primary"
-                          onClick={handleAddService}
-                          sx={{ ml: 1 }}
-                        >
-                          <AddIcon />
-                        </IconButton>
-                        {extraServices.length > 1 && (
-                          <IconButton
-                            color="secondary"
-                            onClick={() => handleRemoveService(index)}
-                            sx={{ ml: 1 }}
-                          >
-                            <RemoveIcon />
-                          </IconButton>
-                        )}
-                      </>
-                    )}
-                  </Box>
-                ))}
-              </Box>
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                  AGGIUNGI DESCRIZIONE TECNICA
-                </Typography>
-                <TextField label="Descrizione" multiline rows={4} fullWidth />
+              <Box sx={{ padding: 2 }}>
+                <TextField label="Inserisci la descrizione prima di cambiare lo stato" multiline rows={4} fullWidth />
               </Box>
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Paper sx={{ padding: 2, height: "100%", boxShadow: 3 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Typography variant="h6">DETTAGLI PREVENTIVO</Typography>
-              </Box>
-              <Box sx={{ mt: 1, mb: 1, border: "1px solid", padding: 1 }}>
-                <Typography variant="h6">Servizi richiesti</Typography>
-                {requestedServices.map((service, index) => (
-                  <Box
-                    key={index}
-                    sx={{ display: "flex", flexDirection: "column", mb: 1 }}
-                  >
-                    <Typography variant="body2">{service.service}</Typography>
-                    <TextField
-                      value={updatedPrices[index]}
-                      onChange={(event) =>
-                        handleRequestedServiceChange(index, event)
-                      }
-                      sx={{ width: "30%", ml: 1 }}
-                    />
-                  </Box>
-                ))}
-                {extraServices.some(isServiceFilled) && (
-                  <>
-                    <Typography variant="h6" sx={{ mt: 2 }}>
-                      Servizi extra
-                    </Typography>
-                    {extraServices.map(
-                      (service, index) =>
-                        isServiceFilled(service) && (
-                          <Typography key={index} variant="body2">
-                            {service.service} {service.price} €
-                          </Typography>
-                        )
-                    )}
-                  </>
-                )}
-                <Typography variant="body2" sx={{ mt: 2 }}>
-                  Prezzo stimato {prezzoStimato} €
-                </Typography>
-                <Typography variant="body2">
-                  Prezzo aggiornato {prezzoAggiornato} €
-                </Typography>
-                <Typography variant="body2">
-                  Prezzo servizi extra {prezzoServiziExtra} €
-                </Typography>
-                <Typography variant="h6">
-                  Prezzo totale {prezzoTotale} €
-                </Typography>
-              </Box>
-            </Paper>
+            <EstimateDetails
+              requestedServices={requestedServices}
+              extraServices={extraServices}
+              updatedPrices={updatedPrices}
+              onRequestedServiceChange={handleRequestedServiceChange}
+              calculateTotal={calculateTotal}
+            />
           </Grid>
         </Grid>
       </Box>

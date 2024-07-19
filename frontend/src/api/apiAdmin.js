@@ -375,13 +375,16 @@ export const fetchModelsByBrand = async (token, brand) => {
 
 export const fetchCustomerByPhone = async (token, phone) => {
   console.log("fetchCustomerByPhone called with phone:", phone);
-  const response = await fetch(`/api/customer/phone/${encodeURIComponent(phone)}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
+  const response = await fetch(
+    `/api/customer/phone/${encodeURIComponent(phone)}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   if (!response.ok) {
     console.error("Errore nel recupero del cliente:", response.statusText);

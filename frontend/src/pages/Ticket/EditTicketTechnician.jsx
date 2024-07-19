@@ -111,7 +111,9 @@ const EditTicketTechnician = () => {
 
   const handleStatusChange = (newStatus) => {
     setCurrentAction(() => () => console.log(`Changed status to ${newStatus}`));
-    setModalMessage(`Sei sicuro di voler cambiare lo stato del ticket in "${newStatus}"?`);
+    setModalMessage(
+      `Sei sicuro di voler cambiare lo stato del ticket in "${newStatus}"?`
+    );
     setModalOpen(true);
   };
 

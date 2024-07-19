@@ -420,7 +420,10 @@ const CreateTicket = () => {
               </Grid>
             </Grid>
           </Box>
-          <FormActions onSubmit={handleSubmit} disableSubmit={!isCustomerValid} />
+          <FormActions
+            onSubmit={handleSubmit}
+            disableSubmit={!isCustomerValid}
+          />
         </form>
         {alert.open && (
           <CustomAlert

@@ -63,7 +63,10 @@ const App = () => {
               {/* Senza autenticazione */}
               <Route path="/" element={<HomePage />} />
               <Route path="/logout" element={<Logout />} />
-              <Route path="/login"  element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+              <Route
+                path="/login"
+                element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+              />
 
               {/* Admin Routes */}
               <Route element={<PrivateRoute roles={["admin"]} />}>
@@ -89,19 +92,38 @@ const App = () => {
                 <Route path="/apri-ticket" element={<CreateTicket />} />
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/clienti" element={<Customers />} />
-                <Route path="/modifica-cliente/:id" element={<EditCustomer />} />
-                <Route path="/edit-ticket-partner" element={<EdiTicketPartner />}/>
+                <Route
+                  path="/modifica-cliente/:id"
+                  element={<EditCustomer />}
+                />
+                <Route
+                  path="/edit-ticket-partner"
+                  element={<EdiTicketPartner />}
+                />
               </Route>
 
               {/* Tecnico Routes */}
               <Route element={<PrivateRoute roles={["tecnico"]} />}>
-                <Route path="/tecnico-dashboard" element={<DashboardTechnician />}/>
-                <Route path="/tickets-accettati" element={<AcceptedTickets />} />
-                <Route path="/edit-ticket-technician" element={<EdiTicketTechnician />} />
+                <Route
+                  path="/tecnico-dashboard"
+                  element={<DashboardTechnician />}
+                />
+                <Route
+                  path="/tickets-accettati"
+                  element={<AcceptedTickets />}
+                />
+                <Route
+                  path="/edit-ticket-technician"
+                  element={<EdiTicketTechnician />}
+                />
               </Route>
 
               {/* Shared Routes */}
-              <Route element={<PrivateRoute roles={["tecnico", "admin", "partner"]} />}>
+              <Route
+                element={
+                  <PrivateRoute roles={["tecnico", "admin", "partner"]} />
+                }
+              >
                 <Route path="/account" element={<Account />} />
               </Route>
 

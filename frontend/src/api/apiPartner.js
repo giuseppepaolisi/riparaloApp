@@ -287,8 +287,8 @@ export const editTicket = async (token, { id, newstate }) => {
   }
 };
 
-export const downloadPDF = async (token, id) => {
-  const response = await fetch(`/api/pdf/${id}`, {
+export const downloadPDF = async (token, ticket) => {
+  const response = await fetch(`/api/pdf/${ticket._id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -303,8 +303,29 @@ export const downloadPDF = async (token, id) => {
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${id}.pdf`;
+  a.download = `${ticket._id}-ticket.pdf`;
   document.body.appendChild(a);
   a.click();
   a.remove();
+};
+
+export const viewPDF = async (token, ticketId) => {
+  try {
+    const response = await fetch(`/api/pdf/${ticketId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore nella visualizzazione del PDF");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    window.open(url, '_blank');
+  } catch (error) {
+    console.error("Errore nella visualizzazione del PDF:", error);
+  }
 };

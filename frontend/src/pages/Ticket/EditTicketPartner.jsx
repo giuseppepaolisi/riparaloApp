@@ -17,7 +17,7 @@ import TicketActions from "../../components/Ticket/TicketActions";
 import TicketDetails from "../../components/Ticket/TicketDetails";
 import EstimateDetails from "../../components/Ticket/EstimateDetails";
 import Modals from "../../components/Modal/Modals";
-import { fetchTicketById, editTicket, downloadPDF } from "../../api/apiPartner";
+import { fetchTicketById, editTicket, downloadPDF, viewPDF } from "../../api/apiPartner";
 import { useSelector } from "react-redux";
 
 const EditTicketPartner = () => {
@@ -79,10 +79,17 @@ const EditTicketPartner = () => {
 
   const handleDownloadPDF = async () => {
     try {
-      await downloadPDF(token, ticket._id);
-      console.log("PDF scaricato con successo");
+      await downloadPDF(token, ticket);
     } catch (error) {
       console.error("Errore nel download del PDF:", error);
+    }
+  };
+
+  const handleViewPDF = async () => {
+    try {
+      await viewPDF(token, ticket._id);
+    } catch (error) {
+      console.error("Errore nella visualizzazione del PDF:", error);
     }
   };
 
@@ -117,7 +124,7 @@ const EditTicketPartner = () => {
             <IconButton color="primary" onClick={handleDownloadPDF}>
               <PictureAsPdfIcon />
             </IconButton>
-            <IconButton color="primary">
+            <IconButton color="primary" onClick={handleViewPDF}>
               <PrintIcon />
             </IconButton>
           </Box>

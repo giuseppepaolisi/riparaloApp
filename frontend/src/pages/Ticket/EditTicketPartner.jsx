@@ -1,4 +1,3 @@
-// EditTicketPartner.jsx
 import { useState, useEffect } from "react";
 import {
   Box,
@@ -18,7 +17,7 @@ import TicketActions from "../../components/Ticket/TicketActions";
 import TicketDetails from "../../components/Ticket/TicketDetails";
 import EstimateDetails from "../../components/Ticket/EstimateDetails";
 import Modals from "../../components/Modal/Modals";
-import { fetchTicketById, editTicket } from "../../api/apiPartner"; // Assicurati che il percorso sia corretto
+import { fetchTicketById, editTicket, downloadPDF } from "../../api/apiPartner";
 import { useSelector } from "react-redux";
 
 const EditTicketPartner = () => {
@@ -78,6 +77,15 @@ const EditTicketPartner = () => {
     console.log(`Clicked ${infoType}`);
   };
 
+  const handleDownloadPDF = async () => {
+    try {
+      await downloadPDF(token, ticket._id);
+      console.log("PDF scaricato con successo");
+    } catch (error) {
+      console.error("Errore nel download del PDF:", error);
+    }
+  };
+
   return (
     <Box sx={{ padding: 3, display: "flex", flexDirection: "column", height: "100vh" }}>
       <Modals
@@ -106,7 +114,7 @@ const EditTicketPartner = () => {
             <Typography variant="h6" component="span" sx={{ mr: 1 }}>
               STAMPA TICKET
             </Typography>
-            <IconButton color="primary">
+            <IconButton color="primary" onClick={handleDownloadPDF}>
               <PictureAsPdfIcon />
             </IconButton>
             <IconButton color="primary">

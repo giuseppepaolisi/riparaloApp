@@ -97,7 +97,7 @@ const App = () => {
                   element={<EditCustomer />}
                 />
                 <Route
-                  path="/edit-ticket-partner"
+                  path="/edit-ticket-partner/:id"
                   element={<EdiTicketPartner />}
                 />
               </Route>

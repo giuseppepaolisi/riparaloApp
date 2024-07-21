@@ -1,5 +1,5 @@
 // EditTicketPartner.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -8,6 +8,7 @@ import {
   Chip,
   Button,
 } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
 import PrintIcon from "@mui/icons-material/Print";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import usePageTitle from "../../CustomHooks/usePageTitle";
@@ -17,17 +18,40 @@ import TicketActions from "../../components/Ticket/TicketActions";
 import TicketDetails from "../../components/Ticket/TicketDetails";
 import EstimateDetails from "../../components/Ticket/EstimateDetails";
 import Modals from "../../components/Modal/Modals";
+import { fetchTicketById, editTicket } from "../../api/apiPartner"; // Assicurati che il percorso sia corretto
+import { useSelector } from "react-redux";
 
 const EditTicketPartner = () => {
   usePageTitle("Dettagli Ticket");
   useBodyBackgroundColor("#fff");
 
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { token } = useSelector((state) => state.auth);
+  const [ticket, setTicket] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [currentAction, setCurrentAction] = useState(null);
 
-  const ticketStatus = "Aperto";
+  useEffect(() => {
+    const loadTicket = async () => {
+      try {
+        const data = await fetchTicketById(token, id);
+        setTicket(data);
+      } catch (error) {
+        console.error("Errore nel caricamento del ticket:", error);
+      }
+    };
+
+    loadTicket();
+  }, [token, id]);
+
+  if (!ticket) {
+    return <Typography>Caricamento...</Typography>;
+  }
+
+  const ticketStatus = ticket.stato;
   const statusColor = stateColors[ticketStatus] || "#FFFFFF";
 
   const handleDelete = () => {
@@ -35,22 +59,19 @@ const EditTicketPartner = () => {
     setDeleteModalOpen(false);
   };
 
-  const handleStatusChange = (newStatus) => {
-    setCurrentAction(() => () => console.log(`Changed status to ${newStatus}`));
-    setModalMessage(
-      `Sei sicuro di voler cambiare lo stato del ticket in "${newStatus}"?`
-    );
-    setModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setModalOpen(false);
-    setDeleteModalOpen(false);
+  const handleStatusChange = async (newStatus) => {
+    try {
+      const updatedTicket = await editTicket(token, { id: ticket._id, newstate: newStatus });
+      setTicket(updatedTicket);
+      console.log(`Changed status to ${newStatus}`);
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Errore nel cambiamento dello stato del ticket:", error);
+    }
   };
 
   const handleConfirm = () => {
     if (currentAction) currentAction();
-    setModalOpen(false);
   };
 
   const handleInfoClick = (infoType) => {
@@ -58,46 +79,27 @@ const EditTicketPartner = () => {
   };
 
   return (
-    <Box
-      sx={{
-        padding: 3,
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-      }}
-    >
+    <Box sx={{ padding: 3, display: "flex", flexDirection: "column", height: "100vh" }}>
       <Modals
         modalOpen={modalOpen}
         deleteModalOpen={deleteModalOpen}
         modalMessage={modalMessage}
         onConfirm={handleConfirm}
-        onCancel={handleCancel}
+        onCancel={() => setModalOpen(false)}
         onDelete={handleDelete}
       />
       <Box>
         <Typography variant="h6" gutterBottom>
-          TICKET ID: 662a6d00eedee8b18bb75f53
+          TICKET ID: {ticket._id}
         </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-          }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography variant="h6" sx={{ mr: 1 }}>
               STATO
             </Typography>
             <Chip
               label={ticketStatus}
-              sx={{
-                backgroundColor: statusColor,
-                color: "#000",
-                border: "1px solid #000",
-                mr: 2,
-              }}
+              sx={{ backgroundColor: statusColor, color: "#000", border: "1px solid #000", mr: 2 }}
             />
           </Box>
           <Box>
@@ -116,7 +118,11 @@ const EditTicketPartner = () => {
         <TicketActions
           ticketStatus={ticketStatus}
           stateColors={stateColors}
-          onStatusChange={handleStatusChange}
+          onStatusChange={(newStatus) => {
+            setCurrentAction(() => () => handleStatusChange(newStatus));
+            setModalMessage(`Sei sicuro di voler cambiare lo stato del ticket in "${newStatus}"?`);
+            setModalOpen(true);
+          }}
           onDelete={() => setDeleteModalOpen(true)}
         />
 
@@ -124,7 +130,7 @@ const EditTicketPartner = () => {
           <Grid item xs={12} md={6}>
             <TicketDetails
               ticketInfo={[
-                { label: "Samsung Galaxy s10", type: "DISPOSITIVO" },
+                { label: `${ticket.marca} ${ticket.modello}`, type: "DISPOSITIVO" },
                 { label: "INFORMAZIONI CLIENTE", type: "CLIENTE" },
                 { label: "STORICO TICKET", type: "STORICO" },
               ]}
@@ -133,32 +139,23 @@ const EditTicketPartner = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <EstimateDetails
-              requestedServices={[
-                { service: "Riparazione schermo", price: 40 },
-                { service: "Connettore batteria", price: 50 },
-                { service: "Connettore audio", price: 30 },
-              ]}
+              requestedServices={ticket.servizi.map(service => ({ service: service.servizio, price: service.prezzo }))}
               extraServices={[]}
-              updatedPrices={[40, 50, 30]}
+              updatedPrices={ticket.servizi.map(service => service.prezzo)}
               onRequestedServiceChange={() => {}}
               calculateTotal={() => ({
-                prezzoStimato: 120,
-                prezzoAggiornato: 120,
+                prezzoStimato: ticket.prezzo_stimato,
+                prezzoAggiornato: ticket.prezzo_stimato,
                 prezzoServiziExtra: 0,
-                prezzoTotale: 120,
+                prezzoTotale: ticket.prezzo_stimato,
               })}
             />
           </Grid>
         </Grid>
       </Box>
 
-      <Box
-        sx={{ display: "flex", justifyContent: "center", mt: "auto", mb: 3 }}
-      >
-        <Button
-          variant="outlined"
-          sx={{ color: "#1976d2", borderColor: "#1976d2" }}
-        >
+      <Box sx={{ display: "flex", justifyContent: "center", mt: "auto", mb: 3 }}>
+        <Button variant="outlined" sx={{ color: "#1976d2", borderColor: "#1976d2" }} onClick={() => navigate(-1)}>
           INDIETRO
         </Button>
       </Box>

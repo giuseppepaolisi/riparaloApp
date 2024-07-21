@@ -1,3 +1,4 @@
+// components/Ticket/EstimateDetails.jsx
 import PropTypes from "prop-types";
 import { Box, Typography, TextField, Paper } from "@mui/material";
 
@@ -23,10 +24,7 @@ const EstimateDetails = ({
       <Box sx={{ border: "1px solid", padding: 1 }}>
         <Typography variant="h6">Servizi richiesti</Typography>
         {requestedServices.map((service, index) => (
-          <Box
-            key={index}
-            sx={{ display: "flex", flexDirection: "column", mb: 1 }}
-          >
+          <Box key={index} sx={{ display: "flex", flexDirection: "column", mb: 1 }}>
             <Typography variant="body2">{service.service}</Typography>
             <TextField
               value={updatedPrices[index]}
@@ -42,8 +40,7 @@ const EstimateDetails = ({
             </Typography>
             {extraServices.map(
               (service, index) =>
-                service.service &&
-                service.price && (
+                service.service && service.price && (
                   <Typography key={index} variant="body2">
                     {service.service} {service.price} €
                   </Typography>
@@ -78,7 +75,7 @@ EstimateDetails.propTypes = {
   extraServices: PropTypes.arrayOf(
     PropTypes.shape({
       service: PropTypes.string,
-      price: PropTypes.string,
+      price: PropTypes.number,
     })
   ).isRequired,
   updatedPrices: PropTypes.arrayOf(PropTypes.number).isRequired,

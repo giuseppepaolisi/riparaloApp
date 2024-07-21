@@ -2,7 +2,14 @@ import PropTypes from "prop-types";
 import EditModal from "./EditModal"; // Assicurati che il percorso sia corretto
 import DeleteModal from "./DeleteModal"; // Assicurati che il percorso sia corretto
 
-const Modals = ({ modalOpen, deleteModalOpen, modalMessage, onConfirm, onCancel, onDelete }) => {
+const Modals = ({
+  modalOpen,
+  deleteModalOpen,
+  modalMessage,
+  onConfirm,
+  onCancel,
+  onDelete,
+}) => {
   return (
     <>
       {modalOpen && (

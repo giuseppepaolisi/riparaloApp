@@ -1,9 +1,22 @@
 import PropTypes from "prop-types";
-import { Box, Typography, TextField, MenuItem, IconButton, Paper } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  MenuItem,
+  IconButton,
+  Paper,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
-const ExtraServices = ({ extraServices, onAddService, onRemoveService, onServiceChange, isServiceFilled }) => {
+const ExtraServices = ({
+  extraServices,
+  onAddService,
+  onRemoveService,
+  onServiceChange,
+  isServiceFilled,
+}) => {
   return (
     <Paper sx={{ padding: 2, boxShadow: 3, mt: 2 }}>
       <Typography variant="h6" gutterBottom>
@@ -11,7 +24,10 @@ const ExtraServices = ({ extraServices, onAddService, onRemoveService, onService
       </Typography>
       <Box sx={{ border: "1px solid #000", padding: 2 }}>
         {extraServices.map((service, index) => (
-          <Box key={index} sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          <Box
+            key={index}
+            sx={{ display: "flex", alignItems: "center", mb: 1 }}
+          >
             <TextField
               select
               label="Servizio"
@@ -32,11 +48,19 @@ const ExtraServices = ({ extraServices, onAddService, onRemoveService, onService
             />
             {isServiceFilled(service) && (
               <>
-                <IconButton color="primary" onClick={onAddService} sx={{ ml: 1 }}>
+                <IconButton
+                  color="primary"
+                  onClick={onAddService}
+                  sx={{ ml: 1 }}
+                >
                   <AddIcon />
                 </IconButton>
                 {extraServices.length > 1 && (
-                  <IconButton color="secondary" onClick={() => onRemoveService(index)} sx={{ ml: 1 }}>
+                  <IconButton
+                    color="secondary"
+                    onClick={() => onRemoveService(index)}
+                    sx={{ ml: 1 }}
+                  >
                     <RemoveIcon />
                   </IconButton>
                 )}
@@ -53,7 +77,7 @@ ExtraServices.propTypes = {
   extraServices: PropTypes.arrayOf(
     PropTypes.shape({
       service: PropTypes.string,
-      price: PropTypes.string
+      price: PropTypes.string,
     })
   ).isRequired,
   onAddService: PropTypes.func.isRequired,

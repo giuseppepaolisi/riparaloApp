@@ -1,4 +1,3 @@
-// frontend\src\components\Ticket\TicketActions.jsx
 import PropTypes from "prop-types";
 import { Box, Typography, Chip } from "@mui/material";
 

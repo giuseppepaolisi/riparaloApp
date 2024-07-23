@@ -1,4 +1,3 @@
-// frontend\src\components\Ticket\EstimateDetails.jsx
 import PropTypes from "prop-types";
 import { Box, Typography, Paper } from "@mui/material";
 

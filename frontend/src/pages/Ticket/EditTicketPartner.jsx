@@ -22,6 +22,7 @@ import CustomerDetailModal from "../../components/Modal/CustomerDetailModal";
 import HistoryDetailModal from "../../components/Modal/HistoryDetailModal";
 import InfoDeviceDetailModal from "../../components/Modal/InfoDeviceDetailModal";
 import DescriptionDetailModal from "../../components/Modal/DescriptionDetailModal";
+import CustomAlert from "../../components/Alert/CustomAlert";
 
 const EditTicketPartner = () => {
   usePageTitle("Dettagli Ticket");
@@ -51,6 +52,7 @@ const EditTicketPartner = () => {
     isOpen: false,
     description: null,
   });
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
 
   useEffect(() => {
     const loadTicket = async () => {
@@ -75,11 +77,22 @@ const EditTicketPartner = () => {
   const handleDelete = async () => {
     try {
       await deleteTicket(token, ticket._id);
-      console.log("Ticket eliminato");
+      setAlert({
+        open: true,
+        msg: "Ticket eliminato con successo!",
+        severity: "success",
+      });
       setDeleteModalOpen(false);
-      navigate(-1);
+      setTimeout(() => {
+        navigate(-1);
+      }, 1500);
     } catch (error) {
       console.error("Errore nell'eliminazione del ticket:", error);
+      setAlert({
+        open: true,
+        msg: "Errore nell'eliminazione del ticket",
+        severity: "error",
+      });
     }
   };
 
@@ -181,6 +194,7 @@ const EditTicketPartner = () => {
         onConfirm={handleConfirm}
         onCancel={() => setModalOpen(false)}
         onDelete={handleDelete}
+        confirmButtonColor="error"
       />
       <CustomerDetailModal
         open={customerDetailModal.isOpen}
@@ -206,6 +220,13 @@ const EditTicketPartner = () => {
         onClose={() => setDescriptionDetailModal({ isOpen: false, description: null })}
         description={descriptionDetailModal.description}
       />
+      {alert.open && (
+        <CustomAlert
+          msg={alert.msg}
+          severity={alert.severity}
+          onClose={() => setAlert({ ...alert, open: false })}
+        />
+      )}
       <Box>
         <Typography variant="h6" gutterBottom>
           TICKET ID: {ticket._id}

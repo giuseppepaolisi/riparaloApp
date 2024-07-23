@@ -1,4 +1,3 @@
-//frontend\src\components\Modal\CustomerDetailModal.jsx
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { Modal, Box, Typography, IconButton } from "@mui/material";

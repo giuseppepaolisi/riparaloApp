@@ -1,10 +1,7 @@
 import PropTypes from "prop-types";
 import { Box, Typography, Paper } from "@mui/material";
 
-const EstimateDetails = ({
-  ticketStatus,
-  calculateTotal,
-}) => {
+const EstimateDetails = ({ ticketStatus, calculateTotal }) => {
   const {
     prezzoStimato,
     acconto,
@@ -21,10 +18,20 @@ const EstimateDetails = ({
         <Typography variant="body2" sx={{ mt: 2 }}>
           Prezzo stimato: {prezzoStimato} €
         </Typography>
-        {(ticketStatus === "Attesa conferma preventivo" ||
-          ["Preventivo accettato", "Preventivo rifiutato", "Completato"].includes(
-            ticketStatus
-          )) && (
+        {ticketStatus === "Attesa conferma preventivo" && (
+          <>
+            <Typography variant="body2">
+              Acconto: {acconto} €
+            </Typography>
+            <Typography variant="body2">
+              Prezzo finale: {prezzoTotale} €
+            </Typography>
+            <Typography variant="body2">
+              Prezzo da saldare: {prezzoDaSaldare} €
+            </Typography>
+          </>
+        )}
+        {ticketStatus !== "Aperto" && ticketStatus !== "Attesa conferma preventivo" && (
           <>
             <Typography variant="body2">
               Acconto: {acconto} €

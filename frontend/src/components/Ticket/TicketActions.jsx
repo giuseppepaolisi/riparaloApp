@@ -25,23 +25,7 @@ const TicketActions = ({
             }}
           />
         );
-      case "Accettato":
-        return (
-          <Chip
-            label="Ritirato"
-            onClick={() => onStatusChange("Ritirato")}
-            clickable
-            sx={{
-              backgroundColor: stateColors["Ritirato"],
-              color: "#000",
-              mr: 2,
-              "&:hover": {
-                backgroundColor: stateColors["Ritirato"],
-                opacity: 0.8,
-              },
-            }}
-          />
-        );
+        
       case "Attesa conferma preventivo":
         return (
           <>

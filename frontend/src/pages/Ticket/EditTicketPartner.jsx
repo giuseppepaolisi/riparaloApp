@@ -85,7 +85,7 @@ const EditTicketPartner = () => {
       setDeleteModalOpen(false);
       setTimeout(() => {
         navigate(-1);
-      }, 1500);
+      }, 1500); // Aggiungi un ritardo di 1,5 secondi
     } catch (error) {
       console.error("Errore nell'eliminazione del ticket:", error);
       setAlert({
@@ -165,16 +165,13 @@ const EditTicketPartner = () => {
   };
 
   const calculateTotal = () => {
-    const prezzoFinale = ticket.servizi.reduce(
-      (total, service) => total + service.prezzo,
-      0
-    );
-    const prezzoDaSaldare = prezzoFinale - ticket.acconto;
+    const prezzoTotale = ticket.prezzo || ticket.prezzo_stimato;
+    const prezzoDaSaldare = prezzoTotale - ticket.acconto;
     return {
       prezzoStimato: ticket.prezzo_stimato,
       acconto: ticket.acconto,
-      prezzoTotale: prezzoFinale,
-      prezzoDaSaldare,
+      prezzoTotale: prezzoTotale,
+      prezzoDaSaldare: prezzoDaSaldare,
     };
   };
 
@@ -194,7 +191,7 @@ const EditTicketPartner = () => {
         onConfirm={handleConfirm}
         onCancel={() => setModalOpen(false)}
         onDelete={handleDelete}
-        confirmButtonColor="error"
+        confirmButtonColor="error" // Imposta il colore del pulsante di conferma su rosso
       />
       <CustomerDetailModal
         open={customerDetailModal.isOpen}
@@ -220,13 +217,6 @@ const EditTicketPartner = () => {
         onClose={() => setDescriptionDetailModal({ isOpen: false, description: null })}
         description={descriptionDetailModal.description}
       />
-      {alert.open && (
-        <CustomAlert
-          msg={alert.msg}
-          severity={alert.severity}
-          onClose={() => setAlert({ ...alert, open: false })}
-        />
-      )}
       <Box>
         <Typography variant="h6" gutterBottom>
           TICKET ID: {ticket._id}
@@ -318,6 +308,13 @@ const EditTicketPartner = () => {
           INDIETRO
         </Button>
       </Box>
+      {alert.open && (
+        <CustomAlert
+          msg={alert.msg}
+          severity={alert.severity}
+          onClose={() => setAlert({ ...alert, open: false })}
+        />
+      )}
     </Box>
   );
 };

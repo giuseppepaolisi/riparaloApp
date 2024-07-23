@@ -1,7 +1,6 @@
-// components/Ticket/TicketDetails.jsx
 import PropTypes from "prop-types";
 import { Box, Typography, Paper } from "@mui/material";
-import DetailButton from "../Action/DetailButton"; // Assicurati che il percorso sia corretto
+import DetailButton from "../Action/DetailButton";
 
 const TicketDetails = ({ ticketInfo, onInfoClick }) => {
   return (

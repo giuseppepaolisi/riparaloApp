@@ -15,8 +15,13 @@ import {
   editTicket,
   downloadPDF,
   viewPDF,
+  deleteTicket
 } from "../../api/apiPartner";
 import { useSelector } from "react-redux";
+import CustomerDetailModal from "../../components/Modal/CustomerDetailModal";
+import HistoryDetailModal from "../../components/Modal/HistoryDetailModal";
+import InfoDeviceDetailModal from "../../components/Modal/InfoDeviceDetailModal";
+import DescriptionDetailModal from "../../components/Modal/DescriptionDetailModal";
 
 const EditTicketPartner = () => {
   usePageTitle("Dettagli Ticket");
@@ -30,6 +35,22 @@ const EditTicketPartner = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [currentAction, setCurrentAction] = useState(null);
+  const [customerDetailModal, setCustomerDetailModal] = useState({
+    isOpen: false,
+    customer: null,
+  });
+  const [historyDetailModal, setHistoryDetailModal] = useState({
+    isOpen: false,
+    history: null,
+  });
+  const [deviceDetailModal, setDeviceDetailModal] = useState({
+    isOpen: false,
+    device: null,
+  });
+  const [descriptionDetailModal, setDescriptionDetailModal] = useState({
+    isOpen: false,
+    description: null,
+  });
 
   useEffect(() => {
     const loadTicket = async () => {
@@ -51,9 +72,15 @@ const EditTicketPartner = () => {
   const ticketStatus = ticket.stato;
   const statusColor = stateColors[ticketStatus] || "#FFFFFF";
 
-  const handleDelete = () => {
-    console.log("Ticket eliminato");
-    setDeleteModalOpen(false);
+  const handleDelete = async () => {
+    try {
+      await deleteTicket(token, ticket._id);
+      console.log("Ticket eliminato");
+      setDeleteModalOpen(false);
+      navigate(-1);
+    } catch (error) {
+      console.error("Errore nell'eliminazione del ticket:", error);
+    }
   };
 
   const handleStatusChange = async (newStatus) => {
@@ -75,7 +102,37 @@ const EditTicketPartner = () => {
   };
 
   const handleInfoClick = (infoType) => {
-    console.log(`Clicked ${infoType}`);
+    if (infoType === "CLIENTE") {
+      setCustomerDetailModal({
+        isOpen: true,
+        customer: {
+          nome: ticket.nome_cliente,
+          cognome: ticket.cognome_cliente,
+          email: ticket.email_cliente,
+          telefono: ticket.telefono_cliente,
+        },
+      });
+    } else if (infoType === "STORICO") {
+      setHistoryDetailModal({
+        isOpen: true,
+        history: ticket.storico_stato,
+      });
+    } else if (infoType === "DISPOSITIVO") {
+      setDeviceDetailModal({
+        isOpen: true,
+        device: {
+          descrizione_problema: ticket.descrizione_problema,
+          imei: ticket.imei,
+          pin: ticket.pin,
+          seriale: ticket.seriale,
+        },
+      });
+    } else if (infoType === "DESCRIZIONE") {
+      setDescriptionDetailModal({
+        isOpen: true,
+        description: ticket.descrizione_tecnica,
+      });
+    }
   };
 
   const handleDownloadPDF = async () => {
@@ -94,6 +151,20 @@ const EditTicketPartner = () => {
     }
   };
 
+  const calculateTotal = () => {
+    const prezzoFinale = ticket.servizi.reduce(
+      (total, service) => total + service.prezzo,
+      0
+    );
+    const prezzoDaSaldare = prezzoFinale - ticket.acconto;
+    return {
+      prezzoStimato: ticket.prezzo_stimato,
+      acconto: ticket.acconto,
+      prezzoTotale: prezzoFinale,
+      prezzoDaSaldare,
+    };
+  };
+
   return (
     <Box
       sx={{
@@ -110,6 +181,30 @@ const EditTicketPartner = () => {
         onConfirm={handleConfirm}
         onCancel={() => setModalOpen(false)}
         onDelete={handleDelete}
+      />
+      <CustomerDetailModal
+        open={customerDetailModal.isOpen}
+        onClose={() =>
+          setCustomerDetailModal({ isOpen: false, customer: null })
+        }
+        customer={customerDetailModal.customer}
+      />
+      <HistoryDetailModal
+        open={historyDetailModal.isOpen}
+        onClose={() =>
+          setHistoryDetailModal({ isOpen: false, history: null })
+        }
+        history={historyDetailModal.history}
+      />
+      <InfoDeviceDetailModal
+        open={deviceDetailModal.isOpen}
+        onClose={() => setDeviceDetailModal({ isOpen: false, device: null })}
+        device={deviceDetailModal.device}
+      />
+      <DescriptionDetailModal
+        open={descriptionDetailModal.isOpen}
+        onClose={() => setDescriptionDetailModal({ isOpen: false, description: null })}
+        description={descriptionDetailModal.description}
       />
       <Box>
         <Typography variant="h6" gutterBottom>
@@ -173,25 +268,19 @@ const EditTicketPartner = () => {
                 },
                 { label: "INFORMAZIONI CLIENTE", type: "CLIENTE" },
                 { label: "STORICO TICKET", type: "STORICO" },
+                {
+                  label: "LEGGI DESCRIZIONE TECNICA",
+                  type: "DESCRIZIONE",
+                  condition: ticket.stato === "Attesa conferma preventivo",
+                },
               ]}
               onInfoClick={handleInfoClick}
             />
           </Grid>
           <Grid item xs={12} md={6}>
             <EstimateDetails
-              requestedServices={ticket.servizi.map((service) => ({
-                service: service.servizio,
-                price: service.prezzo,
-              }))}
-              extraServices={[]}
-              updatedPrices={ticket.servizi.map((service) => service.prezzo)}
-              onRequestedServiceChange={() => {}}
-              calculateTotal={() => ({
-                prezzoStimato: ticket.prezzo_stimato,
-                prezzoAggiornato: ticket.prezzo_stimato,
-                prezzoServiziExtra: 0,
-                prezzoTotale: ticket.prezzo_stimato,
-              })}
+              ticketStatus={ticketStatus}
+              calculateTotal={calculateTotal}
             />
           </Grid>
         </Grid>

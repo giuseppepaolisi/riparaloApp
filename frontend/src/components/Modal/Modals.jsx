@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
-import EditModal from "./EditModal"; // Assicurati che il percorso sia corretto
-import DeleteModal from "./DeleteModal"; // Assicurati che il percorso sia corretto
+import EditModal from "./EditModal";
+import DeleteModal from "./DeleteModal";
 
 const Modals = ({
   modalOpen,

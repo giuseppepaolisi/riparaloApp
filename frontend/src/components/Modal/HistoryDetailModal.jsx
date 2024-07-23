@@ -1,4 +1,4 @@
-//frontend\src\components\Modal\CustomerDetailModal.jsx
+//frontend\src\components\Modal\HistoryDetailModal.jsx
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { Modal, Box, Typography, IconButton } from "@mui/material";
@@ -24,34 +24,25 @@ const headerStyle = css`
   align-items: center;
 `;
 
-const CustomerDetailModal = ({ open, onClose, customer }) => {
+const HistoryDetailModal = ({ open, onClose, history }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Box css={modalStyle}>
         <div css={headerStyle}>
           <Typography variant="h6" component="h2">
-            Dettagli del Cliente
+            Storico Stato
           </Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </div>
-        {customer ? (
+        {history ? (
           <>
-            <Typography sx={{ mt: 2 }}>
-              <strong>Nome:</strong> {customer.nome}
-            </Typography>
-            <Typography sx={{ mt: 1 }}>
-              <strong>Cognome:</strong> {customer.cognome}
-            </Typography>
-            {customer.email && (
-              <Typography sx={{ mt: 1 }}>
-                <strong>Email:</strong> {customer.email}
+            {history.map((item, index) => (
+              <Typography key={index} sx={{ mt: 2 }}>
+                {item.stato} - <strong>Data:</strong> {new Date(item.data).toLocaleDateString()}
               </Typography>
-            )}
-            <Typography sx={{ mt: 1 }}>
-              <strong>Telefono:</strong> {customer.telefono}
-            </Typography>
+            ))}
           </>
         ) : (
           <Typography sx={{ mt: 2 }}>Caricamento...</Typography>
@@ -61,15 +52,15 @@ const CustomerDetailModal = ({ open, onClose, customer }) => {
   );
 };
 
-CustomerDetailModal.propTypes = {
+HistoryDetailModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  customer: PropTypes.shape({
-    nome: PropTypes.string.isRequired,
-    cognome: PropTypes.string.isRequired,
-    email: PropTypes.string, // Non required
-    telefono: PropTypes.string.isRequired,
-  }),
+  history: PropTypes.arrayOf(
+    PropTypes.shape({
+      stato: PropTypes.string.isRequired,
+      data: PropTypes.string.isRequired,
+    })
+  ),
 };
 
-export default CustomerDetailModal;
+export default HistoryDetailModal;

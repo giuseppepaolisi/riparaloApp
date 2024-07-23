@@ -1,12 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Grid,
-  Typography,
-  IconButton,
-  Chip,
-  Button,
-} from "@mui/material";
+import { Box, Grid, Typography, IconButton, Chip, Button } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import PrintIcon from "@mui/icons-material/Print";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -17,7 +10,12 @@ import TicketActions from "../../components/Ticket/TicketActions";
 import TicketDetails from "../../components/Ticket/TicketDetails";
 import EstimateDetails from "../../components/Ticket/EstimateDetails";
 import Modals from "../../components/Modal/Modals";
-import { fetchTicketById, editTicket, downloadPDF, viewPDF } from "../../api/apiPartner";
+import {
+  fetchTicketById,
+  editTicket,
+  downloadPDF,
+  viewPDF,
+} from "../../api/apiPartner";
 import { useSelector } from "react-redux";
 
 const EditTicketPartner = () => {
@@ -60,7 +58,10 @@ const EditTicketPartner = () => {
 
   const handleStatusChange = async (newStatus) => {
     try {
-      const updatedTicket = await editTicket(token, { id: ticket._id, newstate: newStatus });
+      const updatedTicket = await editTicket(token, {
+        id: ticket._id,
+        newstate: newStatus,
+      });
       setTicket(updatedTicket);
       console.log(`Changed status to ${newStatus}`);
       setModalOpen(false);
@@ -94,7 +95,14 @@ const EditTicketPartner = () => {
   };
 
   return (
-    <Box sx={{ padding: 3, display: "flex", flexDirection: "column", height: "100vh" }}>
+    <Box
+      sx={{
+        padding: 3,
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+      }}
+    >
       <Modals
         modalOpen={modalOpen}
         deleteModalOpen={deleteModalOpen}
@@ -107,14 +115,26 @@ const EditTicketPartner = () => {
         <Typography variant="h6" gutterBottom>
           TICKET ID: {ticket._id}
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography variant="h6" sx={{ mr: 1 }}>
               STATO
             </Typography>
             <Chip
               label={ticketStatus}
-              sx={{ backgroundColor: statusColor, color: "#000", border: "1px solid #000", mr: 2 }}
+              sx={{
+                backgroundColor: statusColor,
+                color: "#000",
+                border: "1px solid #000",
+                mr: 2,
+              }}
             />
           </Box>
           <Box>
@@ -135,7 +155,9 @@ const EditTicketPartner = () => {
           stateColors={stateColors}
           onStatusChange={(newStatus) => {
             setCurrentAction(() => () => handleStatusChange(newStatus));
-            setModalMessage(`Sei sicuro di voler cambiare lo stato del ticket in "${newStatus}"?`);
+            setModalMessage(
+              `Sei sicuro di voler cambiare lo stato del ticket in "${newStatus}"?`
+            );
             setModalOpen(true);
           }}
           onDelete={() => setDeleteModalOpen(true)}
@@ -145,7 +167,10 @@ const EditTicketPartner = () => {
           <Grid item xs={12} md={6}>
             <TicketDetails
               ticketInfo={[
-                { label: `${ticket.marca} ${ticket.modello}`, type: "DISPOSITIVO" },
+                {
+                  label: `${ticket.marca} ${ticket.modello}`,
+                  type: "DISPOSITIVO",
+                },
                 { label: "INFORMAZIONI CLIENTE", type: "CLIENTE" },
                 { label: "STORICO TICKET", type: "STORICO" },
               ]}
@@ -154,9 +179,12 @@ const EditTicketPartner = () => {
           </Grid>
           <Grid item xs={12} md={6}>
             <EstimateDetails
-              requestedServices={ticket.servizi.map(service => ({ service: service.servizio, price: service.prezzo }))}
+              requestedServices={ticket.servizi.map((service) => ({
+                service: service.servizio,
+                price: service.prezzo,
+              }))}
               extraServices={[]}
-              updatedPrices={ticket.servizi.map(service => service.prezzo)}
+              updatedPrices={ticket.servizi.map((service) => service.prezzo)}
               onRequestedServiceChange={() => {}}
               calculateTotal={() => ({
                 prezzoStimato: ticket.prezzo_stimato,
@@ -169,8 +197,14 @@ const EditTicketPartner = () => {
         </Grid>
       </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "center", mt: "auto", mb: 3 }}>
-        <Button variant="outlined" sx={{ color: "#1976d2", borderColor: "#1976d2" }} onClick={() => navigate(-1)}>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", mt: "auto", mb: 3 }}
+      >
+        <Button
+          variant="outlined"
+          sx={{ color: "#1976d2", borderColor: "#1976d2" }}
+          onClick={() => navigate(-1)}
+        >
           INDIETRO
         </Button>
       </Box>

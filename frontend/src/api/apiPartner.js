@@ -279,7 +279,9 @@ export const editTicket = async (token, { id, newstate }) => {
 
     const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.error || "Non è stato possibile modificare il ticket");
+      throw new Error(
+        data.error || "Non è stato possibile modificare il ticket"
+      );
     }
     return data.newTicket;
   } catch (error) {
@@ -301,7 +303,7 @@ export const downloadPDF = async (token, ticket) => {
 
   const blob = await response.blob();
   const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = `${ticket._id}-ticket.pdf`;
   document.body.appendChild(a);
@@ -324,7 +326,7 @@ export const viewPDF = async (token, ticketId) => {
 
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   } catch (error) {
     console.error("Errore nella visualizzazione del PDF:", error);
   }

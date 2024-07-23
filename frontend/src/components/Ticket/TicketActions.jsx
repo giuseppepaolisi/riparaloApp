@@ -2,7 +2,12 @@
 import PropTypes from "prop-types";
 import { Box, Typography, Chip } from "@mui/material";
 
-const TicketActions = ({ stateColors, onStatusChange, onDelete, ticketStatus }) => {
+const TicketActions = ({
+  stateColors,
+  onStatusChange,
+  onDelete,
+  ticketStatus,
+}) => {
   const getChipsForState = (status) => {
     switch (status) {
       case "Aperto":

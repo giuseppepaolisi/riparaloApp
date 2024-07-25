@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Grid, Typography, IconButton, Chip, Button } from "@mui/material";
+import { Box, Grid, Typography, IconButton, Chip, Button, TextField } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import PrintIcon from "@mui/icons-material/Print";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -22,9 +22,8 @@ import HistoryDetailModal from "../../components/Modal/HistoryDetailModal";
 import InfoDeviceDetailModal from "../../components/Modal/InfoDeviceDetailModal";
 import DescriptionDetailModal from "../../components/Modal/DescriptionDetailModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import ExtraServices from "../../components/Ticket/ExtraServices";
 import TicketDetails from "../../components/Ticket/TicketDetails";
-import RequestedServices from "../../components/Ticket/RequestedServices"; // Import the new component
+import RequestedServices from "../../components/Ticket/RequestedServices";
 
 const EditTicketTechnician = () => {
   usePageTitle("Dettagli Ticket Tecnico");
@@ -57,6 +56,8 @@ const EditTicketTechnician = () => {
   const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
 
   const [extraServices, setExtraServices] = useState([]);
+  const [serviceName, setServiceName] = useState("");
+  const [servicePrice, setServicePrice] = useState("");
 
   useEffect(() => {
     const loadTicket = async () => {
@@ -192,20 +193,16 @@ const EditTicketTechnician = () => {
   };
 
   const handleAddExtraService = () => {
-    setExtraServices([...extraServices, { nome: "", prezzo: "" }]);
+    if (serviceName && servicePrice) {
+      setExtraServices([...extraServices, { nome: serviceName, prezzo: servicePrice }]);
+      setServiceName("");
+      setServicePrice("");
+    }
   };
 
-  const handleRemoveExtraService = (index) => {
-    const newServices = [...extraServices];
-    newServices.splice(index, 1);
-    setExtraServices(newServices);
-  };
-
-  const handleServiceChange = (index, field, value) => {
-    const newServices = [...extraServices];
-    newServices[index][field] = value;
-    setExtraServices(newServices);
-  };
+  const descriptionText = extraServices
+    .map((service) => `${service.nome} ${service.prezzo}`)
+    .join("; ");
 
   return (
     <Box
@@ -245,7 +242,7 @@ const EditTicketTechnician = () => {
         onClose={() =>
           setDescriptionDetailModal({ isOpen: false, description: null })
         }
-        description={descriptionDetailModal.description}
+        description={descriptionText}
       />
       <Box>
         <Typography variant="h6" gutterBottom>
@@ -299,7 +296,7 @@ const EditTicketTechnician = () => {
         />
 
         <Grid container spacing={2}>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={6}>
             <TicketDetails
               ticketInfo={[
                 {
@@ -317,10 +314,8 @@ const EditTicketTechnician = () => {
               onInfoClick={handleInfoClick}
             />
           </Grid>
-          <Grid item xs={12} md={4}>
-            <RequestedServices services={ticket.servizi} /> {/* Integrate the new component here */}
-          </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={6}>
+            <RequestedServices services={ticket.servizi} />
             <TechnicianCostDetails
               ticketStatus={ticketStatus}
               calculateTotal={calculateTotal}
@@ -329,13 +324,62 @@ const EditTicketTechnician = () => {
         </Grid>
 
         {ticketStatus === "In lavorazione" && (
-          <ExtraServices
-            extraServices={extraServices}
-            onAddService={handleAddExtraService}
-            onRemoveService={handleRemoveExtraService}
-            onServiceChange={handleServiceChange}
-          />
+          <Box mt={3}>
+            <Typography variant="h6" gutterBottom>
+              AGGIUNGI SERVIZI EXTRA
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                <TextField
+                  label="Servizio"
+                  value={serviceName}
+                  onChange={(e) => setServiceName(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Prezzo"
+                  type="number"
+                  value={servicePrice}
+                  onChange={(e) => setServicePrice(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddExtraService}
+                >
+                  Aggiungi Servizio
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
         )}
+
+        {ticketStatus !== "Aperto" &&
+          ticketStatus !== "Accettato" &&
+          ticketStatus !== "Ritirato" && (
+            <Box mt={3}>
+              <Typography variant="h6" gutterBottom>
+                DESCRIZIONE TECNICA
+              </Typography>
+              <TextField
+                value={descriptionText}
+                fullWidth
+                multiline
+                rows={4}
+                margin="normal"
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Box>
+          )}
       </Box>
 
       <Box

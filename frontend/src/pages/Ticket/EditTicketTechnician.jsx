@@ -24,6 +24,7 @@ import DescriptionDetailModal from "../../components/Modal/DescriptionDetailModa
 import CustomAlert from "../../components/Alert/CustomAlert";
 import ExtraServices from "../../components/Ticket/ExtraServices";
 import TicketDetails from "../../components/Ticket/TicketDetails";
+import RequestedServices from "../../components/Ticket/RequestedServices"; // Import the new component
 
 const EditTicketTechnician = () => {
   usePageTitle("Dettagli Ticket Tecnico");
@@ -298,7 +299,7 @@ const EditTicketTechnician = () => {
         />
 
         <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <TicketDetails
               ticketInfo={[
                 {
@@ -316,7 +317,10 @@ const EditTicketTechnician = () => {
               onInfoClick={handleInfoClick}
             />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
+            <RequestedServices services={ticket.servizi} /> {/* Integrate the new component here */}
+          </Grid>
+          <Grid item xs={12} md={4}>
             <TechnicianCostDetails
               ticketStatus={ticketStatus}
               calculateTotal={calculateTotal}

@@ -40,7 +40,7 @@ const InfoPartnerDetailModal = ({ open, onClose, partner }) => {
         {partner ? (
           <Box mt={2}>
             <Typography variant="body1">
-              <strong>Telefono:</strong> {partner.telefono || "N/A"}
+              <strong>Telefono:</strong> {partner.telefono_partner || "N/A"}
             </Typography>
             <Typography variant="body1">
               <strong>Ragione Sociale:</strong> {partner.ragione_sociale || "N/A"}
@@ -76,7 +76,7 @@ InfoPartnerDetailModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   partner: PropTypes.shape({
-    telefono: PropTypes.string,
+    telefono_partner: PropTypes.string,
     ragione_sociale: PropTypes.string,
     partita_iva: PropTypes.string,
     codiceUnivoco: PropTypes.string,

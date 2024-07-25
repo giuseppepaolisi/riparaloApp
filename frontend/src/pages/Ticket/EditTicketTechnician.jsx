@@ -176,14 +176,17 @@ const EditTicketTechnician = () => {
 
   const calculateTotal = () => {
     const prezzoTotale = ticket.prezzo || ticket.prezzo_stimato;
+    const prezzoDaSaldare = prezzoTotale - ticket.acconto;
     const prezzoServiziExtra = extraServices.reduce(
-      (acc, service) => acc + parseFloat(service.prezzo || 0),
+      (total, service) => total + parseFloat(service.prezzo || 0),
       0
     );
     return {
       prezzoStimato: ticket.prezzo_stimato,
-      prezzoServiziExtra: prezzoServiziExtra !== 0 ? prezzoServiziExtra.toFixed(2) : null,
-      prezzoTotale: prezzoTotale.toFixed(2),
+      acconto: ticket.acconto,
+      prezzoServiziExtra: prezzoServiziExtra || null,
+      prezzoTotale: prezzoTotale + prezzoServiziExtra,
+      prezzoDaSaldare: prezzoDaSaldare + prezzoServiziExtra,
     };
   };
 

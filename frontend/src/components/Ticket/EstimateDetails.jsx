@@ -20,9 +20,7 @@ const EstimateDetails = ({ ticketStatus, calculateTotal }) => {
         </Typography>
         {ticketStatus === "Attesa conferma preventivo" && (
           <>
-            <Typography variant="body2">
-              Acconto: {acconto} €
-            </Typography>
+            <Typography variant="body2">Acconto: {acconto} €</Typography>
             <Typography variant="body2">
               Prezzo finale: {prezzoTotale} €
             </Typography>
@@ -31,19 +29,18 @@ const EstimateDetails = ({ ticketStatus, calculateTotal }) => {
             </Typography>
           </>
         )}
-        {ticketStatus !== "Aperto" && ticketStatus !== "Attesa conferma preventivo" && (
-          <>
-            <Typography variant="body2">
-              Acconto: {acconto} €
-            </Typography>
-            <Typography variant="body2">
-              Prezzo finale: {prezzoTotale} €
-            </Typography>
-            <Typography variant="body2">
-              Prezzo da saldare: {prezzoDaSaldare} €
-            </Typography>
-          </>
-        )}
+        {ticketStatus !== "Aperto" &&
+          ticketStatus !== "Attesa conferma preventivo" && (
+            <>
+              <Typography variant="body2">Acconto: {acconto} €</Typography>
+              <Typography variant="body2">
+                Prezzo finale: {prezzoTotale} €
+              </Typography>
+              <Typography variant="body2">
+                Prezzo da saldare: {prezzoDaSaldare} €
+              </Typography>
+            </>
+          )}
       </Box>
     </Paper>
   );

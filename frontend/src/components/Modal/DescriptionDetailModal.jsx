@@ -38,7 +38,9 @@ const DescriptionDetailModal = ({ open, onClose, description }) => {
         {description ? (
           <Typography sx={{ mt: 2 }}>{description}</Typography>
         ) : (
-          <Typography sx={{ mt: 2 }}>Descrizione tecnica non disponibile</Typography>
+          <Typography sx={{ mt: 2 }}>
+            Descrizione tecnica non disponibile
+          </Typography>
         )}
       </Box>
     </Modal>

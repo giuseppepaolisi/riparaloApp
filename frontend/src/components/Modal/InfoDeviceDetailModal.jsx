@@ -38,7 +38,8 @@ const InfoDeviceDetailModal = ({ open, onClose, device }) => {
         {device ? (
           <>
             <Typography sx={{ mt: 2 }}>
-              <strong>Descrizione Problema:</strong> {device.descrizione_problema}
+              <strong>Descrizione Problema:</strong>{" "}
+              {device.descrizione_problema}
             </Typography>
             <Typography sx={{ mt: 1 }}>
               <strong>IMEI:</strong> {device.imei}

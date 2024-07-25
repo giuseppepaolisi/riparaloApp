@@ -25,7 +25,7 @@ const TicketActions = ({
             }}
           />
         );
-        
+
       case "Attesa conferma preventivo":
         return (
           <>

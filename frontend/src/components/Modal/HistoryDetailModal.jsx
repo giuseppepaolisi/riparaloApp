@@ -39,7 +39,8 @@ const HistoryDetailModal = ({ open, onClose, history }) => {
           <>
             {history.map((item, index) => (
               <Typography key={index} sx={{ mt: 2 }}>
-                {item.stato} - <strong>Data:</strong> {new Date(item.data).toLocaleDateString()}
+                {item.stato} - <strong>Data:</strong>{" "}
+                {new Date(item.data).toLocaleDateString()}
               </Typography>
             ))}
           </>

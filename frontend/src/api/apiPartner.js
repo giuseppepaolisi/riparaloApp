@@ -238,7 +238,7 @@ export const createTicket = async (token, ticketData) => {
   }
 };
 
-export const fetchTicketsByTechnician = async (token, tecnicoId) => {
+export const fetchTicketsByTechnician = async (token, email) => {
   try {
     const response = await fetch(`/api/tickets`, {
       method: "GET",
@@ -257,7 +257,7 @@ export const fetchTicketsByTechnician = async (token, tecnicoId) => {
       throw new Error("La risposta del server non è un array");
     }
     const filteredTickets = json.tickets.filter((ticket) =>
-      ticket.storico_stato.some((stato) => stato.tecnico === tecnicoId)
+      ticket.storico_stato.some((stato) => stato.tecnico === email)
     );
 
     return filteredTickets;
@@ -266,7 +266,8 @@ export const fetchTicketsByTechnician = async (token, tecnicoId) => {
   }
 };
 
-export const editTicket = async (token, { id, newstate }) => {
+
+/*export const editTicket = async (token, { id, newstate }) => {
   try {
     const response = await fetch(`/api/ticket`, {
       method: "PATCH",
@@ -287,7 +288,30 @@ export const editTicket = async (token, { id, newstate }) => {
   } catch (error) {
     throw new Error(error.message);
   }
+};*/
+export const editTicket = async (token, { id, newstate, technicianId, extraServices }) => {
+  try {
+    const response = await fetch(`/api/ticket`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, newstate, technicianId, extraServices }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Non è stato possibile modificare il ticket"
+      );
+    }
+    return data.newTicket;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
+
 
 export const downloadPDF = async (token, ticket) => {
   const response = await fetch(`/api/pdf/${ticket._id}`, {

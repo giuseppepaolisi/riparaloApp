@@ -15,7 +15,7 @@ import {
   editTicket,
   downloadPDF,
   viewPDF,
-  deleteTicket
+  deleteTicket,
 } from "../../api/apiPartner";
 import { useSelector } from "react-redux";
 import CustomerDetailModal from "../../components/Modal/CustomerDetailModal";
@@ -202,9 +202,7 @@ const EditTicketPartner = () => {
       />
       <HistoryDetailModal
         open={historyDetailModal.isOpen}
-        onClose={() =>
-          setHistoryDetailModal({ isOpen: false, history: null })
-        }
+        onClose={() => setHistoryDetailModal({ isOpen: false, history: null })}
         history={historyDetailModal.history}
       />
       <InfoDeviceDetailModal
@@ -214,7 +212,9 @@ const EditTicketPartner = () => {
       />
       <DescriptionDetailModal
         open={descriptionDetailModal.isOpen}
-        onClose={() => setDescriptionDetailModal({ isOpen: false, description: null })}
+        onClose={() =>
+          setDescriptionDetailModal({ isOpen: false, description: null })
+        }
         description={descriptionDetailModal.description}
       />
       <Box>

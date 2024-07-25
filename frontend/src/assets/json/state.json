@@ -9,7 +9,7 @@
   "Completato": "#34B302",
   "Annullato": "#B40000",
   "Attesa ricambio": "#EAF108",
-  "In consegna completato": "#003DB4",
-  "In consegna annullato": "#003DB4",
-  "In consegna rifiutato": "#003DB4"
+  "In consegna - completato": "#003DB4",
+  "In consegna - annullato": "#003DB4",
+  "In consegna - rifiutato": "#003DB4"
 }

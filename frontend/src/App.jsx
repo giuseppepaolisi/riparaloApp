@@ -113,7 +113,7 @@ const App = () => {
                   element={<AcceptedTickets />}
                 />
                 <Route
-                  path="/edit-ticket-technician"
+                  path="/edit-ticket-technician/:id"
                   element={<EdiTicketTechnician />}
                 />
               </Route>

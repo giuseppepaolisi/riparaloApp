@@ -175,22 +175,15 @@ const EditTicketTechnician = () => {
   };
 
   const calculateTotal = () => {
-    const prezzoStimato = ticket.prezzo_stimato;
+    const prezzoTotale = ticket.prezzo || ticket.prezzo_stimato;
     const prezzoServiziExtra = extraServices.reduce(
-      (total, service) => total + parseFloat(service.prezzo || 0),
+      (acc, service) => acc + parseFloat(service.prezzo || 0),
       0
     );
-    const prezzoTotale = prezzoStimato + prezzoServiziExtra;
-
     return {
       prezzoStimato: ticket.prezzo_stimato,
-      prezzoServiziExtra:
-        ticketStatus === "Aperto" ||
-        ticketStatus === "Accettato" ||
-        ticketStatus === "Ritirato"
-          ? null
-          : prezzoServiziExtra,
-      prezzoTotale: prezzoTotale,
+      prezzoServiziExtra: prezzoServiziExtra !== 0 ? prezzoServiziExtra.toFixed(2) : null,
+      prezzoTotale: prezzoTotale.toFixed(2),
     };
   };
 
@@ -321,7 +314,10 @@ const EditTicketTechnician = () => {
             />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TechnicianCostDetails calculateTotal={calculateTotal} ticketStatus={ticketStatus} />
+            <TechnicianCostDetails
+              ticketStatus={ticketStatus}
+              calculateTotal={calculateTotal}
+            />
           </Grid>
         </Grid>
 

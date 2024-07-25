@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import { Box, Typography, Paper } from "@mui/material";
 
-const TechnicianCostDetails = ({ calculateTotal }) => {
+const TechnicianCostDetails = ({ calculateTotal, ticketStatus }) => {
   const { prezzoStimato, prezzoServiziExtra, prezzoTotale } = calculateTotal();
+
+  const isTotalVisible = !["Aperto", "Accettato", "Ritirato"].includes(ticketStatus);
 
   return (
     <Paper sx={{ padding: 2, boxShadow: 3 }}>
@@ -13,12 +15,14 @@ const TechnicianCostDetails = ({ calculateTotal }) => {
         <Typography variant="body2" sx={{ mt: 2 }}>
           Prezzo stimato: {prezzoStimato} €
         </Typography>
-        {prezzoServiziExtra !== null && (
+        {isTotalVisible && prezzoServiziExtra !== null && (
           <Typography variant="body2">
             Prezzo servizi extra: {prezzoServiziExtra} €
           </Typography>
         )}
-        <Typography variant="body2">Prezzo totale: {prezzoTotale} €</Typography>
+        {isTotalVisible && (
+          <Typography variant="body2">Prezzo totale: {prezzoTotale} €</Typography>
+        )}
       </Box>
     </Paper>
   );
@@ -26,6 +30,7 @@ const TechnicianCostDetails = ({ calculateTotal }) => {
 
 TechnicianCostDetails.propTypes = {
   calculateTotal: PropTypes.func.isRequired,
+  ticketStatus: PropTypes.string.isRequired,
 };
 
 export default TechnicianCostDetails;

@@ -403,7 +403,7 @@ const CreateTicket = () => {
                   ))
                 )}
                 <Typography variant="h6" gutterBottom>
-                  Totale stimato: {totalPrice}€
+                  Totale stimato: {totalPrice.toFixed(2)}€
                 </Typography>
                 <TextField
                   id="acconto"
@@ -412,7 +412,7 @@ const CreateTicket = () => {
                   value={fields.acconto}
                   onChange={(e) => setField("acconto")(e.target.value)}
                   required
-                  inputProps={{ min: 0, step: "0.01" }}
+                  inputProps={{ min: 0, step: "0.5" }}
                   onKeyPress={handleKeyPress}
                   fullWidth
                   margin="normal"

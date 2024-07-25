@@ -2,12 +2,7 @@ import PropTypes from "prop-types";
 import { Box, Typography, Paper } from "@mui/material";
 
 const EstimateDetails = ({ ticketStatus, calculateTotal }) => {
-  const {
-    prezzoStimato,
-    acconto,
-    prezzoTotale,
-    prezzoDaSaldare,
-  } = calculateTotal();
+  const { prezzoStimato, acconto, prezzoTotale, prezzoDaSaldare } = calculateTotal();
 
   return (
     <Paper sx={{ padding: 2, boxShadow: 3 }}>
@@ -18,29 +13,16 @@ const EstimateDetails = ({ ticketStatus, calculateTotal }) => {
         <Typography variant="body2" sx={{ mt: 2 }}>
           Prezzo stimato: {prezzoStimato} €
         </Typography>
-        {ticketStatus === "Attesa conferma preventivo" && (
+        <Typography variant="body2">Acconto: {acconto} €</Typography>
+        {ticketStatus !== "Aperto" &&
+          ticketStatus !== "Accettato" &&
+          ticketStatus !== "Ritirato" &&
+          ticketStatus !== "In lavorazione" && (
           <>
-            <Typography variant="body2">Acconto: {acconto} €</Typography>
-            <Typography variant="body2">
-              Prezzo finale: {prezzoTotale} €
-            </Typography>
-            <Typography variant="body2">
-              Prezzo da saldare: {prezzoDaSaldare} €
-            </Typography>
+            <Typography variant="body2">Prezzo finale: {prezzoTotale} €</Typography>
+            <Typography variant="body2">Prezzo da saldare: {prezzoDaSaldare} €</Typography>
           </>
         )}
-        {ticketStatus !== "Aperto" &&
-          ticketStatus !== "Attesa conferma preventivo" && (
-            <>
-              <Typography variant="body2">Acconto: {acconto} €</Typography>
-              <Typography variant="body2">
-                Prezzo finale: {prezzoTotale} €
-              </Typography>
-              <Typography variant="body2">
-                Prezzo da saldare: {prezzoDaSaldare} €
-              </Typography>
-            </>
-          )}
       </Box>
     </Paper>
   );

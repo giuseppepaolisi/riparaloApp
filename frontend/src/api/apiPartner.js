@@ -238,7 +238,7 @@ export const createTicket = async (token, ticketData) => {
   }
 };
 
-export const fetchTicketsByTechnician = async (token, tecnicoId) => {
+export const fetchTicketsByTechnician = async (token, email) => {
   try {
     const response = await fetch(`/api/tickets`, {
       method: "GET",
@@ -257,11 +257,102 @@ export const fetchTicketsByTechnician = async (token, tecnicoId) => {
       throw new Error("La risposta del server non è un array");
     }
     const filteredTickets = json.tickets.filter((ticket) =>
-      ticket.storico_stato.some((stato) => stato.tecnico === tecnicoId)
+      ticket.storico_stato.some((stato) => stato.tecnico === email)
     );
 
     return filteredTickets;
   } catch (error) {
     throw new Error(error.message);
+  }
+};
+
+/*export const editTicket = async (token, { id, newstate }) => {
+  try {
+    const response = await fetch(`/api/ticket`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, newstate }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Non è stato possibile modificare il ticket"
+      );
+    }
+    return data.newTicket;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};*/
+export const editTicket = async (
+  token,
+  { id, newstate, technicianId, extraServices }
+) => {
+  try {
+    const response = await fetch(`/api/ticket`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id, newstate, technicianId, extraServices }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Non è stato possibile modificare il ticket"
+      );
+    }
+    return data.newTicket;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const downloadPDF = async (token, ticket) => {
+  const response = await fetch(`/api/pdf/${ticket._id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Errore nel download del PDF");
+  }
+
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${ticket._id}-ticket.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
+
+export const viewPDF = async (token, ticketId) => {
+  try {
+    const response = await fetch(`/api/pdf/${ticketId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore nella visualizzazione del PDF");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  } catch (error) {
+    console.error("Errore nella visualizzazione del PDF:", error);
   }
 };

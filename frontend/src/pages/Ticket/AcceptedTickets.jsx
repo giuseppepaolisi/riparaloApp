@@ -86,7 +86,7 @@ const AcceptedTickets = () => {
   return (
     <React.Fragment>
       <TicketDashboard
-        fetchTickets={() => fetchTicketsByTechnician(token, user._id)}
+        fetchTickets={() => fetchTicketsByTechnician(token, user.email)}
         columns={columns}
         searchFields={[
           "_id",
@@ -101,6 +101,7 @@ const AcceptedTickets = () => {
         alignSearchWithFilters={true}
         onDetail={handleDetail}
         showDeleteButton={false}
+        editTicketLink="/edit-ticket-technician" // Provide the edit link for technician
       />
       <TicketDetailModal
         open={isDetailModalOpen}

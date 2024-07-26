@@ -80,6 +80,7 @@ const App = () => {
                 <Route path="/modifica-modello/:id" element={<EditDevice />} />
                 <Route path="/partner" element={<Partners />} />
                 <Route path="/tecnici" element={<Technicians />} />
+                <Route path="/edit-ticket-technician/:id" element={<EdiTicketTechnician />} />
               </Route>
 
               {/* Partner Routes */}
@@ -97,7 +98,7 @@ const App = () => {
                   element={<EditCustomer />}
                 />
                 <Route
-                  path="/edit-ticket-partner"
+                  path="/edit-ticket-partner/:id"
                   element={<EdiTicketPartner />}
                 />
               </Route>
@@ -113,7 +114,7 @@ const App = () => {
                   element={<AcceptedTickets />}
                 />
                 <Route
-                  path="/edit-ticket-technician"
+                  path="/edit-ticket-technician/:id"
                   element={<EdiTicketTechnician />}
                 />
               </Route>

@@ -1,89 +1,114 @@
 import PropTypes from "prop-types";
-import {
-  Box,
-  Typography,
-  TextField,
-  MenuItem,
-  IconButton,
-  Paper,
-} from "@mui/material";
+import { Grid, TextField, IconButton, Typography, Box } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 
 const ExtraServices = ({
   extraServices,
-  onAddService,
-  onRemoveService,
-  onServiceChange,
-  isServiceFilled,
-}) => {
-  return (
-    <Paper sx={{ padding: 2, boxShadow: 3, mt: 2 }}>
-      <Typography variant="h6" gutterBottom>
-        AGGIUNGI SERVIZI EXTRA
-      </Typography>
-      <Box sx={{ border: "1px solid #000", padding: 2 }}>
-        {extraServices.map((service, index) => (
-          <Box
-            key={index}
-            sx={{ display: "flex", alignItems: "center", mb: 1 }}
+  setExtraServices,
+  serviceName,
+  setServiceName,
+  servicePrice,
+  setServicePrice,
+  handleAddExtraService,
+  handleRemoveExtraService
+}) => (
+  <Box mt={3}>
+    <Typography variant="h6" gutterBottom>
+      AGGIUNGI SERVIZI EXTRA
+    </Typography>
+    {extraServices.map((service, index) => (
+      <Grid container spacing={2} key={index} alignItems="center">
+        <Grid item xs={5}>
+          <TextField
+            label="Servizio"
+            value={service.nome}
+            onChange={(e) =>
+              setExtraServices((prev) =>
+                prev.map((s, i) =>
+                  i === index ? { ...s, nome: e.target.value } : s
+                )
+              )
+            }
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={5}>
+          <TextField
+            label="Prezzo"
+            type="number"
+            value={service.prezzo}
+            onChange={(e) =>
+              setExtraServices((prev) =>
+                prev.map((s, i) =>
+                  i === index ? { ...s, prezzo: parseFloat(e.target.value) } : s
+                )
+              )
+            }
+            fullWidth
+            margin="normal"
+          />
+        </Grid>
+        <Grid item xs={2} sx={{ display: "flex", justifyContent: "center" }}>
+          <IconButton
+            color="error"
+            onClick={() => handleRemoveExtraService(index)}
+            size="small"
           >
-            <TextField
-              select
-              label="Servizio"
-              name="service"
-              value={service.service}
-              onChange={(event) => onServiceChange(index, event)}
-              sx={{ width: "45%" }}
-            >
-              <MenuItem value="Tasto volume up">Tasto volume up</MenuItem>
-              <MenuItem value="Altoparlante">Altoparlante</MenuItem>
-            </TextField>
-            <TextField
-              label="Prezzo"
-              name="price"
-              value={service.price}
-              onChange={(event) => onServiceChange(index, event)}
-              sx={{ width: "20%", ml: 1 }}
-            />
-            {isServiceFilled(service) && (
-              <>
-                <IconButton
-                  color="primary"
-                  onClick={onAddService}
-                  sx={{ ml: 1 }}
-                >
-                  <AddIcon />
-                </IconButton>
-                {extraServices.length > 1 && (
-                  <IconButton
-                    color="secondary"
-                    onClick={() => onRemoveService(index)}
-                    sx={{ ml: 1 }}
-                  >
-                    <RemoveIcon />
-                  </IconButton>
-                )}
-              </>
-            )}
-          </Box>
-        ))}
-      </Box>
-    </Paper>
-  );
-};
+            <CloseIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+    ))}
+    <Grid container spacing={2}>
+      <Grid item xs={5}>
+        <TextField
+          label="Servizio"
+          value={serviceName}
+          onChange={(e) => setServiceName(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+      </Grid>
+      <Grid item xs={5}>
+        <TextField
+          label="Prezzo"
+          type="number"
+          value={servicePrice}
+          onChange={(e) => setServicePrice(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+      </Grid>
+      <Grid item xs={2} sx={{ display: "flex", justifyContent: "center" }}>
+        <IconButton
+          color="primary"
+          onClick={handleAddExtraService}
+          size="small"
+        >
+          <AddIcon />
+        </IconButton>
+      </Grid>
+    </Grid>
+  </Box>
+);
 
 ExtraServices.propTypes = {
   extraServices: PropTypes.arrayOf(
     PropTypes.shape({
-      service: PropTypes.string,
-      price: PropTypes.string,
+      nome: PropTypes.string.isRequired,
+      prezzo: PropTypes.number.isRequired,
     })
   ).isRequired,
-  onAddService: PropTypes.func.isRequired,
-  onRemoveService: PropTypes.func.isRequired,
-  onServiceChange: PropTypes.func.isRequired,
-  isServiceFilled: PropTypes.func.isRequired,
+  setExtraServices: PropTypes.func.isRequired,
+  serviceName: PropTypes.string.isRequired,
+  setServiceName: PropTypes.func.isRequired,
+  servicePrice: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
+  setServicePrice: PropTypes.func.isRequired,
+  handleAddExtraService: PropTypes.func.isRequired,
+  handleRemoveExtraService: PropTypes.func.isRequired,
 };
 
 export default ExtraServices;

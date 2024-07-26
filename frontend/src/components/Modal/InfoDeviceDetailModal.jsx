@@ -23,33 +23,32 @@ const headerStyle = css`
   align-items: center;
 `;
 
-const CustomerDetailModal = ({ open, onClose, customer }) => {
+const InfoDeviceDetailModal = ({ open, onClose, device }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Box css={modalStyle}>
         <div css={headerStyle}>
           <Typography variant="h6" component="h2">
-            Dettagli del Cliente
+            Dettagli Dispositivo
           </Typography>
           <IconButton onClick={onClose}>
             <CloseIcon />
           </IconButton>
         </div>
-        {customer ? (
+        {device ? (
           <>
             <Typography sx={{ mt: 2 }}>
-              <strong>Nome:</strong> {customer.nome}
+              <strong>Descrizione Problema:</strong>{" "}
+              {device.descrizione_problema}
             </Typography>
             <Typography sx={{ mt: 1 }}>
-              <strong>Cognome:</strong> {customer.cognome}
+              <strong>IMEI:</strong> {device.imei}
             </Typography>
-            {customer.email && (
-              <Typography sx={{ mt: 1 }}>
-                <strong>Email:</strong> {customer.email}
-              </Typography>
-            )}
             <Typography sx={{ mt: 1 }}>
-              <strong>Telefono:</strong> {customer.telefono}
+              <strong>PIN:</strong> {device.pin}
+            </Typography>
+            <Typography sx={{ mt: 1 }}>
+              <strong>Seriale:</strong> {device.seriale}
             </Typography>
           </>
         ) : (
@@ -60,15 +59,15 @@ const CustomerDetailModal = ({ open, onClose, customer }) => {
   );
 };
 
-CustomerDetailModal.propTypes = {
+InfoDeviceDetailModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  customer: PropTypes.shape({
-    nome: PropTypes.string.isRequired,
-    cognome: PropTypes.string.isRequired,
-    email: PropTypes.string, // Non required
-    telefono: PropTypes.string.isRequired,
+  device: PropTypes.shape({
+    descrizione_problema: PropTypes.string.isRequired,
+    imei: PropTypes.string.isRequired,
+    pin: PropTypes.string.isRequired,
+    seriale: PropTypes.string.isRequired,
   }),
 };
 
-export default CustomerDetailModal;
+export default InfoDeviceDetailModal;

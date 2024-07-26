@@ -266,7 +266,6 @@ export const fetchTicketsByTechnician = async (token, email) => {
   }
 };
 
-
 /*export const editTicket = async (token, { id, newstate }) => {
   try {
     const response = await fetch(`/api/ticket`, {
@@ -289,7 +288,10 @@ export const fetchTicketsByTechnician = async (token, email) => {
     throw new Error(error.message);
   }
 };*/
-export const editTicket = async (token, { id, newstate, technicianId, extraServices }) => {
+export const editTicket = async (
+  token,
+  { id, newstate, technicianId, extraServices }
+) => {
   try {
     const response = await fetch(`/api/ticket`, {
       method: "PATCH",
@@ -311,7 +313,6 @@ export const editTicket = async (token, { id, newstate, technicianId, extraServi
     throw new Error(error.message);
   }
 };
-
 
 export const downloadPDF = async (token, ticket) => {
   const response = await fetch(`/api/pdf/${ticket._id}`, {

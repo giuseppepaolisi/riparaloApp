@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { Box, Grid, Typography, IconButton, Chip, Button, TextField } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  IconButton,
+  Chip,
+  Button,
+  TextField,
+} from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import PrintIcon from "@mui/icons-material/Print";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -194,7 +202,10 @@ const EditTicketTechnician = () => {
 
   const handleAddExtraService = () => {
     if (serviceName && servicePrice) {
-      setExtraServices([...extraServices, { nome: serviceName, prezzo: servicePrice }]);
+      setExtraServices([
+        ...extraServices,
+        { nome: serviceName, prezzo: servicePrice },
+      ]);
       setServiceName("");
       setServicePrice("");
     }

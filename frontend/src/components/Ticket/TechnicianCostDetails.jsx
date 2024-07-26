@@ -4,7 +4,9 @@ import { Box, Typography, Paper } from "@mui/material";
 const TechnicianCostDetails = ({ calculateTotal, ticketStatus }) => {
   const { prezzoStimato, prezzoServiziExtra, prezzoTotale } = calculateTotal();
 
-  const isTotalVisible = !["Aperto", "Accettato", "Ritirato"].includes(ticketStatus);
+  const isTotalVisible = !["Aperto", "Accettato", "Ritirato"].includes(
+    ticketStatus
+  );
 
   return (
     <Paper sx={{ padding: 2, boxShadow: 3 }}>
@@ -21,7 +23,9 @@ const TechnicianCostDetails = ({ calculateTotal, ticketStatus }) => {
           </Typography>
         )}
         {isTotalVisible && (
-          <Typography variant="body2">Prezzo totale: {prezzoTotale} €</Typography>
+          <Typography variant="body2">
+            Prezzo totale: {prezzoTotale} €
+          </Typography>
         )}
       </Box>
     </Paper>

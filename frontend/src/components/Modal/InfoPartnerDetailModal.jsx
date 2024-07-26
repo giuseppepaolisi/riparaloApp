@@ -43,7 +43,8 @@ const InfoPartnerDetailModal = ({ open, onClose, partner }) => {
               <strong>Telefono:</strong> {partner.telefono_partner || "N/A"}
             </Typography>
             <Typography variant="body1">
-              <strong>Ragione Sociale:</strong> {partner.ragione_sociale || "N/A"}
+              <strong>Ragione Sociale:</strong>{" "}
+              {partner.ragione_sociale || "N/A"}
             </Typography>
             <Typography variant="body1">
               <strong>Partita IVA:</strong> {partner.partita_iva || "N/A"}

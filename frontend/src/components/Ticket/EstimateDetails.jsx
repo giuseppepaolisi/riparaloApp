@@ -2,7 +2,12 @@ import PropTypes from "prop-types";
 import { Box, Typography, Paper } from "@mui/material";
 
 const EstimateDetails = ({ ticketStatus, calculateTotal }) => {
-  const { prezzoStimato, acconto, prezzoTotale, prezzoDaSaldare } = calculateTotal();
+  const {
+    prezzoStimato,
+    acconto,
+    prezzoTotale,
+    prezzoDaSaldare,
+  } = calculateTotal();
 
   return (
     <Paper sx={{ padding: 2, boxShadow: 3 }}>
@@ -18,11 +23,15 @@ const EstimateDetails = ({ ticketStatus, calculateTotal }) => {
           ticketStatus !== "Accettato" &&
           ticketStatus !== "Ritirato" &&
           ticketStatus !== "In lavorazione" && (
-          <>
-            <Typography variant="body2">Prezzo finale: {prezzoTotale} €</Typography>
-            <Typography variant="body2">Prezzo da saldare: {prezzoDaSaldare} €</Typography>
-          </>
-        )}
+            <>
+              <Typography variant="body2">
+                Prezzo finale: {prezzoTotale} €
+              </Typography>
+              <Typography variant="body2">
+                Prezzo da saldare: {prezzoDaSaldare} €
+              </Typography>
+            </>
+          )}
       </Box>
     </Paper>
   );

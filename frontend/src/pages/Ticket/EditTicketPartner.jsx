@@ -170,8 +170,8 @@ const EditTicketPartner = () => {
     return {
       prezzoStimato: ticket.prezzo_stimato,
       acconto: ticket.acconto,
-      prezzoTotale: prezzoTotale,
-      prezzoDaSaldare: prezzoDaSaldare,
+      prezzoTotale: prezzoTotale.toFixed(2),
+      prezzoDaSaldare: prezzoDaSaldare.toFixed(2),
     };
   };
 
@@ -189,7 +189,10 @@ const EditTicketPartner = () => {
         deleteModalOpen={deleteModalOpen}
         modalMessage={modalMessage}
         onConfirm={handleConfirm}
-        onCancel={() => setModalOpen(false)}
+        onCancel={() => {
+          setModalOpen(false);
+          setDeleteModalOpen(false);
+        }}
         onDelete={handleDelete}
         confirmButtonColor="error" // Imposta il colore del pulsante di conferma su rosso
       />

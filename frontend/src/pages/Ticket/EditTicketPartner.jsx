@@ -1,13 +1,6 @@
 // EditTicketPartner.jsx
 import { useState } from "react";
-import {
-  Box,
-  Grid,
-  Typography,
-  IconButton,
-  Chip,
-  Button,
-} from "@mui/material";
+import { Box, Grid, Typography, IconButton, Chip, Button } from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import usePageTitle from "../../CustomHooks/usePageTitle";

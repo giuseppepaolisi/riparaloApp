@@ -7,7 +7,7 @@ import {
   Chip,
   Button,
   TextField,
-  Paper
+  Paper,
 } from "@mui/material";
 import PrintIcon from "@mui/icons-material/Print";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -185,7 +185,10 @@ const EditTicketTechnician = () => {
           <Grid item xs={12} md={6}>
             <TicketDetails
               ticketInfo={[
-                { label: "Samsung Galaxy s10", type: "INFORMAZIONI DISPOSITIVO" },
+                {
+                  label: "Samsung Galaxy s10",
+                  type: "INFORMAZIONI DISPOSITIVO",
+                },
                 { label: "INFORMAZIONI PARTNER", type: "INFORMAZIONI PARTNER" },
                 { label: "STORICO TICKET", type: "STORICO TICKET" },
               ]}
@@ -203,7 +206,12 @@ const EditTicketTechnician = () => {
                 AGGIUNGI DESCRIZIONE TECNICA
               </Typography>
               <Box sx={{ padding: 2 }}>
-                <TextField label="Inserisci la descrizione prima di cambiare lo stato" multiline rows={4} fullWidth />
+                <TextField
+                  label="Inserisci la descrizione prima di cambiare lo stato"
+                  multiline
+                  rows={4}
+                  fullWidth
+                />
               </Box>
             </Paper>
           </Grid>

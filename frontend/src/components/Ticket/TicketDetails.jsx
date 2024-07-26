@@ -10,15 +10,17 @@ const TicketDetails = ({ ticketInfo, onInfoClick }) => {
       </Typography>
       <Box sx={{ border: "1px solid", padding: 1 }}>
         {ticketInfo.map((info) => (
-          <Typography
-            key={info.label}
-            variant="body1"
-            gutterBottom
-            sx={{ display: "flex", alignItems: "center" }}
-          >
-            {info.label}
-            <DetailButton onClick={() => onInfoClick(info.type)} />
-          </Typography>
+          (info.condition === undefined || info.condition) && (
+            <Typography
+              key={info.label}
+              variant="body1"
+              gutterBottom
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              {info.label}
+              <DetailButton onClick={() => onInfoClick(info.type)} />
+            </Typography>
+          )
         ))}
       </Box>
     </Paper>
@@ -30,6 +32,7 @@ TicketDetails.propTypes = {
     PropTypes.shape({
       label: PropTypes.string,
       type: PropTypes.string,
+      condition: PropTypes.bool,
     })
   ).isRequired,
   onInfoClick: PropTypes.func.isRequired,

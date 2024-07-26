@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { Box, Typography, Paper } from "@mui/material";
 
 const TechnicianCostDetails = ({ calculateTotal, ticketStatus }) => {
-  const { prezzoStimato, prezzoServiziExtra, prezzoTotale } = calculateTotal();
+  const { prezzoStimato, prezzoServiziExtra, prezzo } = calculateTotal();
 
   const isTotalVisible = !["Aperto", "Accettato", "Ritirato"].includes(
     ticketStatus
@@ -24,7 +24,7 @@ const TechnicianCostDetails = ({ calculateTotal, ticketStatus }) => {
         )}
         {isTotalVisible && (
           <Typography variant="body2">
-            Prezzo totale: {prezzoTotale} €
+            Prezzo totale: {prezzo} €
           </Typography>
         )}
       </Box>

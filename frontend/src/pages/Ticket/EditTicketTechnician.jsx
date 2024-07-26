@@ -188,7 +188,7 @@ const EditTicketTechnician = () => {
       prezzoStimato: ticket.prezzo_stimato,
       acconto: ticket.acconto,
       prezzoServiziExtra: prezzoServiziExtra || null,
-      prezzoTotale: prezzoTotale,
+      prezzo: ticket.prezzo,
       prezzoDaSaldare: prezzoDaSaldare,
     };
   };
@@ -208,6 +208,18 @@ const EditTicketTechnician = () => {
     setExtraServices(extraServices.filter((_, i) => i !== index));
   };
 
+  const isTechnicalDescriptionVisible = [
+    "Attesa conferma preventivo",
+    "Preventivo accettato",
+    "Preventivo rifiutato",
+    "Completato",
+    "Annullato",
+    "Attesa ricambio",
+    "In consegna - completato",
+    "In consegna - annullato",
+    "In consegna - rifiutato",
+  ].includes(ticketStatus);
+
   return (
     <Box
       sx={{
@@ -223,7 +235,7 @@ const EditTicketTechnician = () => {
         modalMessage={modalMessage}
         onConfirm={handleConfirm}
         onCancel={() => setModalOpen(false)}
-        onDelete={() => {}} // You can remove this prop if not used
+        onDelete={() => {}}
       />
       <DetailModals
         partnerDetailModal={partnerDetailModal}
@@ -300,7 +312,7 @@ const EditTicketTechnician = () => {
                 {
                   label: "LEGGI DESCRIZIONE TECNICA",
                   type: "DESCRIZIONE",
-                  condition: ticket.stato === "Attesa conferma preventivo",
+                  condition: isTechnicalDescriptionVisible,
                 },
               ]}
               onInfoClick={handleInfoClick}

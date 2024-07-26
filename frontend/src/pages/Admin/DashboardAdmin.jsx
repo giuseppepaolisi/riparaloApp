@@ -94,7 +94,7 @@ const DashboardAdmin = () => {
         onDetail={handleDetail}
         showDeleteButton={false}
         showEditButton={true}
-        editTicketLink="/edit-ticket-technician"
+        editTicketLink="/edit-ticket-admin"
       />
       <TicketDetailModal
         open={isDetailModalOpen}

@@ -266,31 +266,9 @@ export const fetchTicketsByTechnician = async (token, email) => {
   }
 };
 
-/*export const editTicket = async (token, { id, newstate }) => {
-  try {
-    const response = await fetch(`/api/ticket`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, newstate }),
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Non è stato possibile modificare il ticket"
-      );
-    }
-    return data.newTicket;
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};*/
 export const editTicket = async (
   token,
-  { id, newstate, technicianId, extraServices, descrizione_tecnica, prezzo  }
+  { id, newstate, technicianId, extraServices, descrizione_tecnica, prezzo }
 ) => {
   try {
     const response = await fetch(`/api/ticket`, {
@@ -299,7 +277,14 @@ export const editTicket = async (
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id, newstate, technicianId, extraServices, descrizione_tecnica, prezzo }),
+      body: JSON.stringify({
+        id,
+        newstate,
+        technicianId,
+        extraServices,
+        descrizione_tecnica,
+        prezzo,
+      }),
     });
 
     const data = await response.json();

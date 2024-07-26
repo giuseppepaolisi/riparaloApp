@@ -32,6 +32,7 @@ import DescriptionDetailModal from "../../components/Modal/DescriptionDetailModa
 import CustomAlert from "../../components/Alert/CustomAlert";
 import TicketDetails from "../../components/Ticket/TicketDetails";
 import RequestedServices from "../../components/Ticket/RequestedServices";
+import CloseIcon from "@mui/icons-material/Close";
 
 const EditTicketTechnician = () => {
   usePageTitle("Dettagli Ticket Tecnico");
@@ -66,6 +67,7 @@ const EditTicketTechnician = () => {
   const [extraServices, setExtraServices] = useState([]);
   const [serviceName, setServiceName] = useState("");
   const [servicePrice, setServicePrice] = useState("");
+  const [technicalDescription, setTechnicalDescription] = useState("");
 
   useEffect(() => {
     const loadTicket = async () => {
@@ -73,6 +75,7 @@ const EditTicketTechnician = () => {
         const data = await fetchTicketById(token, id);
         setTicket(data);
         setExtraServices(data.extraServices || []);
+        setTechnicalDescription(data.descrizione_tecnica || "");
       } catch (error) {
         console.error("Errore nel caricamento del ticket:", error);
       }
@@ -112,11 +115,23 @@ const EditTicketTechnician = () => {
 
   const handleStatusChange = async (newStatus) => {
     try {
+      const descriptionText = extraServices
+        .map((service) => `${service.nome} ${service.prezzo} €`)
+        .join("; ");
       const updatedTicket = await editTicket(token, {
         id: ticket._id,
         newstate: newStatus,
         technicianId: newStatus === "Accettato" ? user._id : undefined,
         extraServices: extraServices,
+        descrizione_tecnica:
+          technicalDescription +
+          (descriptionText ? "\n" + descriptionText : ""),
+        prezzo:
+          ticket.prezzo_stimato +
+          extraServices.reduce(
+            (total, service) => total + parseFloat(service.prezzo || 0),
+            0
+          ),
       });
       setTicket(updatedTicket);
       console.log(`Changed status to ${newStatus}`);
@@ -163,7 +178,7 @@ const EditTicketTechnician = () => {
     } else if (infoType === "DESCRIZIONE") {
       setDescriptionDetailModal({
         isOpen: true,
-        description: ticket.descrizione_tecnica,
+        description: technicalDescription,
       });
     }
   };
@@ -185,7 +200,12 @@ const EditTicketTechnician = () => {
   };
 
   const calculateTotal = () => {
-    const prezzoTotale = ticket.prezzo || ticket.prezzo_stimato;
+    const prezzoTotale =
+      ticket.prezzo_stimato +
+      extraServices.reduce(
+        (total, service) => total + parseFloat(service.prezzo || 0),
+        0
+      );
     const prezzoDaSaldare = prezzoTotale - ticket.acconto;
     const prezzoServiziExtra = extraServices.reduce(
       (total, service) => total + parseFloat(service.prezzo || 0),
@@ -195,8 +215,8 @@ const EditTicketTechnician = () => {
       prezzoStimato: ticket.prezzo_stimato,
       acconto: ticket.acconto,
       prezzoServiziExtra: prezzoServiziExtra || null,
-      prezzoTotale: prezzoTotale + prezzoServiziExtra,
-      prezzoDaSaldare: prezzoDaSaldare + prezzoServiziExtra,
+      prezzoTotale: prezzoTotale,
+      prezzoDaSaldare: prezzoDaSaldare,
     };
   };
 
@@ -204,16 +224,16 @@ const EditTicketTechnician = () => {
     if (serviceName && servicePrice) {
       setExtraServices([
         ...extraServices,
-        { nome: serviceName, prezzo: servicePrice },
+        { nome: serviceName, prezzo: parseFloat(servicePrice) },
       ]);
       setServiceName("");
       setServicePrice("");
     }
   };
 
-  const descriptionText = extraServices
-    .map((service) => `${service.nome} ${service.prezzo}`)
-    .join("; ");
+  const handleRemoveExtraService = (index) => {
+    setExtraServices(extraServices.filter((_, i) => i !== index));
+  };
 
   return (
     <Box
@@ -253,7 +273,7 @@ const EditTicketTechnician = () => {
         onClose={() =>
           setDescriptionDetailModal({ isOpen: false, description: null })
         }
-        description={descriptionText}
+        description={technicalDescription}
       />
       <Box>
         <Typography variant="h6" gutterBottom>
@@ -339,8 +359,55 @@ const EditTicketTechnician = () => {
             <Typography variant="h6" gutterBottom>
               AGGIUNGI SERVIZI EXTRA
             </Typography>
+            {extraServices.map((service, index) => (
+              <Grid container spacing={2} key={index} alignItems="center">
+                <Grid item xs={5}>
+                  <TextField
+                    label="Servizio"
+                    value={service.nome}
+                    onChange={(e) =>
+                      setExtraServices((prev) =>
+                        prev.map((s, i) =>
+                          i === index
+                            ? { ...s, nome: e.target.value }
+                            : s
+                        )
+                      )
+                    }
+                    fullWidth
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={5}>
+                  <TextField
+                    label="Prezzo"
+                    type="number"
+                    value={service.prezzo}
+                    onChange={(e) =>
+                      setExtraServices((prev) =>
+                        prev.map((s, i) =>
+                          i === index
+                            ? { ...s, prezzo: parseFloat(e.target.value) }
+                            : s
+                        )
+                      )
+                    }
+                    fullWidth
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <IconButton
+                    color="error"
+                    onClick={() => handleRemoveExtraService(index)}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            ))}
             <Grid container spacing={2}>
-              <Grid item xs={8}>
+              <Grid item xs={5}>
                 <TextField
                   label="Servizio"
                   value={serviceName}
@@ -349,7 +416,7 @@ const EditTicketTechnician = () => {
                   margin="normal"
                 />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={5}>
                 <TextField
                   label="Prezzo"
                   type="number"
@@ -359,13 +426,15 @@ const EditTicketTechnician = () => {
                   margin="normal"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={2}>
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={handleAddExtraService}
+                  fullWidth
+                  sx={{ height: "100%" }}
                 >
-                  Aggiungi Servizio
+                  +
                 </Button>
               </Grid>
             </Grid>
@@ -380,14 +449,12 @@ const EditTicketTechnician = () => {
                 DESCRIZIONE TECNICA
               </Typography>
               <TextField
-                value={descriptionText}
+                value={technicalDescription}
+                onChange={(e) => setTechnicalDescription(e.target.value)}
                 fullWidth
                 multiline
-                rows={4}
+                rows={2}
                 margin="normal"
-                InputProps={{
-                  readOnly: true,
-                }}
               />
             </Box>
           )}

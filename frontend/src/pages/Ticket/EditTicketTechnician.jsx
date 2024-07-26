@@ -22,17 +22,13 @@ import {
   editTicket,
   downloadPDF,
   viewPDF,
-  deleteTicket,
 } from "../../api/apiPartner";
 import { useSelector } from "react-redux";
-import InfoPartnerDetailModal from "../../components/Modal/InfoPartnerDetailModal";
-import HistoryDetailModal from "../../components/Modal/HistoryDetailModal";
-import InfoDeviceDetailModal from "../../components/Modal/InfoDeviceDetailModal";
-import DescriptionDetailModal from "../../components/Modal/DescriptionDetailModal";
+import DetailModals from "../../components/Modal/DetailModals";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import TicketDetails from "../../components/Ticket/TicketDetails";
 import RequestedServices from "../../components/Ticket/RequestedServices";
-import CloseIcon from "@mui/icons-material/Close";
+import ExtraServices from "../../components/Ticket/ExtraServices";
 
 const EditTicketTechnician = () => {
   usePageTitle("Dettagli Ticket Tecnico");
@@ -43,7 +39,6 @@ const EditTicketTechnician = () => {
   const { token, user } = useSelector((state) => state.auth);
   const [ticket, setTicket] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [currentAction, setCurrentAction] = useState(null);
   const [partnerDetailModal, setPartnerDetailModal] = useState({
@@ -90,28 +85,6 @@ const EditTicketTechnician = () => {
 
   const ticketStatus = ticket.stato;
   const statusColor = stateColors[ticketStatus] || "#FFFFFF";
-
-  const handleDelete = async () => {
-    try {
-      await deleteTicket(token, ticket._id);
-      setAlert({
-        open: true,
-        msg: "Ticket eliminato con successo!",
-        severity: "success",
-      });
-      setDeleteModalOpen(false);
-      setTimeout(() => {
-        navigate(-1);
-      }, 1500); // Aggiungi un ritardo di 1,5 secondi
-    } catch (error) {
-      console.error("Errore nell'eliminazione del ticket:", error);
-      setAlert({
-        open: true,
-        msg: "Errore nell'eliminazione del ticket",
-        severity: "error",
-      });
-    }
-  };
 
   const handleStatusChange = async (newStatus) => {
     try {
@@ -246,34 +219,22 @@ const EditTicketTechnician = () => {
     >
       <Modals
         modalOpen={modalOpen}
-        deleteModalOpen={deleteModalOpen}
+        deleteModalOpen={false}
         modalMessage={modalMessage}
         onConfirm={handleConfirm}
         onCancel={() => setModalOpen(false)}
-        onDelete={handleDelete}
-        confirmButtonColor="error" // Imposta il colore del pulsante di conferma su rosso
+        onDelete={() => {}} // You can remove this prop if not used
       />
-      <InfoPartnerDetailModal
-        open={partnerDetailModal.isOpen}
-        onClose={() => setPartnerDetailModal({ isOpen: false, partner: null })}
-        partner={partnerDetailModal.partner}
-      />
-      <HistoryDetailModal
-        open={historyDetailModal.isOpen}
-        onClose={() => setHistoryDetailModal({ isOpen: false, history: null })}
-        history={historyDetailModal.history}
-      />
-      <InfoDeviceDetailModal
-        open={deviceDetailModal.isOpen}
-        onClose={() => setDeviceDetailModal({ isOpen: false, device: null })}
-        device={deviceDetailModal.device}
-      />
-      <DescriptionDetailModal
-        open={descriptionDetailModal.isOpen}
-        onClose={() =>
-          setDescriptionDetailModal({ isOpen: false, description: null })
-        }
-        description={technicalDescription}
+      <DetailModals
+        partnerDetailModal={partnerDetailModal}
+        setPartnerDetailModal={setPartnerDetailModal}
+        historyDetailModal={historyDetailModal}
+        setHistoryDetailModal={setHistoryDetailModal}
+        deviceDetailModal={deviceDetailModal}
+        setDeviceDetailModal={setDeviceDetailModal}
+        descriptionDetailModal={descriptionDetailModal}
+        setDescriptionDetailModal={setDescriptionDetailModal}
+        technicalDescription={technicalDescription}
       />
       <Box>
         <Typography variant="h6" gutterBottom>
@@ -355,90 +316,16 @@ const EditTicketTechnician = () => {
         </Grid>
 
         {ticketStatus === "In lavorazione" && (
-          <Box mt={3}>
-            <Typography variant="h6" gutterBottom>
-              AGGIUNGI SERVIZI EXTRA
-            </Typography>
-            {extraServices.map((service, index) => (
-              <Grid container spacing={2} key={index} alignItems="center">
-                <Grid item xs={5}>
-                  <TextField
-                    label="Servizio"
-                    value={service.nome}
-                    onChange={(e) =>
-                      setExtraServices((prev) =>
-                        prev.map((s, i) =>
-                          i === index
-                            ? { ...s, nome: e.target.value }
-                            : s
-                        )
-                      )
-                    }
-                    fullWidth
-                    margin="normal"
-                  />
-                </Grid>
-                <Grid item xs={5}>
-                  <TextField
-                    label="Prezzo"
-                    type="number"
-                    value={service.prezzo}
-                    onChange={(e) =>
-                      setExtraServices((prev) =>
-                        prev.map((s, i) =>
-                          i === index
-                            ? { ...s, prezzo: parseFloat(e.target.value) }
-                            : s
-                        )
-                      )
-                    }
-                    fullWidth
-                    margin="normal"
-                  />
-                </Grid>
-                <Grid item xs={2}>
-                  <IconButton
-                    color="error"
-                    onClick={() => handleRemoveExtraService(index)}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </Grid>
-              </Grid>
-            ))}
-            <Grid container spacing={2}>
-              <Grid item xs={5}>
-                <TextField
-                  label="Servizio"
-                  value={serviceName}
-                  onChange={(e) => setServiceName(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={5}>
-                <TextField
-                  label="Prezzo"
-                  type="number"
-                  value={servicePrice}
-                  onChange={(e) => setServicePrice(e.target.value)}
-                  fullWidth
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={2}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleAddExtraService}
-                  fullWidth
-                  sx={{ height: "100%" }}
-                >
-                  +
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
+          <ExtraServices
+            extraServices={extraServices}
+            setExtraServices={setExtraServices}
+            serviceName={serviceName}
+            setServiceName={setServiceName}
+            servicePrice={servicePrice}
+            setServicePrice={setServicePrice}
+            handleAddExtraService={handleAddExtraService}
+            handleRemoveExtraService={handleRemoveExtraService}
+          />
         )}
 
         {ticketStatus !== "Aperto" &&

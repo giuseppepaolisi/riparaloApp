@@ -290,7 +290,7 @@ export const fetchTicketsByTechnician = async (token, email) => {
 };*/
 export const editTicket = async (
   token,
-  { id, newstate, technicianId, extraServices }
+  { id, newstate, technicianId, extraServices, descrizione_tecnica, prezzo  }
 ) => {
   try {
     const response = await fetch(`/api/ticket`, {
@@ -299,7 +299,7 @@ export const editTicket = async (
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id, newstate, technicianId, extraServices }),
+      body: JSON.stringify({ id, newstate, technicianId, extraServices, descrizione_tecnica, prezzo }),
     });
 
     const data = await response.json();

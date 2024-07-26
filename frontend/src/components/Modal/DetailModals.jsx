@@ -13,7 +13,7 @@ const DetailModals = ({
   setDeviceDetailModal,
   descriptionDetailModal,
   setDescriptionDetailModal,
-  technicalDescription
+  technicalDescription,
 }) => (
   <>
     <InfoPartnerDetailModal

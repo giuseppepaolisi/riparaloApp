@@ -80,7 +80,10 @@ const App = () => {
                 <Route path="/modifica-modello/:id" element={<EditDevice />} />
                 <Route path="/partner" element={<Partners />} />
                 <Route path="/tecnici" element={<Technicians />} />
-                <Route path="/edit-ticket-technician/:id" element={<EdiTicketTechnician />} />
+                <Route
+                  path="/edit-ticket-technician/:id"
+                  element={<EdiTicketTechnician />}
+                />
               </Route>
 
               {/* Partner Routes */}

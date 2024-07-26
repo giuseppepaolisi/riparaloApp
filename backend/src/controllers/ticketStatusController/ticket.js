@@ -10,6 +10,8 @@ const updateState = async (req, res, next) => {
   const role = req.user.role;
   const email = req.user.email;
   const { descrizione_tecnica, prezzo } = req.body;
+  console.log(descrizione_tecnica);
+  console.log(prezzo);
 
   try {
     // retrive dello stato attuale del ticket

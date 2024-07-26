@@ -11,7 +11,7 @@ const ExtraServices = ({
   servicePrice,
   setServicePrice,
   handleAddExtraService,
-  handleRemoveExtraService
+  handleRemoveExtraService,
 }) => (
   <Box mt={3}>
     <Typography variant="h6" gutterBottom>

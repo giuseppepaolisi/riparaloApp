@@ -93,7 +93,8 @@ const DashboardAdmin = () => {
         alignSearchWithFilters={true}
         onDetail={handleDetail}
         showDeleteButton={false}
-        showEditButton={false}
+        showEditButton={true}
+        editTicketLink="/edit-ticket-technician"
       />
       <TicketDetailModal
         open={isDetailModalOpen}

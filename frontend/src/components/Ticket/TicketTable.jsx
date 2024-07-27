@@ -14,6 +14,7 @@ const TicketTable = ({
   searchTerm,
   showSearchBar,
   setSearchTerm,
+  getRowClassName, // Aggiungi questa riga
 }) => {
   const [filteredRows, setFilteredRows] = useState([]);
 
@@ -63,6 +64,7 @@ const TicketTable = ({
         rows={filteredRows}
         columns={columns}
         getRowId={(row) => row._id || row.id} // Specifica un id unico
+        getRowClassName={getRowClassName} // Aggiungi questa riga
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 20 },
@@ -77,6 +79,9 @@ const TicketTable = ({
           },
           "& .MuiDataGrid-columnHeaderTitle": {
             fontWeight: "bold",
+          },
+          "& .accepted-ticket": {
+            backgroundColor: "#b0aeae !important",
           },
         }}
       />
@@ -101,6 +106,7 @@ TicketTable.propTypes = {
   searchTerm: PropTypes.string, // Add searchTerm prop
   showSearchBar: PropTypes.bool, // Add showSearchBar prop
   setSearchTerm: PropTypes.func, // Add setSearchTerm prop
+  getRowClassName: PropTypes.func, // Add getRowClassName prop
   onDetail: PropTypes.func, // Add onDetail prop
 };
 
@@ -110,6 +116,7 @@ TicketTable.defaultProps = {
   searchTerm: "", // Default searchTerm to an empty string
   showSearchBar: true, // Default to true
   setSearchTerm: () => {}, // Default to an empty function
+  getRowClassName: () => "", // Default to an empty function
   onDetail: () => {}, // Default to an empty function
 };
 

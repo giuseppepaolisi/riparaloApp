@@ -23,9 +23,7 @@ const TechnicianCostDetails = ({ calculateTotal, ticketStatus }) => {
           </Typography>
         )}
         {isTotalVisible && (
-          <Typography variant="body2">
-            Prezzo totale: {prezzo} €
-          </Typography>
+          <Typography variant="body2">Prezzo totale: {prezzo} €</Typography>
         )}
       </Box>
     </Paper>

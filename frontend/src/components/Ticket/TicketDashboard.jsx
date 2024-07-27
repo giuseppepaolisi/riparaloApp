@@ -26,6 +26,7 @@ const TicketDashboard = ({
   showDeleteButtonOnlyOpen,
   onDetail,
   editTicketLink,
+  getRowClassName, // Aggiungi questa riga
 }) => {
   const [tickets, setTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -172,6 +173,7 @@ const TicketDashboard = ({
         showSearchBar={!alignSearchWithFilters}
         setSearchTerm={setSearchTerm}
         onDetail={handleDetail}
+        getRowClassName={getRowClassName} // Passa la funzione getRowClassName
       />
       {deleteModalOpen && (
         <DeleteModal
@@ -217,6 +219,7 @@ TicketDashboard.propTypes = {
   showDeleteButtonOnlyOpen: PropTypes.bool,
   onDetail: PropTypes.func,
   editTicketLink: PropTypes.string.isRequired,
+  getRowClassName: PropTypes.func, // Aggiungi questa riga
 };
 
 TicketDashboard.defaultProps = {
@@ -226,6 +229,7 @@ TicketDashboard.defaultProps = {
   showDeleteButton: true,
   showDeleteButtonOnlyOpen: false,
   onDetail: () => {},
+  getRowClassName: () => "", // Default to an empty function
 };
 
 export default TicketDashboard;

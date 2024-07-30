@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { fetchTickets, fetchTicketById, fetchTicketsByTechnician } from "../../api/apiPartner";
+import {
+  fetchTickets,
+  fetchTicketById,
+  fetchTicketsByTechnician,
+} from "../../api/apiPartner";
 import TicketDashboard from "../../components/Ticket/TicketDashboard";
 import stateColors from "../../assets/json/state.json";
 import usePageTitle from "../../CustomHooks/usePageTitle";
@@ -96,7 +100,7 @@ const DashboardTechnician = () => {
   ];
 
   const getRowClassName = (params) => {
-    return acceptedTicketIds.includes(params.id) ? 'accepted-ticket' : '';
+    return acceptedTicketIds.includes(params.id) ? "accepted-ticket" : "";
   };
 
   return (

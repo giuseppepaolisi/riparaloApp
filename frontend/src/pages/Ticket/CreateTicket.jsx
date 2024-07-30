@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Grid,
   Box,
@@ -245,6 +245,13 @@ const CreateTicket = () => {
               <Grid item xs={12} md={4}>
                 <Typography variant="h6" gutterBottom>
                   INFORMAZIONI CLIENTE
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  Il cliente non esiste o è nuovo?{" "}
+                  <Link to="/aggiungi-cliente" style={{ textDecoration: "none", color: "#007bff" }}>
+                    Clicca qui
+                  </Link>{" "}
+                  per registrarlo
                 </Typography>
                 <TextField
                   label="Telefono Cliente"

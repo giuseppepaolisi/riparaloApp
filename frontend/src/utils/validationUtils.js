@@ -6,7 +6,7 @@ export function validatePhoneNumber(phone) {
 
 export function validateIMEI(imei) {
   const imeiRegex = /^\d{15}$/;
-  return imeiRegex.test(imei);
+  return imei === "" || imeiRegex.test(imei);
 }
 
 export function validatePrice(price) {

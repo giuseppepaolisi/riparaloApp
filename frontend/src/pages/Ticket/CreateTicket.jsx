@@ -149,12 +149,12 @@ const CreateTicket = () => {
           "Cognome cliente non valido",
           setAlert
         ) ||
-        handleValidationError(
+        (imei && handleValidationError(
           validateIMEI,
           imei,
           "IMEI non valido",
           setAlert
-        ) ||
+        )) ||
         handleValidationError(
           validatePrice,
           acconto,
@@ -349,7 +349,6 @@ const CreateTicket = () => {
                   type="text"
                   value={fields.imei}
                   onChange={(e) => setField("imei")(e.target.value)}
-                  required
                   onKeyPress={handleKeyPress}
                   fullWidth
                   margin="normal"
@@ -371,7 +370,6 @@ const CreateTicket = () => {
                   type="text"
                   value={fields.seriale}
                   onChange={(e) => setField("seriale")(e.target.value)}
-                  required
                   onKeyPress={handleKeyPress}
                   fullWidth
                   margin="normal"

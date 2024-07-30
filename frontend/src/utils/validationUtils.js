@@ -33,7 +33,7 @@ export function validateVAT(vat) {
 }
 
 export function validateUniqueCode(code) {
-  const codeRegex = /^[A-Za-z]{6}$/;
+  const codeRegex = /^[A-Za-z0-9]{1,7}$/;
   return codeRegex.test(code);
 }
 

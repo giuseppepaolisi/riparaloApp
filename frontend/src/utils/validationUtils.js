@@ -23,6 +23,7 @@ export function validateName(name) {
 }
 
 export function validateEmail(email) {
+  if (email === "") return true;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }

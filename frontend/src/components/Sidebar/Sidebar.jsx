@@ -62,8 +62,8 @@ function Sidebar({ menuItems, commonMenu }) {
           show={show}
           onHide={handleClose}
           placement="start"
-          className="bg-dark text-white"
-          style={{ width: "250px" }}
+          className="text-white"
+          style={{ width: "250px", backgroundColor: "#1D2942" }}
         >
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
@@ -93,7 +93,6 @@ function Sidebar({ menuItems, commonMenu }) {
                   path="/logout"
                   label="Logout"
                   icon={faSignOutAlt}
-                  style={{ color: "#b22222" }}
                 />
               </ul>
             </div>
@@ -101,16 +100,20 @@ function Sidebar({ menuItems, commonMenu }) {
         </Offcanvas>
       ) : (
         <div
-          className="bg-dark text-white d-flex flex-column"
+          className="text-white d-flex flex-column"
           style={{
             width: "200px",
             position: "fixed",
             top: 0,
             bottom: 0,
             left: 0,
+            backgroundColor: "#1D2942",
           }}
         >
-          <div className="d-flex align-items-center mb-3 text-white text-decoration-none p-2">
+          <div
+            className="d-flex align-items-center justify-content-center mb-3 p-2"
+            style={{ height: "100px" }}
+          >
             <Link
               to="/"
               style={{
@@ -122,7 +125,7 @@ function Sidebar({ menuItems, commonMenu }) {
               <img
                 src={logo}
                 alt="Logo"
-                style={{ width: "60%", margin: "auto" }}
+                style={{ width: "60%" }}
               />
             </Link>
           </div>
@@ -136,7 +139,6 @@ function Sidebar({ menuItems, commonMenu }) {
                   path="/logout"
                   label="Logout"
                   icon={faSignOutAlt}
-                  style={{ color: "#b22222" }}
                 />
               </ul>
             </div>

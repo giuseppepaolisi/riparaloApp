@@ -45,12 +45,13 @@ const AddCustomer = () => {
           "Numero di telefono non valido",
           setAlert
         ) ||
-        (fields.email_cliente && handleValidationError(
-          validateEmail,
-          fields.email_cliente,
-          "Email non valida",
-          setAlert
-        )) ||
+        (fields.email_cliente &&
+          handleValidationError(
+            validateEmail,
+            fields.email_cliente,
+            "Email non valida",
+            setAlert
+          )) ||
         handleValidationError(
           validateName,
           fields.nome_cliente,
@@ -82,7 +83,12 @@ const AddCustomer = () => {
         { id: "nome_cliente" },
         { id: "cognome_cliente" },
         { id: "telefono_cliente" },
-        { id: "email_cliente", label: "Email Cliente", type: "email", required: false },
+        {
+          id: "email_cliente",
+          label: "Email Cliente",
+          type: "email",
+          required: false,
+        },
       ]),
     [fields, setField]
   );

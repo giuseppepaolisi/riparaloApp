@@ -149,12 +149,13 @@ const CreateTicket = () => {
           "Cognome cliente non valido",
           setAlert
         ) ||
-        (imei && handleValidationError(
-          validateIMEI,
-          imei,
-          "IMEI non valido",
-          setAlert
-        )) ||
+        (imei &&
+          handleValidationError(
+            validateIMEI,
+            imei,
+            "IMEI non valido",
+            setAlert
+          )) ||
         handleValidationError(
           validatePrice,
           acconto,
@@ -248,7 +249,10 @@ const CreateTicket = () => {
                 </Typography>
                 <Typography variant="body2" gutterBottom>
                   Il cliente non esiste o è nuovo?{" "}
-                  <Link to="/aggiungi-cliente" style={{ textDecoration: "none", color: "#007bff" }}>
+                  <Link
+                    to="/aggiungi-cliente"
+                    style={{ textDecoration: "none", color: "#007bff" }}
+                  >
                     Clicca qui
                   </Link>{" "}
                   per registrarlo

@@ -122,11 +122,7 @@ function Sidebar({ menuItems, commonMenu }) {
                 width: "100%",
               }}
             >
-              <img
-                src={logo}
-                alt="Logo"
-                style={{ width: "60%" }}
-              />
+              <img src={logo} alt="Logo" style={{ width: "60%" }} />
             </Link>
           </div>
           <div className="d-flex flex-column justify-content-between flex-grow-1">

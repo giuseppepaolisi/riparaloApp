@@ -98,7 +98,7 @@ const getTickets = async (req, res, next) => {
   }
 
   try {
-    const tickets = await Ticket.find(filters);
+    const tickets = await Ticket.find(filters).sort({ createdAt: -1 });
     res.status(200).json({ tickets });
   } catch (error) {
     next(error);

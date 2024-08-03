@@ -55,6 +55,20 @@ describe('TEST getCustomers', () => {
       customer: mockCustomer,
     });
   });
+
+  it('SUCCESS - Inserimento cliente email vuota', async () => {
+    delete mockReq.body.email;
+    Customer.findOne.mockResolvedValue(false);
+    Customer.create.mockResolvedValue(mockCustomer);
+
+    await createCustomer(mockReq, mockRes, mockNext);
+
+    expect(Customer.create).toHaveBeenCalled();
+    expect(mockRes.status).toHaveBeenCalledWith(201);
+    expect(mockRes.json).toHaveBeenCalledWith({
+      customer: mockCustomer,
+    });
+  });
   /*
   it('SUCCESS - Cliente già inserito', async () => {
     Customer.findOne.mockResolvedValue(true);

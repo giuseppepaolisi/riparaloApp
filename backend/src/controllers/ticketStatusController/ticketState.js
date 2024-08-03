@@ -171,7 +171,7 @@ class AwatingQuoteConfirmTicket extends TicketState {
   }
 
   authorized(role) {
-    if ([PARTNER].includes(role)) {
+    if ([PARTNER, TECHNICIAN, ADMIN].includes(role)) {
       return true;
     }
     return false;
@@ -226,7 +226,7 @@ class AwationgPartsTicket extends TicketState {
   handleAction(state) {
     if (state === COMPLETATO) {
       return true;
-    } else if(state === ANNULLATO) {
+    } else if (state === ANNULLATO) {
       return true;
     }
     return false;

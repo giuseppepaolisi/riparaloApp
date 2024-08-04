@@ -1,4 +1,5 @@
 // frontend/src/utils/ticketUtils.js
+
 import { createTicket } from "../api/apiPartner";
 
 export async function handleTicketCreate(fields, token, setAlert, navigate) {
@@ -9,18 +10,21 @@ export async function handleTicketCreate(fields, token, setAlert, navigate) {
   );
 
   try {
-    await createTicket(token, { ...fields, servizi: filteredServices });
+    const response = await createTicket(token, { ...fields, servizi: filteredServices });
+    const createdTicket = response.ticket; // Ottieni il ticket dalla risposta
     setAlert({
       open: true,
       msg: "Ticket creato con successo",
       severity: "success",
     });
-    setTimeout(() => navigate("/partner-dashboard"), 2000);
+    setTimeout(() => navigate(`/edit-ticket-partner/${createdTicket._id}`), 2000); // Utilizza l'ID del ticket creato
+    return createdTicket;
   } catch (err) {
     setAlert({
       open: true,
       msg: "Errore nella creazione del ticket",
       severity: "error",
     });
+    throw err;
   }
 }

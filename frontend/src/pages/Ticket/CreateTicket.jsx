@@ -172,7 +172,11 @@ const CreateTicket = () => {
         return;
       }
 
-      handleTicketCreate(fields, token, setAlert, navigate);
+      try {
+        await handleTicketCreate(fields, token, setAlert, navigate);
+      } catch (error) {
+        console.error("Errore nella creazione del ticket:", error);
+      }
     },
     [fields, token, navigate, setAlert]
   );

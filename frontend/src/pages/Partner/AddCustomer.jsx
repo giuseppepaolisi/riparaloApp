@@ -37,7 +37,7 @@ const AddCustomer = () => {
     async (event) => {
       event.preventDefault();
       if (!token) return;
-      
+
       const fieldsToSend = { ...fields };
       if (fieldsToSend.email_cliente === "") {
         delete fieldsToSend.email_cliente;

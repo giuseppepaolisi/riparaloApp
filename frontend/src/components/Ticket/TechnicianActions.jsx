@@ -184,34 +184,34 @@ const TechnicianActions = ({ stateColors, onStatusChange, ticketStatus }) => {
       case "Attesa ricambio":
         return (
           <>
-          <Chip
-            label="Completato"
-            onClick={() => onStatusChange("Completato")}
-            clickable
-            sx={{
-              backgroundColor: stateColors["Completato"],
-              color: "#000",
-              mr: 2,
-              "&:hover": {
+            <Chip
+              label="Completato"
+              onClick={() => onStatusChange("Completato")}
+              clickable
+              sx={{
                 backgroundColor: stateColors["Completato"],
-                opacity: 0.8,
-              },
-            }}
-          />
-          <Chip
-            label="Annullato"
-            onClick={() => onStatusChange("Annullato")}
-            clickable
-            sx={{
-              backgroundColor: stateColors["Annullato"],
-              color: "#000",
-              mr: 2,
-              "&:hover": {
+                color: "#000",
+                mr: 2,
+                "&:hover": {
+                  backgroundColor: stateColors["Completato"],
+                  opacity: 0.8,
+                },
+              }}
+            />
+            <Chip
+              label="Annullato"
+              onClick={() => onStatusChange("Annullato")}
+              clickable
+              sx={{
                 backgroundColor: stateColors["Annullato"],
-                opacity: 0.8,
-              },
-            }}
-          />
+                color: "#000",
+                mr: 2,
+                "&:hover": {
+                  backgroundColor: stateColors["Annullato"],
+                  opacity: 0.8,
+                },
+              }}
+            />
           </>
         );
       case "Completato":

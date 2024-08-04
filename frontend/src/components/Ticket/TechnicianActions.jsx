@@ -84,6 +84,39 @@ const TechnicianActions = ({ stateColors, onStatusChange, ticketStatus }) => {
             />
           </>
         );
+      case "Attesa conferma preventivo":
+        return (
+          <>
+            <Chip
+              label="Preventivo accettato"
+              onClick={() => onStatusChange("Preventivo accettato")}
+              clickable
+              sx={{
+                backgroundColor: stateColors["Preventivo accettato"],
+                color: "#000",
+                mr: 2,
+                "&:hover": {
+                  backgroundColor: stateColors["Preventivo accettato"],
+                  opacity: 0.8,
+                },
+              }}
+            />
+            <Chip
+              label="Preventivo rifiutato"
+              onClick={() => onStatusChange("Preventivo rifiutato")}
+              clickable
+              sx={{
+                backgroundColor: stateColors["Preventivo rifiutato"],
+                color: "#000",
+                mr: 2,
+                "&:hover": {
+                  backgroundColor: stateColors["Preventivo rifiutato"],
+                  opacity: 0.8,
+                },
+              }}
+            />
+          </>
+        );
       case "Annullato":
         return (
           <Chip
@@ -150,6 +183,7 @@ const TechnicianActions = ({ stateColors, onStatusChange, ticketStatus }) => {
         );
       case "Attesa ricambio":
         return (
+          <>
           <Chip
             label="Completato"
             onClick={() => onStatusChange("Completato")}
@@ -164,6 +198,21 @@ const TechnicianActions = ({ stateColors, onStatusChange, ticketStatus }) => {
               },
             }}
           />
+          <Chip
+            label="Annullato"
+            onClick={() => onStatusChange("Annullato")}
+            clickable
+            sx={{
+              backgroundColor: stateColors["Annullato"],
+              color: "#000",
+              mr: 2,
+              "&:hover": {
+                backgroundColor: stateColors["Annullato"],
+                opacity: 0.8,
+              },
+            }}
+          />
+          </>
         );
       case "Completato":
         return (

@@ -8,7 +8,7 @@ import TicketDetailModal from "../../components/Modal/TicketDetailModal";
 
 const columns = [
   { field: "_id", headerName: "ID", flex: 1 },
-  { field: "id_partner", headerName: "ID Partner", flex: 1 },
+  { field: "ragione_sociale", headerName: "Ragione Sociale", flex: 1 },
   {
     field: "stato",
     headerName: "Stato",
@@ -87,7 +87,7 @@ const DashboardAdmin = () => {
       <TicketDashboard
         fetchTickets={fetchTickets}
         columns={columns}
-        searchFields={["_id", "id_partner", "stato"]}
+        searchFields={["_id", "ragione_sociale", "stato"]}
         addTicketLink="/apri-ticket"
         filterStatuses={filterStatuses}
         alignSearchWithFilters={true}

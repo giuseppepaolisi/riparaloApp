@@ -51,7 +51,7 @@ const DashboardTechnician = () => {
 
   const columns = [
     { field: "_id", headerName: "ID", flex: 1 },
-    { field: "id_partner", headerName: "ID Partner", flex: 1 },
+    { field: "ragione_sociale", headerName: "Ragione Sociale", flex: 1 },
     { field: "marca", headerName: "Marca", flex: 1 },
     { field: "modello", headerName: "Modello", flex: 1 },
     {
@@ -110,7 +110,7 @@ const DashboardTechnician = () => {
         columns={columns}
         searchFields={[
           "_id",
-          "id_partner",
+          "ragione_sociale",
           "marca",
           "modello",
           "stato",

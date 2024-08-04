@@ -8,6 +8,9 @@ const TechnicianCostDetails = ({ calculateTotal, ticketStatus }) => {
     ticketStatus
   );
 
+  const isInLavorazione = ticketStatus === "In lavorazione";
+  const isOtherStates = !["Aperto", "Accettato", "Ritirato", "In lavorazione"].includes(ticketStatus);
+
   return (
     <Paper sx={{ padding: 2, boxShadow: 3 }}>
       <Typography variant="h6" gutterBottom>
@@ -22,7 +25,10 @@ const TechnicianCostDetails = ({ calculateTotal, ticketStatus }) => {
             Prezzo servizi extra: {prezzoServiziExtra} €
           </Typography>
         )}
-        {isTotalVisible && (
+        {isInLavorazione && (
+          <Typography variant="body2">Prezzo totale: {prezzoStimato + prezzoServiziExtra} €</Typography>
+        )}
+        {isOtherStates && (
           <Typography variant="body2">Prezzo totale: {prezzo} €</Typography>
         )}
       </Box>

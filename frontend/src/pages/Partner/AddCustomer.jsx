@@ -37,6 +37,11 @@ const AddCustomer = () => {
     async (event) => {
       event.preventDefault();
       if (!token) return;
+      
+      const fieldsToSend = { ...fields };
+      if (fieldsToSend.email_cliente === "") {
+        delete fieldsToSend.email_cliente;
+      }
 
       if (
         handleValidationError(
@@ -46,8 +51,9 @@ const AddCustomer = () => {
           setAlert
         ) ||
         (fields.email_cliente &&
+          !validateEmail(fields.email_cliente) &&
           handleValidationError(
-            validateEmail,
+            () => false,
             fields.email_cliente,
             "Email non valida",
             setAlert
@@ -68,7 +74,7 @@ const AddCustomer = () => {
         return;
       }
 
-      await handleCustomerAdd(fields, token, setAlert, () => {
+      await handleCustomerAdd(fieldsToSend, token, setAlert, () => {
         setTimeout(() => {
           navigate("/clienti");
         }, 1000);

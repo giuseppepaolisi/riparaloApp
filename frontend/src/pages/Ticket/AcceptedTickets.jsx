@@ -1,3 +1,4 @@
+// frontend\src\pages\Ticket\AcceptedTickets.jsx
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -86,7 +87,9 @@ const AcceptedTickets = () => {
   return (
     <React.Fragment>
       <TicketDashboard
-        fetchTickets={() => fetchTicketsByTechnician(token, user.email)}
+        fetchTickets={() =>
+          fetchTicketsByTechnician(token, user.nome, user.cognome)
+        }
         columns={columns}
         searchFields={[
           "_id",

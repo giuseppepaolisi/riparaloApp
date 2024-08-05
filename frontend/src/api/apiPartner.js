@@ -238,7 +238,8 @@ export const createTicket = async (token, ticketData) => {
   }
 };
 
-export const fetchTicketsByTechnician = async (token, email) => {
+// apiPartner.js
+export const fetchTicketsByTechnician = async (token, nome, cognome) => {
   try {
     const response = await fetch(`/api/tickets`, {
       method: "GET",
@@ -256,8 +257,11 @@ export const fetchTicketsByTechnician = async (token, email) => {
     if (!Array.isArray(json.tickets)) {
       throw new Error("La risposta del server non è un array");
     }
+
     const filteredTickets = json.tickets.filter((ticket) =>
-      ticket.storico_stato.some((stato) => stato.tecnico === email)
+      ticket.storico_stato.some(
+        (stato) => stato.tecnico === `${nome} ${cognome}`
+      )
     );
 
     return filteredTickets;
@@ -265,6 +269,7 @@ export const fetchTicketsByTechnician = async (token, email) => {
     throw new Error(error.message);
   }
 };
+
 
 export const editTicket = async (
   token,

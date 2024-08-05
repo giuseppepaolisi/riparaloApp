@@ -145,6 +145,7 @@ const ticketSchema = new mongoose.Schema(
     },
     imei: {
       type: String,
+      unique: true,
     },
     pin: {
       type: String,

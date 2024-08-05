@@ -8,7 +8,8 @@ const { ATTESA_CONFERMA_PREVENTIVO } = require('../../conf/state');
 const updateState = async (req, res, next) => {
   const { id, newstate } = req.body;
   const role = req.user.role;
-  const email = req.user.email;
+  const nome = req.user.nome;
+  const cognome = req.user.cognome;
   const { descrizione_tecnica, prezzo } = req.body;
   console.log(descrizione_tecnica);
   console.log(prezzo);
@@ -42,7 +43,7 @@ const updateState = async (req, res, next) => {
       data: new Date(),
     };
     if ([ADMIN, TECHNICIAN].includes(role)) {
-      storico.tecnico = email;
+      storico.tecnico = nome + " " + cognome;
     }
     ticket.storico_stato.push(storico);
     // set descrizione tecnica

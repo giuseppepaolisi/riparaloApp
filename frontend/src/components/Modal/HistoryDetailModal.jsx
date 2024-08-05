@@ -23,7 +23,7 @@ const headerStyle = css`
   align-items: center;
 `;
 
-const HistoryDetailModal = ({ open, onClose, history }) => {
+const HistoryDetailModal = ({ open, onClose, history, showTechnician }) => {
   return (
     <Modal open={open} onClose={onClose}>
       <Box css={modalStyle}>
@@ -41,6 +41,9 @@ const HistoryDetailModal = ({ open, onClose, history }) => {
               <Typography key={index} sx={{ mt: 2 }}>
                 {item.stato} - <strong>Data:</strong>{" "}
                 {new Date(item.data).toLocaleDateString()}
+                {showTechnician && item.tecnico && (
+                  <> - <strong>Tecnico:</strong> {item.tecnico}</>
+                )}
               </Typography>
             ))}
           </>
@@ -59,8 +62,10 @@ HistoryDetailModal.propTypes = {
     PropTypes.shape({
       stato: PropTypes.string.isRequired,
       data: PropTypes.string.isRequired,
+      tecnico: PropTypes.string,
     })
   ),
+  showTechnician: PropTypes.bool,
 };
 
 export default HistoryDetailModal;

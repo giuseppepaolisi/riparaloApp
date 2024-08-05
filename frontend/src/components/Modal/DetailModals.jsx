@@ -14,6 +14,7 @@ const DetailModals = ({
   descriptionDetailModal,
   setDescriptionDetailModal,
   technicalDescription,
+  showTechnician,
 }) => (
   <>
     <InfoPartnerDetailModal
@@ -25,6 +26,7 @@ const DetailModals = ({
       open={historyDetailModal.isOpen}
       onClose={() => setHistoryDetailModal({ isOpen: false, history: null })}
       history={historyDetailModal.history}
+      showTechnician={showTechnician}
     />
     <InfoDeviceDetailModal
       open={deviceDetailModal.isOpen}
@@ -62,6 +64,7 @@ DetailModals.propTypes = {
   }).isRequired,
   setDescriptionDetailModal: PropTypes.func.isRequired,
   technicalDescription: PropTypes.string.isRequired,
+  showTechnician: PropTypes.bool,
 };
 
 export default DetailModals;

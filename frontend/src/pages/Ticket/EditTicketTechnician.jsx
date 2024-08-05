@@ -247,6 +247,7 @@ const EditTicketTechnician = () => {
         descriptionDetailModal={descriptionDetailModal}
         setDescriptionDetailModal={setDescriptionDetailModal}
         technicalDescription={technicalDescription}
+        showTechnician={true}
       />
       <Box>
         <Typography variant="h6" gutterBottom>

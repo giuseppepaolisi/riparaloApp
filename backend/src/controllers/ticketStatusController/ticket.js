@@ -43,7 +43,7 @@ const updateState = async (req, res, next) => {
       data: new Date(),
     };
     if ([ADMIN, TECHNICIAN].includes(role)) {
-      storico.tecnico = nome + " " + cognome;
+      storico.tecnico = nome + ' ' + cognome;
     }
     ticket.storico_stato.push(storico);
     // set descrizione tecnica

@@ -98,7 +98,7 @@ const getTickets = async (req, res, next) => {
   }
 
   try {
-    const tickets = await Ticket.find(filters);
+    const tickets = await Ticket.find(filters).sort({ createdAt: -1 });
     res.status(200).json({ tickets });
   } catch (error) {
     next(error);
@@ -143,7 +143,10 @@ const deleteTicket = async (req, res, next) => {
     if (!ticket) {
       throw new ErrorResponse('Ticket non trovato', 404);
     }
-    if (ticket.stato !== APERTO || ticket.id_partner !== req.user._id) {
+    if (
+      ticket.stato !== APERTO ||
+      ticket.id_partner !== req.user._id.toString()
+    ) {
       throw new ErrorResponse(
         'Non puoi eliminare un ticket in uno stato avanzato',
         400

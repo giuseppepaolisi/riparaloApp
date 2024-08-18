@@ -99,8 +99,9 @@ const DashboardPartner = () => {
         filterStatuses={filterStatuses}
         alignSearchWithFilters={false}
         onDetail={handleDetail}
-        showDeleteButton={true} // Pass the showDeleteButton prop
-        showDeleteButtonOnlyOpen={true} // Show delete button only if state is open
+        showDeleteButton={true}
+        showDeleteButtonOnlyOpen={true}
+        editTicketLink="/edit-ticket-partner"
       />
       <TicketDetailModal
         open={isDetailModalOpen}

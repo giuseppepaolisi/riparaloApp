@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import { addPartner } from "../../api/apiAdmin";
-import FormInput from "../../components/FormInput";
-import FormActions from "../../components/FormActions";
-import FormContainer from "../../components/FormContainer";
+import FormInput from "../../components/Form/FormInput";
+import FormActions from "../../components/Form/FormActions";
+import FormContainer from "../../components/Form/FormContainer";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
@@ -52,7 +52,9 @@ const AddPartner = () => {
       const response = await addPartner(token, formData);
       console.log("Risposta del server:", response);
       setSuccess("Partner aggiunto con successo");
-      navigate("/partner");
+      setTimeout(() => {
+        navigate("/partner");
+      }, 1000);
     } catch (error) {
       console.error("Errore durante l'aggiunta del partner:", error);
       setError(error.message);

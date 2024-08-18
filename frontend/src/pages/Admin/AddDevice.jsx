@@ -1,20 +1,11 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {
-  Grid,
-  Box,
-  TextField,
-  Button,
-  Autocomplete,
-  IconButton,
-  InputAdornment,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Grid, Box, TextField, Button, Autocomplete } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import smartphoneBrands from "../../assets/js/brands";
-import FormActions from "../../components/FormActions";
-import FormContainer from "../../components/FormContainer";
+import FormActions from "../../components/Form/FormActions";
+import FormContainer from "../../components/Form/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import { addDevice } from "../../api/apiAdmin";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
@@ -30,20 +21,20 @@ const AddDevice = () => {
   const navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
-    setMarca(newValue);
+    console.log("New value:", newValue);
+    setMarca(newValue || "");
   };
 
-  const handleClearMarca = () => {
-    setMarca("");
+  const handleInputChange = (event) => {
+    setMarca(event.target.value);
   };
 
   const handleServizioChange = (index, event) => {
     const values = [...servizi];
     const { name, value } = event.target;
-    const field = name.split("-")[0]; // get the base name, either 'servizio' or 'prezzo'
+    const field = name.split("-")[0];
 
     if (field === "prezzo") {
-      // Allow only positive numbers
       const validValue = value.replace(/[^0-9]/g, "");
       values[index][field] = validValue;
     } else {
@@ -65,24 +56,39 @@ const AddDevice = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Verifica che la marca sia valida o personalizzata
+    console.log("Form submit event triggered");
+    console.log("Marca:", marca);
+
+    if (!marca) {
+      setAlert({
+        open: true,
+        msg: "Inserisci una marca valida.",
+        severity: "error",
+      });
+      return;
+    }
+
     const formData = {
       modello,
-      marca: marca || "Altro", // Imposta "Altro" se la marca è vuota
+      marca,
       servizi: servizi.map((servizio) => ({
         servizio: servizio.servizio,
         prezzo: Number(servizio.prezzo),
       })),
     };
 
+    console.log("FormData inviato:", formData);
+
     try {
-      await addDevice(token, formData); // usa la funzione addDevice
+      await addDevice(token, formData);
       setAlert({
         open: true,
         msg: "Dispositivo aggiunto con successo",
         severity: "success",
       });
-      navigate("/modelli");
+      setTimeout(() => {
+        navigate("/modelli");
+      }, 1000);
     } catch (error) {
       console.error(error);
       setAlert({
@@ -98,7 +104,6 @@ const AddDevice = () => {
   );
 
   const handleKeyDown = (e) => {
-    // Prevent the user from typing '-' or '+' or 'e'
     if (["-", "+", "e"].includes(e.key)) {
       e.preventDefault();
     }
@@ -118,6 +123,9 @@ const AddDevice = () => {
                 options={smartphoneBrands}
                 value={marca}
                 onChange={handleChange}
+                onInputChange={handleInputChange}
+                onBlur={(e) => handleInputChange(e)}
+                clearOnEscape
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -127,24 +135,6 @@ const AddDevice = () => {
                     fullWidth
                     required
                     variant="outlined"
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <>
-                          {marca && (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="clear input"
-                                onClick={handleClearMarca}
-                              >
-                                <CloseIcon />
-                              </IconButton>
-                            </InputAdornment>
-                          )}
-                          {params.InputProps.endAdornment}
-                        </>
-                      ),
-                    }}
                   />
                 )}
               />
@@ -187,11 +177,11 @@ const AddDevice = () => {
                     name={`prezzo-${index}`}
                     value={servizio.prezzo}
                     onChange={(e) => handleServizioChange(index, e)}
-                    onKeyDown={handleKeyDown} // Added to prevent invalid characters
+                    onKeyDown={handleKeyDown}
                     fullWidth
                     required
                     variant="outlined"
-                    inputProps={{ min: "0" }} // This will prevent negative numbers
+                    inputProps={{ min: "0" }}
                   />
                 </Grid>
                 <Grid
@@ -223,7 +213,10 @@ const AddDevice = () => {
               </Button>
             </Grid>
           </Grid>
-          <FormActions onSubmit={handleSubmit} />
+          <FormActions
+            onSubmit={handleSubmit}
+            isSubmitDisabled={isAddServizioDisabled}
+          />
         </form>
       </FormContainer>
     </React.Fragment>

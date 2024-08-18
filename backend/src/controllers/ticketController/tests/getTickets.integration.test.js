@@ -7,11 +7,13 @@ const { APERTO } = require('../../../conf/state');
 
 // mock del model
 jest.mock('../../../models/ticket', () => ({
-  find: jest.fn(),
+  find: jest.fn(() => ({
+    sort: jest.fn().mockResolvedValue([]),
+  })),
 }));
 
 describe('TEST getTickets', () => {
-  let mockReq, mockRes, mockNext, mockTicket;
+  let mockReq, mockRes, mockNext, mockTicket1, mockTicket2;
 
   beforeEach(() => {
     mockReq = {
@@ -23,7 +25,7 @@ describe('TEST getTickets', () => {
       json: jest.fn(),
     };
     mockNext = jest.fn();
-    mockTicket = {
+    mockTicket1 = {
       id_partner: '601c546d4d3f8b2f243d58e6',
       telefono_partner: '+39 098 765 4321',
       ragione_sociale: 'Tech Repair S.r.l.',
@@ -57,6 +59,39 @@ describe('TEST getTickets', () => {
           data: new Date('2024-04-27T12:00:00Z'),
         },
       ],
+      createdAt: new Date('2024-04-27T12:00:00Z'),
+    };
+    mockTicket2 = {
+      id_partner: '601c546d4d3f8b2f243d58e6',
+      telefono_partner: '+39 098 765 4321',
+      ragione_sociale: 'Tech Repair S.r.l.',
+      partita_iva: 'IT12345678901',
+      codiceUnivoco: 'XYZ123ABC',
+      pec: 'info@techrepair.it',
+      cap: '00100',
+      via: 'Via delle Tecnologie, 10',
+      provincia: 'Roma',
+      nome_cliente: 'Luigi',
+      cognome_cliente: 'Rossi',
+      telefono_cliente: '+39 012 345 6789',
+      descrizione_problema: 'Batteria non si carica.',
+      marca: 'SuperTech',
+      modello: 'PowerX3000',
+      servizi: [
+        {
+          problema: 'Sostituzione batteria',
+          prezzo: 80,
+        },
+      ],
+      prezzo_stimato: 80,
+      stato: 'Aperto',
+      storico_stato: [
+        {
+          stato: 'Aperto',
+          data: new Date('2024-05-01T12:00:00Z'),
+        },
+      ],
+      createdAt: new Date('2024-05-01T12:00:00Z'),
     };
     mockUser = {
       _id: '601c546d4d3f8b2f243d58e6',
@@ -76,56 +111,73 @@ describe('TEST getTickets', () => {
     jest.clearAllMocks();
   });
 
-  it('SUCCESS - Lista ti tutti i ticket di un utente admin / tacnico', async () => {
-    Ticket.find.mockResolvedValue([mockTicket]); // Array di ticket
+  it('SUCCESS - Lista di tutti i ticket di un utente admin / tecnico', async () => {
+    Ticket.find.mockImplementationOnce(() => ({
+      sort: jest.fn().mockResolvedValue([mockTicket2, mockTicket1]), // Array di ticket ordinato per data decrescente
+    }));
+
     await getTickets(mockReq, mockRes, mockNext);
 
-    expect(Ticket.find).toHaveBeenCalled();
+    expect(Ticket.find).toHaveBeenCalledWith({});
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({
-      tickets: [mockTicket],
+      tickets: [mockTicket2, mockTicket1],
     });
   });
 
-  it('SUCCESS - Lista ti tutti i ticket di un utente admin / tacnico impostando come filtro stato Aperto', async () => {
+  it('SUCCESS - Lista di tutti i ticket di un utente admin / tecnico impostando come filtro stato Aperto', async () => {
     mockReq.params.state = APERTO;
 
-    Ticket.find.mockResolvedValue([mockTicket]); // Array di ticket
+    Ticket.find.mockImplementationOnce(() => ({
+      sort: jest.fn().mockResolvedValue([mockTicket2, mockTicket1]), // Array di ticket ordinato per data decrescente
+    }));
+
     await getTickets(mockReq, mockRes, mockNext);
 
-    expect(Ticket.find).toHaveBeenCalled();
+    expect(Ticket.find).toHaveBeenCalledWith({ stato: APERTO });
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({
-      tickets: [mockTicket],
+      tickets: [mockTicket2, mockTicket1],
     });
   });
 
-  it('SUCCESS - Lista ti tutti i ticket di un utente Partner passando il suo id impostando come filtro stato Aperto', async () => {
+  it('SUCCESS - Lista di tutti i ticket di un utente Partner passando il suo id impostando come filtro stato Aperto', async () => {
     mockReq.params.state = APERTO;
     mockReq.user.role = PARTNER;
     mockReq.user._id = '601c546d4d3f8b2f243d58e6';
 
-    Ticket.find.mockResolvedValue([mockTicket]); // Array di ticket
+    Ticket.find.mockImplementationOnce(() => ({
+      sort: jest.fn().mockResolvedValue([mockTicket2, mockTicket1]), // Array di ticket ordinato per data decrescente
+    }));
+
     await getTickets(mockReq, mockRes, mockNext);
 
-    expect(Ticket.find).toHaveBeenCalled();
+    expect(Ticket.find).toHaveBeenCalledWith({
+      id_partner: '601c546d4d3f8b2f243d58e6',
+      stato: APERTO,
+    });
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({
-      tickets: [mockTicket],
+      tickets: [mockTicket2, mockTicket1],
     });
   });
 
-  it('SUCCESS - Lista ti tutti i ticket di un utente Partner passando il suo id senza impostare un filtro', async () => {
+  it('SUCCESS - Lista di tutti i ticket di un utente Partner passando il suo id senza impostare un filtro', async () => {
     mockReq.user.role = PARTNER;
     mockReq.user._id = '601c546d4d3f8b2f243d58e6';
 
-    Ticket.find.mockResolvedValue([mockTicket]); // Array di ticket
+    Ticket.find.mockImplementationOnce(() => ({
+      sort: jest.fn().mockResolvedValue([mockTicket2, mockTicket1]), // Array di ticket ordinato per data decrescente
+    }));
+
     await getTickets(mockReq, mockRes, mockNext);
 
-    expect(Ticket.find).toHaveBeenCalled();
+    expect(Ticket.find).toHaveBeenCalledWith({
+      id_partner: '601c546d4d3f8b2f243d58e6',
+    });
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({
-      tickets: [mockTicket],
+      tickets: [mockTicket2, mockTicket1],
     });
   });
 
@@ -133,10 +185,13 @@ describe('TEST getTickets', () => {
     mockReq.user.role = PARTNER;
     mockReq.user._id = '';
 
-    Ticket.find.mockResolvedValue([]); // Array di ticket
+    Ticket.find.mockImplementationOnce(() => ({
+      sort: jest.fn().mockResolvedValue([]), // Array di ticket vuoto
+    }));
+
     await getTickets(mockReq, mockRes, mockNext);
 
-    expect(Ticket.find).toHaveBeenCalled();
+    expect(Ticket.find).toHaveBeenCalledWith({ id_partner: '' });
     expect(mockRes.status).toHaveBeenCalledWith(200);
     expect(mockRes.json).toHaveBeenCalledWith({
       tickets: [],
@@ -145,7 +200,9 @@ describe('TEST getTickets', () => {
 
   it("gestisce l'errore quando la ricerca dei ticket fallisce", async () => {
     const expectedError = new Error('Errore durante la ricerca dei tickets');
-    Ticket.find.mockRejectedValue(expectedError); // Configura il mock per rifiutare la promessa
+    Ticket.find.mockImplementationOnce(() => ({
+      sort: jest.fn().mockRejectedValue(expectedError),
+    }));
 
     await getTickets(mockReq, mockRes, mockNext);
 

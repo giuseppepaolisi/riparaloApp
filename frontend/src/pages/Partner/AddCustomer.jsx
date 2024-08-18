@@ -1,25 +1,35 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
-import { addCliente } from "../../api/apiPartner";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import FormInput from "../../components/FormInput";
-import FormActions from "../../components/FormActions";
-import FormContainer from "../../components/FormContainer";
+import FormInput from "../../components/Form/FormInput";
+import FormActions from "../../components/Form/FormActions";
+import FormContainer from "../../components/Form/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
+import {
+  validatePhoneNumber,
+  validateEmail,
+  validateName,
+} from "../../utils/validationUtils";
+import { handleValidationError } from "../../utils/errorHandling";
+import { formFieldsConfig } from "../../utils/formConfig";
+import useFormFields from "../../CustomHooks/useFormFields";
+import { handleCustomerAdd } from "../../utils/customerUtils";
 
 const AddCustomer = () => {
   usePageTitle("Aggiungi Cliente");
   useBodyBackgroundColor("#007bff");
 
-  const [email, setEmail] = useState("");
-  const [nome, setNome] = useState("");
-  const [cognome, setCognome] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
+  const [fields, setField] = useFormFields({
+    email_cliente: "",
+    nome_cliente: "",
+    cognome_cliente: "",
+    telefono_cliente: "",
+  });
 
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -28,59 +38,65 @@ const AddCustomer = () => {
       event.preventDefault();
       if (!token) return;
 
-      try {
-        const newCustomer = { email, nome, cognome, telefono };
-        await addCliente(token, newCustomer);
-        setAlert({
-          open: true,
-          msg: "Cliente registrato con successo",
-          severity: "success",
-        });
-        navigate("/clienti");
-      } catch (error) {
-        console.error(error);
-        setAlert({
-          open: true,
-          msg: "Errore nella registrazione del cliente",
-          severity: "error",
-        });
+      const fieldsToSend = { ...fields };
+      if (fieldsToSend.email_cliente === "") {
+        delete fieldsToSend.email_cliente;
       }
+
+      if (
+        handleValidationError(
+          validatePhoneNumber,
+          fields.telefono_cliente,
+          "Numero di telefono non valido",
+          setAlert
+        ) ||
+        (fields.email_cliente &&
+          !validateEmail(fields.email_cliente) &&
+          handleValidationError(
+            () => false,
+            fields.email_cliente,
+            "Email non valida",
+            setAlert
+          )) ||
+        handleValidationError(
+          validateName,
+          fields.nome_cliente,
+          "Nome non valido",
+          setAlert
+        ) ||
+        handleValidationError(
+          validateName,
+          fields.cognome_cliente,
+          "Cognome non valido",
+          setAlert
+        )
+      ) {
+        return;
+      }
+
+      await handleCustomerAdd(fieldsToSend, token, setAlert, () => {
+        setTimeout(() => {
+          navigate("/clienti");
+        }, 1000);
+      });
     },
-    [email, nome, cognome, telefono, token, navigate]
+    [fields, token, navigate]
   );
 
   const formFields = useMemo(
-    () => [
-      {
-        id: "email",
-        label: "Email",
-        type: "email",
-        value: email,
-        onChange: (e) => setEmail(e.target.value),
-      },
-      {
-        id: "nome",
-        label: "Nome",
-        type: "text",
-        value: nome,
-        onChange: (e) => setNome(e.target.value),
-      },
-      {
-        id: "cognome",
-        label: "Cognome",
-        type: "text",
-        value: cognome,
-        onChange: (e) => setCognome(e.target.value),
-      },
-      {
-        id: "telefono",
-        label: "Telefono",
-        type: "tel",
-        value: telefono,
-        onChange: (e) => setTelefono(e.target.value),
-      },
-    ],
-    [email, nome, cognome, telefono]
+    () =>
+      formFieldsConfig(fields, setField, [
+        { id: "nome_cliente" },
+        { id: "cognome_cliente" },
+        { id: "telefono_cliente" },
+        {
+          id: "email_cliente",
+          label: "Email Cliente",
+          type: "email",
+          required: false,
+        },
+      ]),
+    [fields, setField]
   );
 
   return (
@@ -88,23 +104,39 @@ const AddCustomer = () => {
       <FormContainer title="Aggiungi Cliente" maxWidth="sm">
         <form onSubmit={handleAggiungiCliente}>
           <Grid container spacing={2}>
-            {formFields.map(({ id, label, type, value, onChange }) => (
-              <Grid item xs={12} key={id}>
-                <FormInput
-                  id={id}
-                  label={label}
-                  type={type}
-                  value={value}
-                  onChange={onChange}
-                  required
-                />
-              </Grid>
-            ))}
+            {formFields.map(
+              ({
+                id,
+                label,
+                type,
+                value,
+                onChange,
+                inputProps,
+                onKeyPress,
+              }) => (
+                <Grid item xs={12} key={id}>
+                  <FormInput
+                    id={id}
+                    label={label}
+                    type={type}
+                    value={value}
+                    onChange={onChange}
+                    required={id !== "email_cliente"}
+                    inputProps={inputProps}
+                    onKeyPress={onKeyPress}
+                  />
+                </Grid>
+              )
+            )}
           </Grid>
           <FormActions onSubmit={handleAggiungiCliente} />
         </form>
         {alert.open && (
-          <CustomAlert msg={alert.msg} severity={alert.severity} />
+          <CustomAlert
+            msg={alert.msg}
+            severity={alert.severity}
+            onClose={() => setAlert({ ...alert, open: false })}
+          />
         )}
       </FormContainer>
     </React.Fragment>

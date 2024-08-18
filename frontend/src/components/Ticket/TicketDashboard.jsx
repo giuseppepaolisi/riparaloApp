@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,8 +8,10 @@ import AddButton from "../Action/AddButton";
 import DetailButton from "../Action/DetailButton";
 import EditButton from "../Action/EditButton";
 import DeleteButton from "../Action/DeleteButton";
-import StatusFilterButtons from "../../components/StatusFilterButtons";
+import StatusFilterButtons from "../Button/StatusFilterButtons";
 import { fetchTicketsByState, deleteTicket } from "../../api/apiPartner";
+import DeleteModal from "../Modal/DeleteModal";
+import CustomAlert from "../Alert/CustomAlert";
 
 const TicketDashboard = ({
   fetchTickets,
@@ -23,10 +25,15 @@ const TicketDashboard = ({
   showDeleteButton,
   showDeleteButtonOnlyOpen,
   onDetail,
+  editTicketLink,
+  getRowClassName, // Aggiungi questa riga
 }) => {
   const [tickets, setTickets] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTicketId, setDeleteTicketId] = useState(null);
+  const [alert, setAlert] = useState({ open: false, msg: "", severity: "" });
   const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
@@ -59,24 +66,43 @@ const TicketDashboard = ({
 
   const handleEdit = useCallback(
     (id) => {
-      navigate(`/modifica-ticket/${id}`);
+      navigate(`${editTicketLink}/${id}`);
     },
-    [navigate]
+    [navigate, editTicketLink]
   );
 
-  const handleDelete = useCallback(
-    async (id) => {
-      try {
-        await deleteTicket(token, id);
-        setTickets((prevTickets) =>
-          prevTickets.filter((ticket) => ticket._id !== id)
-        );
-      } catch (error) {
-        console.error("Error deleting ticket:", error);
-      }
-    },
-    [token]
-  );
+  const handleDeleteRequest = useCallback((id) => {
+    setDeleteTicketId(id);
+    setDeleteModalOpen(true);
+  }, []);
+
+  const handleDeleteCancel = useCallback(() => {
+    setDeleteModalOpen(false);
+    setDeleteTicketId(null);
+  }, []);
+
+  const handleDeleteConfirm = useCallback(async () => {
+    try {
+      await deleteTicket(token, deleteTicketId);
+      setTickets((prevTickets) =>
+        prevTickets.filter((ticket) => ticket._id !== deleteTicketId)
+      );
+      setAlert({
+        open: true,
+        msg: "Ticket eliminato con successo!",
+        severity: "success",
+      });
+    } catch (error) {
+      setAlert({
+        open: true,
+        msg: "Errore nell'eliminazione del ticket",
+        severity: "error",
+      });
+    } finally {
+      setDeleteModalOpen(false);
+      setDeleteTicketId(null);
+    }
+  }, [token, deleteTicketId]);
 
   const actionColumns = [
     ...columns,
@@ -92,7 +118,9 @@ const TicketDashboard = ({
           )}
           {showDeleteButton &&
             (!showDeleteButtonOnlyOpen || params.row.stato === "Aperto") && (
-              <DeleteButton onClick={() => handleDelete(params.row._id)} />
+              <DeleteButton
+                onClick={() => handleDeleteRequest(params.row._id)}
+              />
             )}
         </div>
       ),
@@ -145,7 +173,22 @@ const TicketDashboard = ({
         showSearchBar={!alignSearchWithFilters}
         setSearchTerm={setSearchTerm}
         onDetail={handleDetail}
+        getRowClassName={getRowClassName} // Passa la funzione getRowClassName
       />
+      {deleteModalOpen && (
+        <DeleteModal
+          message="Vuoi davvero eliminare questo ticket?"
+          onDelete={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+        />
+      )}
+      {alert.open && (
+        <CustomAlert
+          msg={alert.msg}
+          severity={alert.severity}
+          onClose={() => setAlert({ ...alert, open: false })}
+        />
+      )}
     </div>
   );
 };
@@ -173,8 +216,10 @@ TicketDashboard.propTypes = {
   alignSearchWithFilters: PropTypes.bool,
   showEditButton: PropTypes.bool,
   showDeleteButton: PropTypes.bool,
-  showDeleteButtonOnlyOpen: PropTypes.bool, // New prop to control delete button visibility
+  showDeleteButtonOnlyOpen: PropTypes.bool,
   onDetail: PropTypes.func,
+  editTicketLink: PropTypes.string.isRequired,
+  getRowClassName: PropTypes.func, // Aggiungi questa riga
 };
 
 TicketDashboard.defaultProps = {
@@ -182,8 +227,9 @@ TicketDashboard.defaultProps = {
   alignSearchWithFilters: false,
   showEditButton: true,
   showDeleteButton: true,
-  showDeleteButtonOnlyOpen: false, // Default to showing delete button for all states
+  showDeleteButtonOnlyOpen: false,
   onDetail: () => {},
+  getRowClassName: () => "", // Default to an empty function
 };
 
 export default TicketDashboard;

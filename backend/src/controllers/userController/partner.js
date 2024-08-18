@@ -3,7 +3,7 @@ const { ErrorResponse } = require('../../middleware/errorManager');
 
 // preparazione dell'utente PARTNER alla registrazione
 function signupPartner(newuser, next) {
-  if (!newuser.codiceUnivoco || newuser.codiceUnivoco.length !== 6) {
+  if (!newuser.codiceUnivoco || newuser.codiceUnivoco.length !== 7) {
     return next(
       new ErrorResponse(
         'Il codice univoco deve avere esattamente 6 caratteri',
@@ -32,7 +32,7 @@ const updatePartner = (data, next) => {
     'provincia',
   ];
 
-  if (data.codiceUnivoco && data.codiceUnivoco.length !== 6) {
+  if (data.codiceUnivoco && data.codiceUnivoco.length !== 7) {
     return next(
       new ErrorResponse(
         'Il codice univoco deve avere esattamente 6 caratteri',

@@ -120,10 +120,28 @@ const updateCustomer = async (req, res, next) => {
   }
 };
 
+// Ritorna i dati di un singolo cliente passato il suo numero di telefono
+const getCustomerByPhone = async (req, res, next) => {
+  const { phone } = req.params;
+  const partner = req.user._id;
+  try {
+    const customer = await Customer.findOne({ telefono: phone, partner });
+
+    if (!customer) {
+      return next(new ErrorResponse('Cliente non trovato', 404));
+    }
+
+    res.status(200).json({ customer });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createCustomer,
   getCustomers,
   deleteCustomer,
   getCustomer,
   updateCustomer,
+  getCustomerByPhone,
 };

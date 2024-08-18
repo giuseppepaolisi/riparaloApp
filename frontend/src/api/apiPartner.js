@@ -100,14 +100,16 @@ export const updateCliente = async (token, id, updatedData) => {
     });
 
     const text = await response.text();
-    const data = JSON.parse(text);
+    console.log("Response text:", text);
+
     if (!response.ok) {
-      throw new Error(
-        data.error || "Non è stato possibile aggiornare il cliente"
-      );
+      throw new Error(`Error ${response.status}: ${text}`);
     }
+
+    const data = JSON.parse(text);
     return data;
   } catch (error) {
+    console.error("Fetch error:", error);
     throw new Error(error.message);
   }
 };
@@ -165,6 +167,9 @@ export const fetchTicketsByState = async (token, stato) => {
 
 export const deleteTicket = async (token, id) => {
   try {
+    console.log("Token:", token);
+    console.log("Deleting ticket ID:", id);
+
     const response = await fetch(`/api/ticket/${id}`, {
       method: "DELETE",
       headers: {
@@ -175,9 +180,11 @@ export const deleteTicket = async (token, id) => {
 
     if (!response.ok) {
       const errorData = await response.json();
+      console.log("Errore nella risposta del server:", errorData);
       throw new Error(errorData.error || "Errore nell'eliminazione del ticket");
     }
   } catch (error) {
+    console.error("Error deleting ticket:", error);
     throw new Error(error.message);
   }
 };
@@ -228,5 +235,113 @@ export const createTicket = async (token, ticketData) => {
     return data;
   } catch (error) {
     throw new Error(error.message);
+  }
+};
+
+// apiPartner.js
+export const fetchTicketsByTechnician = async (token, nome, cognome) => {
+  try {
+    const response = await fetch(`/api/tickets`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore nel recupero dei ticket");
+    }
+
+    const json = await response.json();
+    if (!Array.isArray(json.tickets)) {
+      throw new Error("La risposta del server non è un array");
+    }
+
+    const filteredTickets = json.tickets.filter((ticket) =>
+      ticket.storico_stato.some(
+        (stato) => stato.tecnico === `${nome} ${cognome}`
+      )
+    );
+
+    return filteredTickets;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const editTicket = async (
+  token,
+  { id, newstate, technicianId, extraServices, descrizione_tecnica, prezzo }
+) => {
+  try {
+    const response = await fetch(`/api/ticket`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id,
+        newstate,
+        technicianId,
+        extraServices,
+        descrizione_tecnica,
+        prezzo,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Non è stato possibile modificare il ticket"
+      );
+    }
+    return data.newTicket;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const downloadPDF = async (token, ticket) => {
+  const response = await fetch(`/api/pdf/${ticket._id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Errore nel download del PDF");
+  }
+
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${ticket._id}-ticket.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
+
+export const viewPDF = async (token, ticketId) => {
+  try {
+    const response = await fetch(`/api/pdf/${ticketId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Errore nella visualizzazione del PDF");
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  } catch (error) {
+    console.error("Errore nella visualizzazione del PDF:", error);
   }
 };

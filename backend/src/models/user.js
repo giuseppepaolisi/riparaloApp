@@ -45,8 +45,8 @@ const userSchema = new Schema({
   },
   codiceUnivoco: {
     type: String,
-    minlength: 6,
-    maxlength: 6,
+    minlength: 7,
+    maxlength: 7,
   },
   pec: {
     type: String,

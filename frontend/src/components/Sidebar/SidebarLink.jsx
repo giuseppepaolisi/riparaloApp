@@ -9,9 +9,17 @@ const SidebarLink = ({ path, icon, label, ...props }) => {
     return location.pathname === path ? "nav-link active" : "nav-link";
   };
 
+  const linkStyle =
+    label === "Logout" ? { color: "#b22222" } : { color: "#ffffff" };
+
   return (
     <li className="nav-item" style={{ padding: "5px 0" }}>
-      <Link to={path} className={getLinkClass(path)} {...props}>
+      <Link
+        to={path}
+        className={getLinkClass(path)}
+        style={linkStyle}
+        {...props}
+      >
         <FontAwesomeIcon icon={icon} /> {label}
       </Link>
     </li>

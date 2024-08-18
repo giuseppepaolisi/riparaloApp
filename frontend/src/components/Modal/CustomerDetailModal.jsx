@@ -43,9 +43,11 @@ const CustomerDetailModal = ({ open, onClose, customer }) => {
             <Typography sx={{ mt: 1 }}>
               <strong>Cognome:</strong> {customer.cognome}
             </Typography>
-            <Typography sx={{ mt: 1 }}>
-              <strong>Email:</strong> {customer.email}
-            </Typography>
+            {customer.email && (
+              <Typography sx={{ mt: 1 }}>
+                <strong>Email:</strong> {customer.email}
+              </Typography>
+            )}
             <Typography sx={{ mt: 1 }}>
               <strong>Telefono:</strong> {customer.telefono}
             </Typography>
@@ -64,9 +66,9 @@ CustomerDetailModal.propTypes = {
   customer: PropTypes.shape({
     nome: PropTypes.string.isRequired,
     cognome: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
+    email: PropTypes.string, // Non required
     telefono: PropTypes.string.isRequired,
-  }), // Non più required
+  }),
 };
 
 export default CustomerDetailModal;

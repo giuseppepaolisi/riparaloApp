@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid, Box, TextField, Button } from "@mui/material";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import FormContainer from "../../components/FormContainer";
+import FormContainer from "../../components/Form/FormContainer";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import { fetchDevice, updateDevice } from "../../api/apiAdmin";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
@@ -72,7 +72,9 @@ const EditDevice = () => {
         msg: "Dispositivo modificato con successo",
         severity: "success",
       });
-      navigate("/modelli");
+      setTimeout(() => {
+        navigate("/modelli");
+      }, 1000);
     } catch (error) {
       console.error(error.message);
       setAlert({

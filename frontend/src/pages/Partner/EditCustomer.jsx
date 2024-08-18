@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { fetchClienteById, updateCliente } from "../../api/apiPartner";
@@ -9,11 +9,18 @@ import {
   Typography,
   Box,
   Grid,
+  Paper,
 } from "@mui/material";
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
+import {
+  validatePhoneNumber,
+  validateEmail,
+  validateName,
+} from "../../utils/validationUtils";
+import { handleValidationError } from "../../utils/errorHandling";
 
 const EditCustomer = () => {
   usePageTitle("Modifica Cliente");
@@ -56,6 +63,37 @@ const EditCustomer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      handleValidationError(
+        validatePhoneNumber,
+        cliente.telefono,
+        "Numero di telefono non valido",
+        setAlert
+      ) ||
+      (cliente.email &&
+        handleValidationError(
+          validateEmail,
+          cliente.email,
+          "Email non valida",
+          setAlert
+        )) ||
+      handleValidationError(
+        validateName,
+        cliente.nome,
+        "Nome non valido",
+        setAlert
+      ) ||
+      handleValidationError(
+        validateName,
+        cliente.cognome,
+        "Cognome non valido",
+        setAlert
+      )
+    ) {
+      return;
+    }
+
     try {
       await updateCliente(token, id, cliente);
       setAlert({
@@ -63,7 +101,9 @@ const EditCustomer = () => {
         msg: "Cliente aggiornato con successo",
         severity: "success",
       });
-      navigate("/clienti");
+      setTimeout(() => {
+        navigate("/clienti");
+      }, 1000);
     } catch (error) {
       console.error(error);
       setAlert({
@@ -81,10 +121,10 @@ const EditCustomer = () => {
   if (loading) return <Loading open={loading} />;
 
   return (
-    <React.Fragment>
-      <Container component="main" maxWidth="xs">
-        <Box mt={8} display="flex" flexDirection="column" alignItems="center">
-          <Typography component="h1" variant="h5">
+    <Container component="main" maxWidth="sm">
+      <Box mt={8} display="flex" flexDirection="column" alignItems="center">
+        <Paper elevation={3} style={{ padding: "20px", width: "100%" }}>
+          <Typography component="h1" variant="h5" align="center">
             Modifica Cliente
           </Typography>
           <form onSubmit={handleSubmit} style={{ marginTop: 1 }}>
@@ -117,6 +157,17 @@ const EditCustomer = () => {
               variant="outlined"
               margin="normal"
               required
+              fullWidth
+              id="telefono"
+              label="Telefono"
+              name="telefono"
+              autoComplete="telefono"
+              value={cliente?.telefono || ""}
+              onChange={handleChange}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
               fullWidth
               id="email"
               label="Email"
@@ -151,9 +202,9 @@ const EditCustomer = () => {
           {alert.open && (
             <CustomAlert msg={alert.msg} severity={alert.severity} />
           )}
-        </Box>
-      </Container>
-    </React.Fragment>
+        </Paper>
+      </Box>
+    </Container>
   );
 };
 

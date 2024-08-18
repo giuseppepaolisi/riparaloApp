@@ -10,7 +10,7 @@ import DeleteButton from "../../components/Action/DeleteButton";
 import DetailButton from "../../components/Action/DetailButton";
 import Table from "../../components/Table/Table";
 import Loading from "../../components/Loading";
-import DeleteModal from "../../components/DeleteModal";
+import DeleteModal from "../../components/Modal/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import TecnicoDetailModal from "../../components/Modal/TecnicoDetailModal";
 import usePageTitle from "../../CustomHooks/usePageTitle";
@@ -35,6 +35,11 @@ const Technicians = () => {
       setLoading(false);
     } catch (error) {
       console.error(error.message);
+      setAlert({
+        open: true,
+        msg: "Errore nel caricamento dei tecnici",
+        severity: "error",
+      });
     }
   }, [token]);
 
@@ -80,6 +85,11 @@ const Technicians = () => {
       setDetailModal({ isOpen: true, tecnico });
     } catch (error) {
       console.error(error.message);
+      setAlert({
+        open: true,
+        msg: "Errore nel recupero del tecnico",
+        severity: "error",
+      });
     }
   };
 
@@ -130,7 +140,11 @@ const Technicians = () => {
               />
             )}
             {alert.open && (
-              <CustomAlert msg={alert.msg} severity={alert.severity} />
+              <CustomAlert
+                msg={alert.msg}
+                severity={alert.severity}
+                onClose={() => setAlert({ ...alert, open: false })}
+              />
             )}
           </>
         )}

@@ -20,7 +20,7 @@ import Logout from "./pages/Authentication/Logout";
 import PrivateRoute from "./redux/auth/PrivateRoute";
 import DashboardAdmin from "./pages/Admin/DashboardAdmin";
 import HomePage from "./pages/Generic/Homepage";
-import DashboardTecnico from "./pages/Tecnico/DashboardTecnico";
+import DashboardTechnician from "./pages/Tecnico/DashboardTechnician";
 import Error403 from "./pages/error/Error403";
 import Error404 from "./pages/error/Error404";
 import Error500 from "./pages/error/Error500";
@@ -28,14 +28,14 @@ import CreateTicket from "./pages/Ticket/CreateTicket";
 import Devices from "./pages/Admin/Devices";
 import AddDevice from "./pages/Admin/AddDevice";
 import EditDevice from "./pages/Admin/EditDevice";
-import EditTechnician from "./pages/Admin/EditTechnician";
-import EditPartner from "./pages/Admin/EditPartner";
 import EditCustomer from "./pages/Partner/EditCustomer";
 import { checkToken, loadUserFromStorage } from "./redux/auth/slice";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./assets/js/theme";
 import Account from "./pages/Generic/Account";
-
+import AcceptedTickets from "./pages/Ticket/AcceptedTickets";
+import EdiTicketTechnician from "./pages/Ticket/EditTicketTechnician";
+import EdiTicketPartner from "./pages/Ticket/EditTicketPartner";
 const App = () => {
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
@@ -79,11 +79,10 @@ const App = () => {
                 <Route path="/aggiungi-modello" element={<AddDevice />} />
                 <Route path="/modifica-modello/:id" element={<EditDevice />} />
                 <Route path="/partner" element={<Partners />} />
-                <Route path="/modifica-partner/:id" element={<EditPartner />} />
                 <Route path="/tecnici" element={<Technicians />} />
                 <Route
-                  path="/modifica-tecnico/:id"
-                  element={<EditTechnician />}
+                  path="/edit-ticket-admin/:id"
+                  element={<EdiTicketTechnician />}
                 />
               </Route>
 
@@ -101,13 +100,25 @@ const App = () => {
                   path="/modifica-cliente/:id"
                   element={<EditCustomer />}
                 />
+                <Route
+                  path="/edit-ticket-partner/:id"
+                  element={<EdiTicketPartner />}
+                />
               </Route>
 
               {/* Tecnico Routes */}
-              <Route element={<PrivateRoute roles={["tecnico", "admin"]} />}>
+              <Route element={<PrivateRoute roles={["tecnico"]} />}>
                 <Route
                   path="/tecnico-dashboard"
-                  element={<DashboardTecnico />}
+                  element={<DashboardTechnician />}
+                />
+                <Route
+                  path="/tickets-accettati"
+                  element={<AcceptedTickets />}
+                />
+                <Route
+                  path="/edit-ticket-technician/:id"
+                  element={<EdiTicketTechnician />}
                 />
               </Route>
 

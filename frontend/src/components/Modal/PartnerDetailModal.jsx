@@ -24,8 +24,6 @@ const headerStyle = css`
 `;
 
 const PartnerDetailModal = ({ open, onClose, partner }) => {
-  console.log("Rendering PartnerDetailModal with partner:", partner); // Aggiungi questo log
-
   return (
     <Modal open={open} onClose={onClose}>
       <Box css={modalStyle}>

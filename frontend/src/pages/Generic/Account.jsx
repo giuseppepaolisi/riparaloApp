@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { Grid, Box, Typography } from "@mui/material";
 import Loading from "../../components/Loading";
 import CustomAlert from "../../components/Alert/CustomAlert";
-import FormInput from "../../components/FormInput";
-import FormActions from "../../components/FormActions";
-import FormContainer from "../../components/FormContainer";
+import FormInput from "../../components/Form/FormInput";
+import FormActions from "../../components/Form/FormActions";
+import FormContainer from "../../components/Form/FormContainer";
 import useBodyBackgroundColor from "../../CustomHooks/useBodyBackgroundColor";
 import usePageTitle from "../../CustomHooks/usePageTitle";
 
@@ -72,8 +72,8 @@ const Account = () => {
         severity: "success",
       });
       setTimeout(() => {
-        navigate("/"); // Reindirizza dopo aver mostrato l'alert
-      }, 1000); // Imposta un ritardo di 1 secondo prima del reindirizzamento
+        navigate("/");
+      }, 500);
     } catch (error) {
       console.error(error);
       setAlert({
@@ -85,7 +85,7 @@ const Account = () => {
   };
 
   const handleCancel = () => {
-    navigate(-1); // Torna indietro alla pagina precedente
+    navigate(-1);
   };
 
   if (loading) {

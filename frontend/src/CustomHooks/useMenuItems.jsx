@@ -6,6 +6,7 @@ import {
   faCogs,
   faShapes,
   faMapMarkerAlt,
+  faTicketAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 const useMenuItems = (role) => {
@@ -23,6 +24,7 @@ const useMenuItems = (role) => {
 
   const tecnicoMenu = [
     { path: "/tecnico-dashboard", label: "Dashboard", icon: faTachometerAlt },
+    { path: "/tickets-accettati", label: "My Tickets", icon: faTicketAlt },
   ];
 
   const commonMenu = [];

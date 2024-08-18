@@ -1,6 +1,10 @@
+// frontend\src\pages\Ticket\AcceptedTickets.jsx
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { fetchTickets, fetchTicketById } from "../../api/apiPartner";
+import {
+  fetchTicketsByTechnician,
+  fetchTicketById,
+} from "../../api/apiPartner";
 import TicketDashboard from "../../components/Ticket/TicketDashboard";
 import stateColors from "../../assets/json/state.json";
 import usePageTitle from "../../CustomHooks/usePageTitle";
@@ -56,13 +60,13 @@ const filterStatuses = [
   },
 ];
 
-const DashboardTecnico = () => {
-  usePageTitle("Dashboard Tecnico");
+const AcceptedTickets = () => {
+  usePageTitle("Tickets Tecnico");
 
   const [ticketDetails, setTicketDetails] = useState(null);
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
 
-  const { token } = useSelector((state) => state.auth);
+  const { token, user } = useSelector((state) => state.auth);
 
   const handleDetail = async (id) => {
     if (!token) return;
@@ -83,7 +87,9 @@ const DashboardTecnico = () => {
   return (
     <React.Fragment>
       <TicketDashboard
-        fetchTickets={fetchTickets}
+        fetchTickets={() =>
+          fetchTicketsByTechnician(token, user.nome, user.cognome)
+        }
         columns={columns}
         searchFields={[
           "_id",
@@ -98,6 +104,7 @@ const DashboardTecnico = () => {
         alignSearchWithFilters={true}
         onDetail={handleDetail}
         showDeleteButton={false}
+        editTicketLink="/edit-ticket-technician" // Provide the edit link for technician
       />
       <TicketDetailModal
         open={isDetailModalOpen}
@@ -108,4 +115,4 @@ const DashboardTecnico = () => {
   );
 };
 
-export default DashboardTecnico;
+export default AcceptedTickets;

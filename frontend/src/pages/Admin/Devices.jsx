@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import AddButton from "../../components/Action/AddButton";
 import DeleteButton from "../../components/Action/DeleteButton";
-import DeleteModal from "../../components/DeleteModal";
+import DeleteModal from "../../components/Modal/DeleteModal";
 import EditButton from "../../components/Action/EditButton";
 import DetailButton from "../../components/Action/DetailButton";
 import Table from "../../components/Table/Table";

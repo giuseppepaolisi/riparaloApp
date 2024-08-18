@@ -12,7 +12,7 @@ import EditButton from "../../components/Action/EditButton";
 import DetailButton from "../../components/Action/DetailButton";
 import Table from "../../components/Table/Table";
 import Loading from "../../components/Loading";
-import DeleteModal from "../../components/DeleteModal";
+import DeleteModal from "../../components/Modal/DeleteModal";
 import CustomAlert from "../../components/Alert/CustomAlert";
 import CustomerDetailModal from "../../components/Modal/CustomerDetailModal";
 import usePageTitle from "../../CustomHooks/usePageTitle";

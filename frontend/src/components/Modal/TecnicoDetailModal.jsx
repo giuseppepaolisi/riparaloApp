@@ -24,8 +24,6 @@ const headerStyle = css`
 `;
 
 const TecnicoDetailModal = ({ open, onClose, tecnico }) => {
-  console.log("Rendering TecnicoDetailModal with tecnico:", tecnico);
-
   return (
     <Modal open={open} onClose={onClose}>
       <Box css={modalStyle}>

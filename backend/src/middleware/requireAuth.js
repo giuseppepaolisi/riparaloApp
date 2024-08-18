@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const { ADMIN, TECHNICIAN, PARTNER } = require('../conf/role');
 
-<<<<<<< HEAD
 // Funzione per leggere il file in modo sicuro da due percorsi possibili
 function readKeyFile(primaryPath, secondaryPath) {
   if (fs.existsSync(primaryPath)) {
@@ -26,18 +25,6 @@ const privateKey = readKeyFile(
 const publicKey = readKeyFile(
   path.join(__dirname, '../keys/rsa.public'),
   path.join(__dirname, 'etc/secrets/rsa.public')
-=======
-// Carica la chiave privata per firmare il token
-const privateKey = fs.readFileSync(
-  path.join(__dirname, process.env.PRIVATE_KEY_PATH),
-  'utf8'
-);
-
-// Carica la chiave pubblica per verificare il token
-const publicKey = fs.readFileSync(
-  path.join(__dirname, process.env.PUBLIC_KEY_PATH),
-  'utf8'
->>>>>>> kris-branch
 );
 
 // Funzione per generare un token JWT
@@ -62,7 +49,7 @@ const requireAuth = async (req, res, next) => {
 
     // Includi il campo 'role' quando recuperi l'utente dal database
     const user = await User.findOne({ _id: payload._id }).select(
-      '_id role email nome cognome'
+      '_id role email'
     );
 
     if (!user) {

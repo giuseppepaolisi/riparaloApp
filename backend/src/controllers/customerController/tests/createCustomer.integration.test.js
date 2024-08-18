@@ -55,23 +55,6 @@ describe('TEST getCustomers', () => {
       customer: mockCustomer,
     });
   });
-<<<<<<< HEAD
-=======
-
-  it('SUCCESS - Inserimento cliente email vuota', async () => {
-    delete mockReq.body.email;
-    Customer.findOne.mockResolvedValue(false);
-    Customer.create.mockResolvedValue(mockCustomer);
-
-    await createCustomer(mockReq, mockRes, mockNext);
-
-    expect(Customer.create).toHaveBeenCalled();
-    expect(mockRes.status).toHaveBeenCalledWith(201);
-    expect(mockRes.json).toHaveBeenCalledWith({
-      customer: mockCustomer,
-    });
-  });
->>>>>>> kris-branch
   /*
   it('SUCCESS - Cliente già inserito', async () => {
     Customer.findOne.mockResolvedValue(true);

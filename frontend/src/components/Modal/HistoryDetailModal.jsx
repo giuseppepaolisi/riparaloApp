@@ -42,7 +42,10 @@ const HistoryDetailModal = ({ open, onClose, history, showTechnician }) => {
                 {item.stato} - <strong>Data:</strong>{" "}
                 {new Date(item.data).toLocaleDateString()}
                 {showTechnician && item.tecnico && (
-                  <> - <strong>Tecnico:</strong> {item.tecnico}</>
+                  <>
+                    {" "}
+                    - <strong>Tecnico:</strong> {item.tecnico}
+                  </>
                 )}
               </Typography>
             ))}

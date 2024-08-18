@@ -270,7 +270,6 @@ export const fetchTicketsByTechnician = async (token, nome, cognome) => {
   }
 };
 
-
 export const editTicket = async (
   token,
   { id, newstate, technicianId, extraServices, descrizione_tecnica, prezzo }

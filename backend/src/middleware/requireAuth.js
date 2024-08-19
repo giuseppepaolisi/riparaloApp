@@ -38,7 +38,7 @@ const requireAuth = async (req, res, next) => {
 
     // Includi il campo 'role' quando recuperi l'utente dal database
     const user = await User.findOne({ _id: payload._id }).select(
-      '_id role email'
+      '_id role email nome cognome'
     );
 
     if (!user) {

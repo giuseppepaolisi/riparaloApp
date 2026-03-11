@@ -31,14 +31,8 @@ pipeline {
       } // end steps
     } // end stage
     stage ('Dump e Tag') {
-      steps {
-        dir('backend') {
-          sh 'ls -l'
-          sh 'git config user.email "jenkins@yourdomain.com"'
-          sh 'git config user.name "Jenkins CI"'
-          sh 'git tag -a v${PACKAGE_VERSION} -m "Release version ${PACKAGE_VERSION}"'
-          sh 'git push origin v${PACKAGE_VERSION}'
-        } // end dir
+      withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+        sh 'env'
       }
     }
   }// end stages

@@ -27,5 +27,12 @@ pipeline {
         } // end dir
       } // end steps
     } // end stage
+    stage ('Dump e Tag') {
+      dir('backend') {
+        steps {
+          sh 'git config user.name'
+        }
+      }
+    }
   }// end stages
 }

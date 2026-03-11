@@ -28,8 +28,8 @@ pipeline {
       } // end steps
     } // end stage
     stage ('Dump e Tag') {
-      dir('backend') {
-        steps {
+      steps {
+        dir('backend') {
           sh 'git config user.name'
         }
       }

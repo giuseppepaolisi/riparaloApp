@@ -34,8 +34,11 @@ pipeline {
       steps {
         dir('backend') {
           sh 'ls -l'
-          sh 'git config user.name'
-        }
+          sh 'git config user.email "jenkins@yourdomain.com"'
+          sh 'git config user.name "Jenkins CI"'
+          sh 'git tag -a v${PACKAGE_VERSION} -m "Release version ${PACKAGE_VERSION}"'
+          sh 'git push origin v${PACKAGE_VERSION}'
+        } // end dir
       }
     }
   }// end stages

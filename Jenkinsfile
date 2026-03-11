@@ -3,6 +3,9 @@ pipeline {
   tools {
     nodejs '20.20'
   }
+  environment {
+    GIT_CREDENTIALS = credentials('github-token')
+    }
   stages {
     stage ('Build') {
       steps {
@@ -30,6 +33,7 @@ pipeline {
     stage ('Dump e Tag') {
       steps {
         dir('backend') {
+          sh 'ls -l'
           sh 'git config user.name'
         }
       }

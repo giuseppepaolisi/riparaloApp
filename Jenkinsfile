@@ -21,8 +21,9 @@ pipeline {
     stage ('Test') {
       steps {
         dir('backend') {
-          sh 'npm run test:coverage > report.txt'
+          sh 'npm run test:coverage'
           sh 'ls -l'
+          sh 'cat coverage'
         } // end dir
       } // end steps
     } // end stage

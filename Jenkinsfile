@@ -1,5 +1,3 @@
-@Library('jenkins-shared-library') _
-log.info 'Starting'
 pipeline {
     agent {
         docker {

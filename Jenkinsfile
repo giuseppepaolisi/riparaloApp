@@ -3,7 +3,8 @@ log.info 'Starting'
 pipeline {
     agent {
         docker {
-            image 'node:20-bullseye'
+            image 'node:20-alpine'
+            label 'test-agent'
         }
     }
     parameters {
